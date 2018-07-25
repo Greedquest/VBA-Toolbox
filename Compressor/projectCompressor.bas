@@ -7,10 +7,11 @@ Private Type codeItem
     code_content() As String
 End Type
 
-Private Const TypeBinary = 1
-Private Const vbext_ct_StdModule = 1, vbext_ct_ClassModule = 2, vbext_ct_MSForm = 3, vbext_ct_Document = 100
-Private Const fmBorderStyleSingle = 1, fmSpecialEffectSunken = 2, fmMultiSelectMulti = 1, fmBackStyleOpaque = 1
-Private Const vbext_pp_none = 0
+Private Const TypeBinary As Long = 1
+'@Ignore MultipleDeclarations
+Private Const vbext_ct_StdModule As Long = 1, vbext_ct_ClassModule As Long = 2, vbext_ct_MSForm As Long = 3, vbext_ct_Document As Long = 100
+Private Const fmBorderStyleSingle As Long = 1, fmSpecialEffectSunken As Long = 2, fmMultiSelectMulti As Long = 1, fmBackStyleOpaque As Long = 1
+Private Const vbext_pp_none As Long = 0
 
 
 Private Function listBoxChoice(wb As Workbook) As String()
@@ -119,7 +120,7 @@ noSelection:                                     'just don't assign anything
     Resume safeExit
 End Function
 
-Public Sub compressProjectFileSelector(Optional wb As Variant)
+Public Sub compressProjectFileSelector(Optional ByVal wb As Variant)
 
     Dim book As Workbook
     If IsMissing(wb) Then Set book = ActiveWorkbook Else Set book = wb 'or active workbook?
@@ -146,6 +147,10 @@ Public Function compressProject(wb As Workbook, ParamArray moduleNames()) As Boo
     If Not project_accessible(wb) Then
         MsgBox "Access to VBA project is restricted, this won't work!"
         Exit Function
+    ElseIf UBound(moduleNames) < 0 Then
+              MsgBox "No module names passed!"
+        Exit Function
+    
     End If
     Dim filenames As Variant
     If IsArray(moduleNames(0)) Then filenames = moduleNames(0) Else filenames = moduleNames
@@ -237,13 +242,13 @@ Debug.Print , IIf(removeModule(projectName, book), _
     
 End Function
 
-Private Sub writeProjectName(ByRef base As String, ByRef module As Object)
-    Const rename_error = 32813
+Private Sub writeProjectName(ByRef base As String, ByVal module As Object)
+    Const rename_error As Long = 32813
     On Error Resume Next
     module.Name = base
     
-    Dim i
-    i = ""
+    Dim i As Variant
+    i = vbNullString
     Do While Err.Number = rename_error
         Err.Clear
         i = i + 1
@@ -265,8 +270,9 @@ End Sub
 Private Function moduleDefinition(ByVal moduleName As String, book As Workbook) As codeItem
     Dim codeModule As Object                     'VBComponent
     Dim result As codeItem
-    
+    On Error GoTo moduleMissing
     Set codeModule = book.VBProject.VBComponents(moduleName)
+    On Error GoTo 0
     'get extension and name
     Select Case codeModule.Type
     Case vbext_ct_StdModule
@@ -295,8 +301,10 @@ Private Function moduleDefinition(ByVal moduleName As String, book As Workbook) 
     
 safeExit:
     Kill tempPath
+moduleMissing:
     moduleDefinition = result
     If Err.Number <> 0 Then moduleDefinition.extension = "missing"
+    
 End Function
 
 Private Function printf(mask As String, ParamArray tokens()) As String
@@ -316,7 +324,7 @@ Private Function project_accessible(wb As Workbook) As Boolean
     End With
 End Function
 
-Private Function readBytes(file As String) As Byte()
+Private Function readBytes(ByVal file As String) As Byte()
     Dim inStream As Object
     ' ADODB stream object used
     Set inStream = CreateObject("ADODB.Stream")
@@ -339,7 +347,7 @@ Private Function chunkify(ByVal base As String, Optional ByVal stringLength As L
     chunkify = contentGroups
 End Function
 
-Private Function SplitString(ByVal str As String, ByVal numOfChar As Long, Optional quotations As Boolean = False) As String()
+Private Function SplitString(ByVal str As String, ByVal numOfChar As Long, Optional ByVal quotations As Boolean = False) As String()
     Dim sArr() As String
     Dim nCount As Long
     ReDim sArr((Len(str) - 1) \ numOfChar)
@@ -390,7 +398,7 @@ Private Function ToBase64(data() As Byte) As String
     ToBase64 = str
 End Function
 
-Public Function removeModule(moduleName As String, book As Workbook) As Boolean
+Private Function removeModule(ByVal moduleName As String, book As Workbook) As Boolean
     On Error Resume Next
     With book.VBProject.VBComponents
         .Remove .Item(moduleName)
@@ -398,7 +406,7 @@ Public Function removeModule(moduleName As String, book As Workbook) As Boolean
     removeModule = Not (Err.Number = 9)
 End Function
 
-Private Function fillModule(codeSection As Object) As Long()
+Private Function fillModule(ByVal codeSection As Object) As Long()
     With codeSection
         .InsertLines 1, "Option Explicit"
         .InsertLines 2, "Private Type codeItem"
@@ -406,10 +414,10 @@ Private Function fillModule(codeSection As Object) As Long()
         .InsertLines 4, "    module_name As String"
         .InsertLines 5, "    code_content() As String"
         .InsertLines 6, "End Type"
-        .InsertLines 7, ""
+        .InsertLines 7, vbNullString
         .InsertLines 8, "Private Const TypeBinary = 1, vbext_pp_none = 0"
         .InsertLines 9, "Private Const ForReading = 1, ForWriting = 2, ForAppending = 8"
-        .InsertLines 10, ""
+        .InsertLines 10, vbNullString
         .InsertLines 11, "Private Function getCodeDefinition(itemNo As Long) As codeItem"
         .InsertLines 12, "    With getCodeDefinition"
         .InsertLines 13, "        Select Case itemNo"
@@ -419,7 +427,7 @@ Private Function fillModule(codeSection As Object) As Long()
         .InsertLines 17, "        End Select"
         .InsertLines 18, "    End With"
         .InsertLines 19, "End Function"
-        .InsertLines 20, ""
+        .InsertLines 20, vbNullString
         .InsertLines 21, "Public Sub Extract()"
         .InsertLines 22, "    Dim code_module As codeItem"
         .InsertLines 23, "    Dim savedPath As String, basePath As String"
@@ -445,7 +453,7 @@ Private Function fillModule(codeSection As Object) As Long()
         .InsertLines 43, "    Loop"
         .InsertLines 44, "    removemodule ""{1}"""
         .InsertLines 45, "End Sub"
-        .InsertLines 46, ""
+        .InsertLines 46, vbNullString
         .InsertLines 47, "Private Function project_accessible() As Boolean"
         .InsertLines 48, "    On Error Resume Next"
         .InsertLines 49, "    With thisworkbook.VBProject"
@@ -453,7 +461,7 @@ Private Function fillModule(codeSection As Object) As Long()
         .InsertLines 51, "        project_accessible = project_accessible And Err.Number = 0"
         .InsertLines 52, "    End With"
         .InsertLines 53, "End Function"
-        .InsertLines 54, ""
+        .InsertLines 54, vbNullString
         .InsertLines 55, "Private Function createFile(definition As codeItem, filePath As Variant) As String"
         .InsertLines 56, "    Dim codeIndex As Long"
         .InsertLines 57, "    Dim newFileObj As Object"
@@ -472,11 +480,11 @@ Private Function fillModule(codeSection As Object) As Long()
         .InsertLines 70, "        createFile = fullPath"
         .InsertLines 71, "    End With"
         .InsertLines 72, "End Function"
-        .InsertLines 73, ""
+        .InsertLines 73, vbNullString
         .InsertLines 74, "Private Sub importFile(filePath As String)"
         .InsertLines 75, "    thisworkbook.VBProject.VBComponents.Import filePath"
         .InsertLines 76, "End Sub"
-        .InsertLines 77, ""
+        .InsertLines 77, vbNullString
         .InsertLines 78, "Private Function removemodule(moduleName As String) As Boolean"
         .InsertLines 79, "    On Error Resume Next"
         .InsertLines 80, "    With thisworkbook.VBProject.VBComponents"
@@ -484,24 +492,24 @@ Private Function fillModule(codeSection As Object) As Long()
         .InsertLines 82, "    End With"
         .InsertLines 83, "    removemodule = Not (Err.Number = 9)"
         .InsertLines 84, "End Function"
-        .InsertLines 85, ""
+        .InsertLines 85, vbNullString
         .InsertLines 86, "Private Function FromBase64(Text As String) As Byte()"
         .InsertLines 87, "    Dim Out() As Byte"
         .InsertLines 88, "    Dim b64(0 To 255) As Byte, str() As Byte, i&, j&, v&, b0&, b1&, b2&, b3&"
         .InsertLines 89, "    Out = """""
         .InsertLines 90, "    If Len(Text) Then Else Exit Function"
-        .InsertLines 91, ""
+        .InsertLines 91, vbNullString
         .InsertLines 92, "    str = "" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"""
         .InsertLines 93, "    For i = 2 To UBound(str) Step 2"
         .InsertLines 94, "        b64(str(i)) = i \ 2"
         .InsertLines 95, "    Next"
-        .InsertLines 96, ""
+        .InsertLines 96, vbNullString
         .InsertLines 97, "    ReDim Out(0 To ((Len(Text) + 3) \ 4) * 3 - 1)"
         .InsertLines 98, "    str = Text & String$(2, 0)"
-        .InsertLines 99, ""
+        .InsertLines 99, vbNullString
         .InsertLines 100, "    For i = 0 To UBound(str) - 7 Step 2"
         .InsertLines 101, "        b0 = b64(str(i))"
-        .InsertLines 102, ""
+        .InsertLines 102, vbNullString
         .InsertLines 103, "        If b0 Then"
         .InsertLines 104, "            b1 = b64(str(i + 2))"
         .InsertLines 105, "            b2 = b64(str(i + 4))"
@@ -514,7 +522,7 @@ Private Function fillModule(codeSection As Object) As Long()
         .InsertLines 112, "            i = i + 6"
         .InsertLines 113, "        End If"
         .InsertLines 114, "    Next"
-        .InsertLines 115, ""
+        .InsertLines 115, vbNullString
         .InsertLines 116, "    If b2 = 0 Then"
         .InsertLines 117, "        Out(j - 3) = (v + 65) \ 65536"
         .InsertLines 118, "        j = j - 2"
@@ -523,7 +531,7 @@ Private Function fillModule(codeSection As Object) As Long()
         .InsertLines 121, "        Out(j - 2) = ((v + 1) \ 256&) Mod 256"
         .InsertLines 122, "        j = j - 1"
         .InsertLines 123, "    End If"
-        .InsertLines 124, ""
+        .InsertLines 124, vbNullString
         .InsertLines 125, "    ReDim Preserve Out(j - 1)"
         .InsertLines 126, "    FromBase64 = Out"
         .InsertLines 127, "End Function"
@@ -537,5 +545,8 @@ Private Function fillModule(codeSection As Object) As Long()
         End If
     End With
 End Function
+
+
+
 
 

@@ -15,7 +15,7 @@ Private Const vbext_pp_none As Long = 0
 Private Const invalid_argument_error As Long = 5
 
 
-Private Function listBoxChoice(ByVal wb As Workbook) As String()
+Private Function ListBoxChoice(ByVal wb As Workbook) As String()
 
     Dim myForm As Object
     Dim newButton As Object                      'MSForms.CommandButton
@@ -102,7 +102,7 @@ Private Function listBoxChoice(ByVal wb As Workbook) As String()
     'Delete the form (Optional)
 safeExit:
     ThisWorkbook.VBProject.VBComponents.Remove myForm
-    listBoxChoice = selections
+    ListBoxChoice = selections
 
     Exit Function
 noSelection:                                     'just don't assign anything
@@ -111,19 +111,19 @@ noSelection:                                     'just don't assign anything
     Resume safeExit
 End Function
 
-Public Sub compressProjectFileSelector(Optional ByRef wb As Variant)
+Public Sub CompressProjectFileSelector(Optional ByRef wb As Variant)
 
     Dim book As Workbook
     If IsMissing(wb) Then Set book = ActiveWorkbook Else Set book = wb 'or active workbook?
     
     Dim selections() As String
-    selections = listBoxChoice(book)
+    selections = ListBoxChoice(book)
     
    
     If selections(1) = "None Selected" Then
         MsgBox "No modules selected to export"
     Else
-        If compressProject(book, selections) Then
+        If CompressProject(book, selections) Then
             MsgBox "Compression succeeded"
         Else
             MsgBox "Compression unsuccessful, see immediate window for more info"
@@ -131,11 +131,11 @@ Public Sub compressProjectFileSelector(Optional ByRef wb As Variant)
     End If
 End Sub
 
-Public Function compressProject(ByRef wb As Workbook, ParamArray moduleNames()) As Boolean
+Public Function CompressProject(ByRef wb As Workbook, ParamArray moduleNames()) As Boolean
     'Sub to convert selected files into self-extracting module
     'Input:
     '   filenames: array of strings based on names of modules in project
-    If Not project_accessible(wb) Then
+    If Not ProjectAccessible(wb) Then
         MsgBox "Access to VBA project is restricted, this won't work!"
         Exit Function
     ElseIf UBound(moduleNames) < 0 Then
@@ -157,17 +157,17 @@ Debug.Print "Getting Definitions..."
     With wb.VBProject.VBComponents
         'loop through files compressing them int 64 bit strings
         For i = arraySt To arrayEnd
-            codeItems(i) = moduleDefinition(filenames(i), wb)
+            codeItems(i) = ModuleDefinition(filenames(i), wb)
         Next i
     End With
 Debug.Print , "Definitions saved"
     'write strings to skeleton file
 Debug.Print "Writing file..."
-    compressProject = writeSkeleton(codeItems, wb)
+    CompressProject = WriteSkeleton(codeItems, wb)
 Debug.Print "Complete"
 End Function
 
-Private Function writeSkeleton(ByRef codeItems() As codeItem, ByRef book As Workbook, Optional ByRef projectName As String = "myProject") As Boolean ' , Optional wb As Variant)
+Private Function WriteSkeleton(ByRef codeItems() As codeItem, ByRef book As Workbook, Optional ByRef projectName As String = "myProject") As Boolean ' , Optional wb As Variant)
     Dim itemCount As Long
     itemCount = UBound(codeItems) - LBound(codeItems) + 1
     If itemCount < 1 Then Exit Function
@@ -178,11 +178,11 @@ Private Function writeSkeleton(ByRef codeItems() As codeItem, ByRef book As Work
     Dim extractorModule As Object                'VBComponent
     Set extractorModule = book.VBProject.VBComponents.Add(vbext_ct_StdModule)
     On Error GoTo cleanExit
-    writeProjectName projectName, extractorModule 'avoid err if duplicate - changes
+    WriteProjectName projectName, extractorModule 'avoid err if duplicate - changes
 Debug.Print , "Project file added"
     'write code to module
     Dim codeInsertPoint As Long
-    codeInsertPoint = fillModule(extractorModule.codeModule)(0) 'x coord
+    codeInsertPoint = FillModule(extractorModule.codeModule)(0) 'x coord
 Debug.Print , "Project skeleton written"
     'ammend code with codeitems and killing line
     With extractorModule.codeModule
@@ -195,7 +195,7 @@ Debug.Print , "Project skeleton written"
         For i = LBound(codeItems) To UBound(codeItems)
             singItem = codeItems(i)
             If singItem.extension = "missing" Then
-                Err.Description = printf("Warning: Module ""{0}"" cannot be found or is not supported for compression", singItem.module_name)
+                Err.Description = Printf("Warning: Module ""{0}"" cannot be found or is not supported for compression", singItem.module_name)
                 Err.Raise invalid_argument_error
                 itemCount = itemCount - 1
             Else
@@ -204,14 +204,14 @@ Debug.Print , "Project skeleton written"
                 content_lbound = LBound(singItem.code_content)
                 'code content array
                 For itemIndex = UBound(singItem.code_content) To LBound(singItem.code_content) Step -1 'loop backwards
-                    .InsertLines codeInsertPoint, printf(String(4, vbTab) & ".code_content({1}) = {0}", singItem.code_content(itemIndex), itemIndex)
+                    .InsertLines codeInsertPoint, Printf(String(4, vbTab) & ".code_content({1}) = {0}", singItem.code_content(itemIndex), itemIndex)
                 Next itemIndex
                 'code content array definition
-                .InsertLines codeInsertPoint, printf(String(4, vbTab) & "Redim .code_content({0} To {1})", content_lbound, content_ubound)
+                .InsertLines codeInsertPoint, Printf(String(4, vbTab) & "Redim .code_content({0} To {1})", content_lbound, content_ubound)
                 'other code definition items
-                .InsertLines codeInsertPoint, printf(String(4, vbTab) & ".module_name = ""{0}""", singItem.module_name)
-                .InsertLines codeInsertPoint, printf(String(4, vbTab) & ".extension = ""{0}""", singItem.extension)
-                .InsertLines codeInsertPoint, printf(String(3, vbTab) & "Case {0}", itemCount)
+                .InsertLines codeInsertPoint, Printf(String(4, vbTab) & ".module_name = ""{0}""", singItem.module_name)
+                .InsertLines codeInsertPoint, Printf(String(4, vbTab) & ".extension = ""{0}""", singItem.extension)
+                .InsertLines codeInsertPoint, Printf(String(3, vbTab) & "Case {0}", itemCount)
                 itemCount = itemCount - 1
             End If
         Next i
@@ -221,19 +221,19 @@ Debug.Print , "Project skeleton written"
         .ReplaceLine killLine, Replace(.Lines(killLine, 1), "{1}", projectName)
 Debug.Print , "Inserted killLine"
     End With
-    writeSkeleton = True
+    WriteSkeleton = True
     Exit Function
     
 cleanExit:
-Debug.Print printf("Error writing to file: #{0} - {1}", Err.Number, Err.Description)
-Debug.Print , IIf(removeModule(projectName, book), _
+Debug.Print Printf("Error writing to file: #{0} - {1}", Err.Number, Err.Description)
+Debug.Print , IIf(RemoveModule(projectName, book), _
                   "Temp file cleared up successfully", _
                   "Could not remove temp file: """ & projectName & """")
-    writeSkeleton = False
+    WriteSkeleton = False
     
 End Function
 
-Private Sub writeProjectName(ByRef base As String, ByRef module As Object)
+Private Sub WriteProjectName(ByRef base As String, ByRef module As Object)
     Const rename_error As Long = 32813
     On Error Resume Next
     module.Name = base
@@ -258,7 +258,7 @@ Private Sub writeProjectName(ByRef base As String, ByRef module As Object)
     
 End Sub
 
-Private Function moduleDefinition(ByVal moduleName As String, ByVal book As Workbook) As codeItem
+Private Function ModuleDefinition(ByVal moduleName As String, ByVal book As Workbook) As codeItem
     Dim codeModule As Object                     'VBComponent
     Dim result As codeItem
     On Error GoTo moduleMissing
@@ -271,51 +271,51 @@ Private Function moduleDefinition(ByVal moduleName As String, ByVal book As Work
     Case vbext_ct_ClassModule
         result.extension = ".cls"
     Case vbext_ct_Document
-Debug.Print , printf("Warning: Module ""{0}"" has been converted to a standard class as document types are not fully supported", moduleName)
+Debug.Print , Printf("Warning: Module ""{0}"" has been converted to a standard class as document types are not fully supported", moduleName)
         result.extension = ".cls"
     Case vbext_ct_MSForm
         result.extension = ".frm"
     Case Else
         result.extension = "missing"
         result.module_name = moduleName
-        moduleDefinition = result
+        ModuleDefinition = result
         Exit Function
     End Select
     
     result.module_name = codeModule.Name
     'save to temp path
     Dim tempPath As String
-    tempPath = printf("{0}\{1}{2}", Environ$("temp"), result.module_name, result.extension)
+    tempPath = Printf("{0}\{1}{2}", Environ$("temp"), result.module_name, result.extension)
     codeModule.Export tempPath
     On Error GoTo safeExit
-    result.code_content = chunkify(ToBase64(readBytes(tempPath))) 'encode and chunkify
+    result.code_content = Chunkify(ToBase64(ReadBytes(tempPath))) 'encode and chunkify
     
 safeExit:
     Kill tempPath
 moduleMissing:
-    moduleDefinition = result
-    If Err.Number <> 0 Then moduleDefinition.extension = "missing"
+    ModuleDefinition = result
+    If Err.Number <> 0 Then ModuleDefinition.extension = "missing"
     
 End Function
 
-Private Function printf(ByVal mask As String, ParamArray tokens()) As String
+Private Function Printf(ByVal mask As String, ParamArray tokens()) As String
     'Debug.Print , " -> Formatting"; Len(tokens(0)); "chars into", """"; mask; """"
     Dim i As Long
     For i = 0 To UBound(tokens)
         mask = Replace$(mask, "{" & i & "}", tokens(i))
     Next
-    printf = mask
+    Printf = mask
 End Function
 
-Private Function project_accessible(ByVal wb As Workbook) As Boolean
+Private Function ProjectAccessible(ByVal wb As Workbook) As Boolean
     On Error Resume Next
     With wb.VBProject
-        project_accessible = .Protection = vbext_pp_none
-        project_accessible = project_accessible And Err.Number = 0
+        ProjectAccessible = .Protection = vbext_pp_none
+        ProjectAccessible = ProjectAccessible And Err.Number = 0
     End With
 End Function
 
-Private Function readBytes(ByVal file As String) As Byte()
+Private Function ReadBytes(ByVal file As String) As Byte()
     Dim inStream As Object
     ' ADODB stream object used
     Set inStream = CreateObject("ADODB.Stream")
@@ -323,10 +323,10 @@ Private Function readBytes(ByVal file As String) As Byte()
     inStream.Open
     inStream.Type = TypeBinary
     inStream.LoadFromFile (file)
-    readBytes = inStream.Read()
+    ReadBytes = inStream.Read()
 End Function
 
-Private Function chunkify(ByVal base As String, Optional ByVal stringLength As Long = 900) As String()
+Private Function Chunkify(ByVal base As String, Optional ByVal stringLength As Long = 900) As String()
     'splits a string at every stringLength charachters and delimits
     '1024 is max chars in a line
     Dim contentGroups() As String
@@ -335,7 +335,7 @@ Private Function chunkify(ByVal base As String, Optional ByVal stringLength As L
     For i = LBound(contentGroups) To UBound(contentGroups)
         contentGroups(i) = Join(SplitString(contentGroups(i), stringLength, quotations:=True), " & _" & vbCrLf)
     Next i
-    chunkify = contentGroups
+    Chunkify = contentGroups
 End Function
 
 Private Function SplitString(ByVal str As String, ByVal numOfChar As Long, Optional ByVal quotations As Boolean = False) As String()
@@ -389,15 +389,15 @@ Private Function ToBase64(ByRef data() As Byte) As String
     ToBase64 = str
 End Function
 
-Private Function removeModule(ByVal moduleName As String, ByRef book As Workbook) As Boolean
+Private Function RemoveModule(ByVal moduleName As String, ByRef book As Workbook) As Boolean
     On Error Resume Next
     With book.VBProject.VBComponents
         .Remove .Item(moduleName)
     End With
-    removeModule = Not (Err.Number = 9)
+    RemoveModule = Not (Err.Number = 9)
 End Function
 
-Private Function fillModule(ByVal codeSection As Object) As Long()
+Private Function FillModule(ByVal codeSection As Object) As Long()
     With codeSection
         .InsertLines 1, "Option Explicit"
         .InsertLines 2, "Private Type codeItem"
@@ -528,14 +528,15 @@ Private Function fillModule(ByVal codeSection As Object) As Long()
         .InsertLines 127, "End Function"
         Dim result(0 To 1) As Long
         If .Find("{0}", result(0), result(1), -1, -1) Then 'search for point to insert lines
-            fillModule = result
+            FillModule = result
         Else
             result(0) = 0
             result(1) = 0
-            fillModule = result
+            FillModule = result
         End If
     End With
 End Function
+
 
 
 

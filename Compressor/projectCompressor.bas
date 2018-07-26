@@ -15,7 +15,7 @@ Private Const vbext_pp_none As Long = 0
 Private Const invalid_argument_error As Long = 5
 
 
-Private Function listBoxChoice(ByRef wb As Workbook) As String()
+Private Function listBoxChoice(ByVal wb As Workbook) As String()
 
     Dim myForm As Object
     Dim newButton As Object                      'MSForms.CommandButton
@@ -111,7 +111,7 @@ noSelection:                                     'just don't assign anything
     Resume safeExit
 End Function
 
-Public Sub compressProjectFileSelector(Optional ByVal wb As Variant)
+Public Sub compressProjectFileSelector(Optional ByRef wb As Variant)
 
     Dim book As Workbook
     If IsMissing(wb) Then Set book = ActiveWorkbook Else Set book = wb 'or active workbook?
@@ -233,7 +233,7 @@ Debug.Print , IIf(removeModule(projectName, book), _
     
 End Function
 
-Private Sub writeProjectName(ByRef base As String, ByVal module As Object)
+Private Sub writeProjectName(ByRef base As String, ByRef module As Object)
     Const rename_error As Long = 32813
     On Error Resume Next
     module.Name = base
@@ -258,7 +258,7 @@ Private Sub writeProjectName(ByRef base As String, ByVal module As Object)
     
 End Sub
 
-Private Function moduleDefinition(ByVal moduleName As String, ByRef book As Workbook) As codeItem
+Private Function moduleDefinition(ByVal moduleName As String, ByVal book As Workbook) As codeItem
     Dim codeModule As Object                     'VBComponent
     Dim result As codeItem
     On Error GoTo moduleMissing
@@ -307,7 +307,7 @@ Private Function printf(ByVal mask As String, ParamArray tokens()) As String
     printf = mask
 End Function
 
-Private Function project_accessible(ByRef wb As Workbook) As Boolean
+Private Function project_accessible(ByVal wb As Workbook) As Boolean
     On Error Resume Next
     With wb.VBProject
         project_accessible = .Protection = vbext_pp_none

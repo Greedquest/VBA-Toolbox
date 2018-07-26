@@ -12,24 +12,19 @@ Private Const TypeBinary As Long = 1
 Private Const vbext_ct_StdModule As Long = 1, vbext_ct_ClassModule As Long = 2, vbext_ct_MSForm As Long = 3, vbext_ct_Document As Long = 100
 Private Const fmBorderStyleSingle As Long = 1, fmSpecialEffectSunken As Long = 2, fmMultiSelectMulti As Long = 1, fmBackStyleOpaque As Long = 1
 Private Const vbext_pp_none As Long = 0
+Private Const invalid_argument_error As Long = 5
 
 
 Private Function listBoxChoice(ByRef wb As Workbook) As String()
+
     Dim myForm As Object
-    'Dim NewFrame As Object                       'MSForms.Frame
-    Dim NewButton As Object                      'MSForms.CommandButton
-    'Dim NewComboBox As MSForms.ComboBox
-    Dim NewListBox As Object                     'MSForms.ListBox
-    'Dim NewTextBox As MSForms.TextBox
-    'Dim NewLabel As MSForms.Label
-    'Dim NewOptionButton As MSForms.OptionButton
-    'Dim NewCheckBox As MSForms.CheckBox
-    'Dim X As Integer
-    'Dim Line As Integer
+    Dim newButton As Object                      'MSForms.CommandButton
+    Dim newListBox As Object                     'MSForms.ListBox
 
     'This is to stop screen flashing while creating form
     Application.VBE.MainWindow.Visible = False
-
+    
+    'Add to ThisWorkbook, not supplied workbook or VBE will crash
     Set myForm = ThisWorkbook.VBProject.VBComponents.Add(vbext_ct_MSForm)
 
     'Create the User Form
@@ -40,8 +35,8 @@ Private Function listBoxChoice(ByRef wb As Workbook) As String()
     End With
 
     'Create ListBox
-    Set NewListBox = myForm.Designer.Controls.Add("Forms.listbox.1")
-    With NewListBox
+    Set newListBox = myForm.Designer.Controls.Add("Forms.listbox.1")
+    With newListBox
         .Name = "lst_1"
         .Top = 10
         .Left = 10
@@ -54,9 +49,9 @@ Private Function listBoxChoice(ByRef wb As Workbook) As String()
         .MultiSelect = fmMultiSelectMulti
     End With
 
-    'Create CommandButton Create
-    Set NewButton = myForm.Designer.Controls.Add("Forms.commandbutton.1")
-    With NewButton
+    'Create CommandButton
+    Set newButton = myForm.Designer.Controls.Add("Forms.commandbutton.1")
+    With newButton
         .Name = "cmd_1"
         .Caption = "Choose"
         .Accelerator = "M"
@@ -69,15 +64,16 @@ Private Function listBoxChoice(ByRef wb As Workbook) As String()
         .BackStyle = fmBackStyleOpaque
     End With
 
-    ''add code for Comand Button
+    'Add code for Comand Button
     myForm.codeModule.InsertLines 1, "Private Sub cmd_1_Click()"
     myForm.codeModule.InsertLines 2, "Me.Hide"
     myForm.codeModule.InsertLines 3, "End Sub"
+    
     'Show the form
     Dim finalForm As Object
     Set finalForm = VBA.UserForms.Add(myForm.Name)
-    Dim cmp As Object                            'VBComponent
     'populate list
+    Dim cmp As Object                            'VBComponent
     For Each cmp In wb.VBProject.VBComponents
         If cmp.Name <> finalForm.Name Then finalForm.lst_1.AddItem cmp.Name
     Next cmp
@@ -99,7 +95,7 @@ Private Function listBoxChoice(ByRef wb As Workbook) As String()
     Next i
     
     On Error GoTo noSelection
-    If selectedCount = 0 Then Err.Raise Err.Number 'no selection
+    If selectedCount = 0 Then Err.Raise 0 'no selection
     On Error GoTo 0
 
     ReDim Preserve selections(1 To selectedCount)
@@ -143,7 +139,7 @@ Public Function compressProject(ByRef wb As Workbook, ParamArray moduleNames()) 
         MsgBox "Access to VBA project is restricted, this won't work!"
         Exit Function
     ElseIf UBound(moduleNames) < 0 Then
-              MsgBox "No module names passed!"
+        MsgBox "No module names passed!"
         Exit Function
     
     End If
@@ -181,7 +177,7 @@ Private Function writeSkeleton(ByRef codeItems() As codeItem, ByRef book As Work
 
     Dim extractorModule As Object                'VBComponent
     Set extractorModule = book.VBProject.VBComponents.Add(vbext_ct_StdModule)
-    'On Error GoTo cleanExit
+    On Error GoTo cleanExit
     writeProjectName projectName, extractorModule 'avoid err if duplicate - changes
 Debug.Print , "Project file added"
     'write code to module
@@ -200,16 +196,16 @@ Debug.Print , "Project skeleton written"
             singItem = codeItems(i)
             If singItem.extension = "missing" Then
                 Err.Description = printf("Warning: Module ""{0}"" cannot be found or is not supported for compression", singItem.module_name)
-                Err.Raise 5
+                Err.Raise invalid_argument_error
                 itemCount = itemCount - 1
             Else
-                Dim X As Long, content_lbound As Long, content_ubound As Long
+                Dim itemIndex As Long, content_lbound As Long, content_ubound As Long
                 content_ubound = UBound(singItem.code_content)
                 content_lbound = LBound(singItem.code_content)
                 'code content array
-                For X = UBound(singItem.code_content) To LBound(singItem.code_content) Step -1 'loop backwards
-                    .InsertLines codeInsertPoint, printf(String(4, vbTab) & ".code_content({1}) = {0}", singItem.code_content(X), X)
-                Next X
+                For itemIndex = UBound(singItem.code_content) To LBound(singItem.code_content) Step -1 'loop backwards
+                    .InsertLines codeInsertPoint, printf(String(4, vbTab) & ".code_content({1}) = {0}", singItem.code_content(itemIndex), itemIndex)
+                Next itemIndex
                 'code content array definition
                 .InsertLines codeInsertPoint, printf(String(4, vbTab) & "Redim .code_content({0} To {1})", content_lbound, content_ubound)
                 'other code definition items
@@ -233,7 +229,7 @@ Debug.Print printf("Error writing to file: #{0} - {1}", Err.Number, Err.Descript
 Debug.Print , IIf(removeModule(projectName, book), _
                   "Temp file cleared up successfully", _
                   "Could not remove temp file: """ & projectName & """")
-                  writeSkeleton = False
+    writeSkeleton = False
     
 End Function
 
@@ -275,7 +271,7 @@ Private Function moduleDefinition(ByVal moduleName As String, ByRef book As Work
     Case vbext_ct_ClassModule
         result.extension = ".cls"
     Case vbext_ct_Document
-        Debug.Print , printf("Warning: Module ""{0}"" has been converted to a standard class as document types are not fully supported", moduleName)
+Debug.Print , printf("Warning: Module ""{0}"" has been converted to a standard class as document types are not fully supported", moduleName)
         result.extension = ".cls"
     Case vbext_ct_MSForm
         result.extension = ".frm"
@@ -530,7 +526,6 @@ Private Function fillModule(ByVal codeSection As Object) As Long()
         .InsertLines 125, "    ReDim Preserve Out(j - 1)"
         .InsertLines 126, "    FromBase64 = Out"
         .InsertLines 127, "End Function"
-Debug.Print 1
         Dim result(0 To 1) As Long
         If .Find("{0}", result(0), result(1), -1, -1) Then 'search for point to insert lines
             fillModule = result
@@ -540,14 +535,7 @@ Debug.Print 1
             fillModule = result
         End If
     End With
-Debug.Print 2
 End Function
-
-
-
-
-
-
 
 
 

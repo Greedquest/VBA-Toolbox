@@ -238,13 +238,12 @@ Private Sub WriteProjectName(ByRef base As String, ByRef module As Object)
     On Error Resume Next
     module.Name = base
     
-    Dim i As Variant
-    i = vbNullString
+    Dim suffix As String
+    suffix = vbNullString
     Do While Err.Number = rename_error
         Err.Clear
-        i = i + 1
-        module.Name = base & i
-        
+        suffix = Val(suffix) + 1
+        module.Name = base & suffix
     Loop
     
     Dim errNum As Long
@@ -253,7 +252,7 @@ Private Sub WriteProjectName(ByRef base As String, ByRef module As Object)
     If errNum <> 0 Then
         Err.Raise errNum
     Else
-        base = base & i
+        base = base & suffix
     End If
     
 End Sub
@@ -528,7 +527,7 @@ Private Function FillModule(ByVal codeSection As Object) As Long()
         .InsertLines 127, "    ReDim Preserve Out(j - 1)"
         .InsertLines 128, "    FromBase64 = Out"
         .InsertLines 129, "End Function"
-        
+Debug.Print , "Inserted skeleton"
         Dim result(0 To 1) As Long
         If .Find("{0}", result(0), result(1), -1, -1) Then 'search for point to insert lines
             FillModule = result
@@ -539,5 +538,6 @@ Private Function FillModule(ByVal codeSection As Object) As Long()
         End If
     End With
 End Function
+
 
 

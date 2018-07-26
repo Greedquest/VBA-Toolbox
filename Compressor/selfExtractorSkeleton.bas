@@ -75,6 +75,7 @@ Private Function createFile(ByRef definition As codeItem, ByVal filePath As Stri
 End Function
 
 Private Sub importFile(ByVal filePath As String, ByRef wb As Workbook)
+    'TODO will not import userform with name clashes
     wb.VBProject.VBComponents.Import filePath
 End Sub
 

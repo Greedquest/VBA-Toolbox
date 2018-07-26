@@ -75,7 +75,7 @@ Private Function ListBoxChoice(ByVal wb As Workbook) As String()
     'populate list
     Dim cmp As Object                            'VBComponent
     For Each cmp In wb.VBProject.VBComponents
-        If cmp.Name <> finalForm.Name Then finalForm.lst_1.AddItem cmp.Name
+        If Not cmp Is finalForm Then finalForm.lst_1.AddItem cmp.Name
     Next cmp
 
     finalForm.Show

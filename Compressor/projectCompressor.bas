@@ -209,7 +209,9 @@ Private Sub designForm(ByRef populatedForm As Object, ByVal callerBook As Workbo
     'populate listbox
     Dim codeItem As Object                            'VBComponent
     Dim formComponent As Object
-    Set formComponent = callerBook.VBProject.VBComponents(populatedForm.Name)
+    On Error Resume Next
+        Set formComponent = callerBook.VBProject.VBComponents(populatedForm.Name) 'may not exist
+    On Error GoTo 0
     For Each codeItem In callerBook.VBProject.VBComponents
         If Not codeItem Is formComponent Then populatedForm.lst_1.AddItem codeItem.Name
     Next codeItem

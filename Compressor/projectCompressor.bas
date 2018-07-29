@@ -14,112 +14,20 @@ Private Const fmBorderStyleSingle As Long = 1, fmSpecialEffectSunken As Long = 2
 Private Const vbext_pp_none As Long = 0
 Private Const invalid_argument_error As Long = 5
 
-
-Private Function ListBoxChoice(ByVal wb As Workbook) As String()
-
-    Dim myForm As Object
-    Dim newButton As Object                      'MSForms.CommandButton
-    Dim newListBox As Object                     'MSForms.ListBox
-
-    'This is to stop screen flashing while creating form
-    Application.VBE.MainWindow.Visible = False
-    
-    'Add to ThisWorkbook, not supplied workbook or VBE will crash
-    Set myForm = ThisWorkbook.VBProject.VBComponents.Add(vbext_ct_MSForm)
-
-    'Create the User Form
-    With myForm
-        .Properties("Caption") = "Select"
-        .Properties("Width") = 300
-        .Properties("Height") = 270
-    End With
-
-    'Create ListBox
-    Set newListBox = myForm.Designer.Controls.Add("Forms.listbox.1")
-    With newListBox
-        .Name = "lst_1"
-        .Top = 10
-        .Left = 10
-        .Width = 150
-        .Height = 230
-        .Font.size = 8
-        .Font.Name = "Tahoma"
-        .BorderStyle = fmBorderStyleSingle
-        .SpecialEffect = fmSpecialEffectSunken
-        .MultiSelect = fmMultiSelectMulti
-    End With
-
-    'Create CommandButton
-    Set newButton = myForm.Designer.Controls.Add("Forms.commandbutton.1")
-    With newButton
-        .Name = "cmd_1"
-        .Caption = "Choose"
-        .Accelerator = "M"
-        .Top = 10
-        .Left = 200
-        .Width = 66
-        .Height = 20
-        .Font.size = 8
-        .Font.Name = "Tahoma"
-        .BackStyle = fmBackStyleOpaque
-    End With
-
-    'Add code for Comand Button
-    myForm.codeModule.InsertLines 1, "Private Sub cmd_1_Click()"
-    myForm.codeModule.InsertLines 2, "Me.Hide"
-    myForm.codeModule.InsertLines 3, "End Sub"
-    
-    'Show the form
-    Dim finalForm As Object
-    Set finalForm = VBA.UserForms.Add(myForm.Name)
-    'populate list
-    Dim cmp As Object                            'VBComponent
-    For Each cmp In wb.VBProject.VBComponents
-        If Not cmp Is finalForm Then finalForm.lst_1.AddItem cmp.Name
-    Next cmp
-
-    finalForm.Show
-    Dim selections() As String                   'hold output of list
-    On Error GoTo noSelection
-    ReDim selections(1 To finalForm.lst_1.ListCount)
-    On Error GoTo 0
-
-    Dim selectedCount As Long
-    selectedCount = 0
-    Dim i As Long
-    For i = 0 To finalForm.lst_1.ListCount - 1
-        If finalForm.lst_1.Selected(i) = True Then
-            selectedCount = selectedCount + 1
-            selections(selectedCount) = finalForm.lst_1.List(i)
-        End If
-    Next i
-    
-    On Error GoTo noSelection
-    If selectedCount = 0 Then Err.Raise 0        'no selection
-    On Error GoTo 0
-
-    ReDim Preserve selections(1 To selectedCount)
-    'Delete the form (Optional)
-safeExit:
-    ThisWorkbook.VBProject.VBComponents.Remove myForm
-    ListBoxChoice = selections
-
-    Exit Function
-noSelection:                                     'just don't assign anything
-    ReDim selections(1 To 1)
-    selections(1) = "None Selected"
-    Resume safeExit
-End Function
-
 Public Sub CompressProjectFileSelector(Optional ByRef wb As Variant)
 
     Dim book As Workbook
     If IsMissing(wb) Then Set book = ActiveWorkbook Else Set book = wb 'or active workbook?
     
     Dim selections() As String
+    On Error Resume Next
     selections = ListBoxChoice(book)
+    If Err.Number <> 0 Then
+        MsgBox Err.Description, Title:="Error getting selection"
+        Exit Sub
+    End If
+    On Error GoTo 0
     
-   
     If selections(1) = "None Selected" Then
         MsgBox "No modules selected to export"
     Else
@@ -166,6 +74,144 @@ Debug.Print "Writing file..."
     CompressProject = WriteSkeleton(codeItems, wb)
 Debug.Print "Complete"
 End Function
+
+Private Function ListBoxChoice(ByVal wb As Workbook) As String()
+
+    Dim newForm As Object
+    Dim protected As Boolean
+    protected = Not ProjectAccessible(ThisWorkbook)
+    
+     'This is to stop screen flashing while creating form
+    Application.VBE.MainWindow.Visible = False
+    
+    Set newForm = populatedForm(protected)
+    If newForm Is Nothing Then 'got something valid
+    
+        Err.Description = "No listbox form could be found or created"
+        Err.Raise 5
+        
+    Else
+        Dim formName As String
+        formName = newForm.Name
+        designForm newForm, wb 'populate form
+        newForm.Show
+        
+        Dim selections() As String                   'hold output of list
+        On Error GoTo noSelection
+        ReDim selections(1 To newForm.lst_1.ListCount)
+        On Error GoTo 0
+    
+        Dim selectedCount As Long
+        selectedCount = 0
+        Dim i As Long
+        For i = 0 To newForm.lst_1.ListCount - 1
+            If newForm.lst_1.Selected(i) = True Then
+                selectedCount = selectedCount + 1
+                selections(selectedCount) = newForm.lst_1.List(i)
+            End If
+        Next i
+        
+        On Error GoTo noSelection
+        If selectedCount = 0 Then Err.Raise 0        'no selection
+        On Error GoTo 0
+
+        ReDim Preserve selections(1 To selectedCount)
+    End If
+    'Delete the form (Optional)
+safeExit:
+    If Not protected Then
+        With ThisWorkbook.VBProject.VBComponents
+            .Remove .Item(formName)
+        End With
+    End If
+    ListBoxChoice = selections
+
+    Exit Function
+noSelection:                                     'just don't assign anything
+    ReDim selections(1 To 1)
+    selections(1) = "None Selected"
+    Resume safeExit
+End Function
+
+Private Function populatedForm(protected As Boolean) As Object
+    Const vbext_ct_MSForm As Long = 3
+    Const form_non_existant As Long = 424
+    If protected Then
+        'try to get existing form
+        On Error Resume Next
+        Dim errNum As Long
+        Set populatedForm = VBA.UserForms.Add("TemplateForm")
+
+        'check if form looks as it should (provided we got one as expected)
+        If Err.Number = 0 Then If Not formIsCorrect(populatedForm) Then Err.Raise form_non_existant
+        errNum = Err.Number
+        On Error GoTo 0
+        If Not (errNum = 0 Or errNum = form_non_existant) Then Err.Raise errNum 'uncaught error
+    Else
+        'create form
+        With ThisWorkbook.VBProject.VBComponents.Add(vbext_ct_MSForm)
+            .Designer.Controls.Add("Forms.listbox.1").Name = "lst_1"
+            .Designer.Controls.Add("Forms.commandbutton.1").Name = "cmd_1"
+            .codeModule.InsertLines 1, "Private Sub cmd_1_Click()"
+            .codeModule.InsertLines 2, "Me.Hide"
+            .codeModule.InsertLines 3, "End Sub"
+            Set populatedForm = VBA.UserForms.Add(.Name)
+        End With
+    End If
+End Function
+
+Private Function formIsCorrect(ByVal form As Object) As Boolean
+    On Error Resume Next
+    Dim v, r
+    With form.Controls
+        If .Count <> 2 Then Err.Raise 5
+        Set v = .Item("lst_1")
+        Set r = .Item("cmd_1")
+    End With
+    formIsCorrect = Err.Number = 0
+    On Error GoTo 0
+End Function
+
+Private Sub designForm(ByRef populatedForm As Object, ByVal callerBook As Workbook)
+    'change overall appearence
+    With populatedForm
+        .Caption = "Select"
+        .Width = 300
+        .Height = 270
+    End With
+
+    'Change ListBox appearence
+    With populatedForm.Controls("lst_1")
+        .Top = 10
+        .Left = 10
+        .Width = 150
+        .Height = 230
+        .Font.size = 8
+        .Font.Name = "Tahoma"
+        .BorderStyle = fmBorderStyleSingle
+        .SpecialEffect = fmSpecialEffectSunken
+        .MultiSelect = fmMultiSelectMulti
+    End With
+    
+    'Change CommandButton appearence
+    With populatedForm.Controls("cmd_1")
+        .Caption = "Choose"
+        .Accelerator = "M"
+        .Top = 10
+        .Left = 200
+        .Width = 66
+        .Height = 20
+        .Font.size = 8
+        .Font.Name = "Tahoma"
+        .BackStyle = fmBackStyleOpaque
+    End With
+    
+    'populate listbox
+    Dim codeItem As Object                            'VBComponent
+    For Each codeItem In callerBook.VBProject.VBComponents
+        If Not codeItem Is populatedForm Then populatedForm.lst_1.AddItem codeItem.Name
+    Next codeItem
+End Sub
 
 Private Function WriteSkeleton(ByRef codeItems() As codeItem, ByRef book As Workbook, Optional ByRef projectName As String = "myProject") As Boolean ' , Optional wb As Variant)
     Dim itemCount As Long
@@ -538,6 +584,3 @@ Debug.Print , "Inserted skeleton"
         End If
     End With
 End Function
-
-
-

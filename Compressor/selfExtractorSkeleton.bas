@@ -129,3 +129,4 @@ Private Function FromBase64(ByVal Text As String) As Byte()
     ReDim Preserve Out(j - 1)
     FromBase64 = Out
 End Function
+

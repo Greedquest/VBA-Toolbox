@@ -94,6 +94,7 @@ Private Function ListBoxChoice(ByVal wb As Workbook) As String()
         Dim formName As String
         formName = newForm.Name
         designForm newForm, wb 'populate form
+        Application.VBE.MainWindow.Visible = True
         newForm.Show
         
         Dim selections() As String                   'hold output of list

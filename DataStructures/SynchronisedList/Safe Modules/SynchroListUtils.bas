@@ -9,7 +9,7 @@ Public Function FlattenArray(iterableToFlatten As Variant, Optional level As Lon
     For Each item In iterableToFlatten
         If isIterable(item) Then
             Dim contentToAdd As Variant
-            Debug.Print level
+Debug.Print level
             For Each contentToAdd In FlattenArray(item, level + 1)
                 flattenedResult.Add contentToAdd
             Next contentToAdd
@@ -19,7 +19,6 @@ Public Function FlattenArray(iterableToFlatten As Variant, Optional level As Lon
     Next item
     Set FlattenArray = flattenedResult
 End Function
-
 
 Public Sub LetSet(ByRef variable As Variant, ByVal Value As Variant)
     If IsObject(Value) Then

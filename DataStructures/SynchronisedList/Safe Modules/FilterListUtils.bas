@@ -10,3 +10,4 @@ Public Function isIterable(obj As Variant) As Boolean
     Next
     isIterable = Err.Number = 0
 End Function
+

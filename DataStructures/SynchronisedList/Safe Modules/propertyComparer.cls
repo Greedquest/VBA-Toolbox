@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'@Folder("GridProject.Main.IComparerFactory")
+'@Folder("Tests.Utils.IComparers")
 Option Explicit
 Implements mscorlib.IComparer
 Private propertyName As String

@@ -3,7 +3,7 @@ Option Explicit
 Option Private Module
 
 '@TestModule
-'@Folder("GridProject.Tests.SynchronizedListTests")
+'@Folder("Tests")
 
 Private Assert As Rubberduck.PermissiveAssertClass
 Private Fakes As Rubberduck.FakesProvider

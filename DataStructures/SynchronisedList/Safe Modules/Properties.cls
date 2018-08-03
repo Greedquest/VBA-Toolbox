@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'@Folder("GridProject.Utils")
+'@Folder("Tests.Utils")
 
 'Dummy class to allow property comparisons
 Private propertyData As Object                   'dictionary to hold values

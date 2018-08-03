@@ -1,5 +1,5 @@
 Attribute VB_Name = "PropertiesUtils"
-'@Folder("GridProject.Utils")
+'@Folder("Tests.Utils")
 
 
 Function GetRndDate(dtStartDate As Date, dtEndDate As Date) As Date

@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'@Folder("Tests.TestClasses")
+'@Folder("Tests.TestEventHandlers")
 Public WithEvents Buffer As clsBuffer
 Attribute Buffer.VB_VarHelpID = -1
 Private Type tBufferTest

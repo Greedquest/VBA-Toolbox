@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'@Folder("GridProject.Tests.TestClasses")
+'@Folder("Tests.Utils.DummyItems")
 'Implements IGridable
 Implements ISortable
 Public Name As String

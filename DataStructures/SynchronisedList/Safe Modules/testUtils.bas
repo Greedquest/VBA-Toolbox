@@ -1,5 +1,5 @@
 Attribute VB_Name = "testUtils"
-'@Folder("GridProject.Tests.Utils")
+'@Folder("Tests.Utils")
 Option Explicit
 
 Public Function getEmptyDummyClasses(Optional n As Long = 5) As DummyGridItem()

@@ -10,7 +10,7 @@ Attribute VB_Exposed = False
 Attribute VB_Description = "A custom colllection class to facilitate sorting and filtering"
 Option Explicit
 
-'@Folder(SynchronisedList.Utils.FilterList)
+'@Folder("SynchronisedList.Utils.FilterList")
 
 Private dataSet As Object
 Public Enum lstFilterMode
@@ -31,6 +31,7 @@ Private Sub Class_Initialize()
 End Sub
 
 Public Property Get Data() As Object
+	Attribute NewEnum.VB_UserMemId = 0
     Set Data = dataSet
 End Property
 

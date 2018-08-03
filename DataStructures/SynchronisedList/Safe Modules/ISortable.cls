@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'@Folder("GridProject.Interfaces")
+'@Folder("Tests.Interfaces")
 Option Explicit
 '''
 'OPTIONAL Interface used to set property which is used for comparing/filtering

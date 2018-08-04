@@ -16,8 +16,8 @@ Private Type tFilter
     FilterMode As lstFilterMode
     SortMode As lstSortMode
     filterAgainst As Variant
-    FilterModeSet As Boolean                     'check to ensure we don't filter with unset IComparer
-    SortModeSet As Boolean
+    filterModeSet As Boolean                     'check to ensure we don't filter with unset IComparer
+    sortModeSet As Boolean
 End Type
 
 Private Const defaultFilterMode = lstFilterMode.lstRemoveMatching
@@ -29,8 +29,8 @@ Private Sub Class_Initialize()
     Set this.sortComparer = New propertyComparer
     this.FilterMode = defaultFilterMode
     this.SortMode = defaultSortMode
-    this.FilterModeSet = False
-    this.SortModeSet = False
+    this.filterModeSet = False
+    this.sortModeSet = False
 End Sub
 
 Public Property Get filterComparer() As IComparer
@@ -39,7 +39,7 @@ End Property
 
 Public Property Set filterComparer(Value As IComparer)
     Set this.filterComparer = Value
-    this.FilterModeSet = Not Value Is Nothing    'filter mode set as long as valid IComparer set
+    this.filterModeSet = Not Value Is Nothing    'filter mode set as long as valid IComparer set
 End Property
 
 Public Property Get sortComparer() As IComparer
@@ -48,7 +48,7 @@ End Property
 
 Public Property Set sortComparer(Value As IComparer)
     Set this.sortComparer = Value
-    this.SortModeSet = Not Value Is Nothing      'sort mode set as long as valid IComparer set
+    this.sortModeSet = Not Value Is Nothing      'sort mode set as long as valid IComparer set
 End Property
 
 Public Sub SetFilterMode(Optional compareTo As Variant = vbNullString, Optional newComparer As IComparer, Optional overrideFilterMode As lstFilterMode = 0)
@@ -90,7 +90,7 @@ End Sub
 
 Public Sub filterGrid(grid As clsGridDataWrapper)
     If isSafeToFilter Then
-        grid.Filter this.filterAgainst, this.FilterMode, filterComparer
+        grid.filter this.filterAgainst, this.FilterMode, filterComparer
     Else
         Err.Description = "No IComparer has been set for filtering, please setFilterMode"
         Err.raise 5
@@ -102,10 +102,10 @@ Public Sub sortGrid(grid As clsGridDataWrapper, itemToTrack As Variant)
 End Sub
 
 Private Function isSafeToFilter() As Boolean
-    isSafeToFilter = this.FilterModeSet Or this.FilterMode = lstRemoveAll Or this.FilterMode = lstKeepAll
+    isSafeToFilter = this.filterModeSet Or this.FilterMode = lstRemoveAll Or this.FilterMode = lstKeepAll
 End Function
 
 Private Function isSafeToSort() As Boolean
-    isSafeToSort = this.SortModeSet Or this.SortMode = lstNoSorting
+    isSafeToSort = this.sortModeSet Or this.SortMode = lstNoSorting
 End Function
 

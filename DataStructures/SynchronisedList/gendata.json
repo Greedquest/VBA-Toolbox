@@ -1,0 +1,42 @@
+[
+   {
+      "form": 0,
+      "name": "",
+      "type": "text",
+      "id": "txt2",
+      "elementPos": 4,
+      "checked": false,
+      "namePos": 0,
+      "value": "name,age,gender,birthday(2),city,natural(5)"
+   },
+   {
+      "form": 0,
+      "name": "",
+      "type": "hidden",
+      "id": "txt1",
+      "elementPos": 5,
+      "checked": false,
+      "namePos": 0,
+      "value": "name,age,gender,birthday(2),city,natural(5)"
+   },
+   {
+      "form": 0,
+      "name": "",
+      "type": "number",
+      "id": "txtRows",
+      "elementPos": 7,
+      "checked": false,
+      "namePos": 0,
+      "value": "100"
+   },
+   {
+      "form": 0,
+      "name": "",
+      "type": "checkbox",
+      "id": "chkDefaultHeader",
+      "elementPos": 8,
+      "checked": true,
+      "namePos": 0,
+      "value": "Y"
+   }
+]

@@ -7,7 +7,7 @@ Option Private Module
 
 Private Assert As Rubberduck.PermissiveAssertClass
 Private Fakes As Rubberduck.FakesProvider
-Private synchro As SynchronizedList
+Private Synchro As SynchronizedList
 Private EventMonitor As SynchroEventsTest
 
 '@ModuleInitialize
@@ -28,9 +28,9 @@ End Sub
 '@TestInitialize
 Public Sub TestInitialize()
     'this method runs before every test in the module.
-    Set synchro = New SynchronizedList
+    Set Synchro = New SynchronizedList
     Set EventMonitor = New SynchroEventsTest
-    Set EventMonitor.synchro = synchro
+    Set EventMonitor.Synchro = Synchro
 End Sub
 
 '@TestCleanup
@@ -49,13 +49,13 @@ Public Sub TestAddingTwo()
     items2() = getEmptyDummyClasses(3)
     
     'Act:
-    With synchro
+    With Synchro
         .Add items1(1), items1(2)
         .Add items2
     End With
     
     'Assert:
-    With synchro
+    With Synchro
         Assert.AreEqual "5", .SourceData.Count, "SourceData added incorrectly"
         Assert.AreEqual "5", .SourceData.Count, "SourceData affected by reading"
         Assert.AreEqual "5", .GridData.Count, "Default Grid behaviour not as expected"
@@ -80,13 +80,13 @@ Public Sub testRemoval()
     'Arrange:
     Dim dummyItems() As DummyGridItem
     dummyItems = getEmptyDummyClasses(5)
-    synchro.Add dummyItems
+    Synchro.Add dummyItems
     
     'Act:
-    synchro.Remove dummyItems(3)
+    Synchro.Remove dummyItems(3)
         
     'Assert:
-    With synchro
+    With Synchro
         Assert.AreEqual "4", .SourceData.Count
         Assert.AreEqual "4", .GridData.Count
         Assert.IsTrue .SourceData.Contains(dummyItems(1))
@@ -115,12 +115,12 @@ Public Sub TestAmmedment()
 
     Dim items() As DummyGridItem
     items() = getEmptyDummyClasses(5)
-    synchro.Add items
+    Synchro.Add items
     'Act:
-    synchro.MarkAsAmmended items(3)              'raises 2 order events!
+    Synchro.MarkAsAmmended items(3)              'raises 2 order events!
     
     'Assert:
-    With synchro
+    With Synchro
         Assert.AreSame items(3), .GridData(4)    'last item since added to end of grid
         Assert.AreSame items(3), .SourceData(2)  '3rd item since no change
     End With
@@ -144,7 +144,7 @@ Public Sub TestSorting()
     
     'Arrange:
     Dim Sorter As New CallByNameComparer
-    Sorter.init "Name", VbGet
+    Sorter.Init "Name", VbGet
     
     'generate correct list
     Dim CorrectList As New ArrayList
@@ -153,17 +153,17 @@ Public Sub TestSorting()
     For i = 1 To 5
         Dim itemToAdd: Set itemToAdd = New DummySortByNameItem
         CorrectList.Add itemToAdd
-        synchro.Add itemToAdd
+        Synchro.Add itemToAdd
     Next i
     CorrectList.Sort_2 Sorter
 
     
     'Act:
-    synchro.Sort Sorter                          'doubles grid data for some reason
+    Synchro.Sort Sorter                          'doubles grid data for some reason
     
     'Assert:
 
-    Assert.SequenceEquals IterableToArray(CorrectList), IterableToArray(synchro.GridData.Data)
+    Assert.SequenceEquals IterableToArray(CorrectList), IterableToArray(Synchro.GridData.Data)
     
 TestExit:
     Exit Sub
@@ -177,30 +177,30 @@ Public Sub TestFilter()
     
     'Arrange:
     Dim Filterer As New CallByNameComparer
-    Filterer.init "Name", VbGet
+    Filterer.Init "Name", VbGet
     
     Dim testClasses() As DummyGridItem           'should be named dummyItem1,2,3 etc.
     Dim filterAgainst As DummyGridItem
     testClasses = getEmptyDummyClasses()
     Set filterAgainst = getEmptyDummyClasses(1)(1) 'should also be named dummyItem1
     
-    synchro.Add testClasses
+    Synchro.Add testClasses
     
     'Act:
-    synchro.filter filterAgainst, Filterer       'auto filter mode is remove matching
+    Synchro.Filter filterAgainst, Filterer       'auto filter mode is remove matching
 
     'Assert:
     'check if items with matching name are removed from  grid
-    Assert.IsTrue synchro.SourceData.Contains(testClasses(1))
-    Assert.IsFalse synchro.GridData.Contains(testClasses(1))
+    Assert.IsTrue Synchro.SourceData.Contains(testClasses(1))
+    Assert.IsFalse Synchro.GridData.Contains(testClasses(1))
     
     'Act:
     Set filterAgainst = getEmptyDummyClasses(2)(2)
-    synchro.filter filterAgainst, Filterer, lstKeepMatching
+    Synchro.Filter filterAgainst, Filterer, lstKeepMatching
 
     'Assert:
-    Assert.IsTrue synchro.GridData.Contains(testClasses(2))
-    Assert.IsFalse synchro.GridData.Contains(testClasses(1))
+    Assert.IsTrue Synchro.GridData.Contains(testClasses(2))
+    Assert.IsFalse Synchro.GridData.Contains(testClasses(1))
     
     'Event assertions
     'expected an order change on addition

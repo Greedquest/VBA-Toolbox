@@ -68,7 +68,7 @@ Public Sub Sort(Optional newComparer As IComparer, Optional overrideSortMode As 
     'this.SourceData.ReSortAndFilter 'doubles grid data
 End Sub
 
-Public Sub filter(Optional compareTo As Variant = vbNullString, Optional newComparer As IComparer, Optional overrideFilterMode As lstFilterMode = 0)
+Public Sub Filter(Optional compareTo As Variant = vbNullString, Optional newComparer As IComparer, Optional overrideFilterMode As lstFilterMode = 0)
     this.FilterSortMethods.SetFilterMode compareTo, newComparer, overrideFilterMode
     this.SourceData.ReSortAndFilter
 End Sub

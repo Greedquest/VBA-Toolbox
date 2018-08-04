@@ -88,7 +88,7 @@ Public Property Get Count() As Long
     Count = dataSet.Count
 End Property
 
-Public Sub Filter(ByVal testValue As Variant, ByVal FilterMode As lstFilterMode, ByVal Comparer As IComparer)
+Public Sub filter(ByVal testValue As Variant, ByVal FilterMode As lstFilterMode, ByVal Comparer As IComparer)
     Dim i As Long
     Dim item As Variant
     Select Case FilterMode

@@ -8,8 +8,8 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 '@Folder("Tests.TestEventHandlers")
-Public WithEvents Synchro As SynchronizedList
-Attribute Synchro.VB_VarHelpID = -1
+Public WithEvents synchro As SynchronizedList
+Attribute synchro.VB_VarHelpID = -1
 Private Type tSynchroTest
     OrderEventRaised As Long
     LastChangeIndex As Long

@@ -39,7 +39,7 @@ Private Function IComparer_Compare(ByVal X As Variant, ByVal Y As Variant) As Lo
     End If
 End Function
 
-Public Sub Init(ProcName As String, CallType As VbCallType, ParamArray Args())
+Public Sub init(ProcName As String, CallType As VbCallType, ParamArray Args())
     mProcName = ProcName
     mCallType = CallType
     mArgs = Args

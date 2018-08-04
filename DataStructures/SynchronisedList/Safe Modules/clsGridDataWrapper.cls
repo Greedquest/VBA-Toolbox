@@ -113,11 +113,11 @@ End Sub
 'Grid Methods
 '''
 
-Public Sub Filter(FilterObject As Variant, FilterMode As lstFilterMode, Comparer As IComparer)
+Public Sub filter(FilterObject As Variant, FilterMode As lstFilterMode, Comparer As IComparer)
     'Filter data references
     Dim unFilteredData As FilterList
     Set unFilteredData = this.Data.Clone
-    this.Data.Filter FilterObject, FilterMode, Comparer
+    this.Data.filter FilterObject, FilterMode, Comparer
     
     Dim firstChangeIndex As Long
     firstChangeIndex = -1                        '0 index

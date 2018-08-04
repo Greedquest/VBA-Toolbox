@@ -89,7 +89,7 @@ Public Sub TestFilter()
     'Arrange:
 
     'Act:
-    myList.Filter a(2), lstRemoveMatching, Comparer
+    myList.filter a(2), lstRemoveMatching, Comparer
     'Assert:
     Assert.IsFalse myList.Contains(a(2))
     Assert.IsTrue myList.Contains(a(1)) = True
@@ -116,7 +116,7 @@ Public Sub testClone()
     Assert.IsTrue clonedList.Contains(a(3)), "Cloned list doesn't contain the correct value"
     
     'Act:
-    clonedList.Filter a(1), lstKeepMatching, Comparer
+    clonedList.filter a(1), lstKeepMatching, Comparer
     
     'Assert:
     Assert.IsTrue myList.Contains(a(2)), "Original list doesn't contain the correct value"

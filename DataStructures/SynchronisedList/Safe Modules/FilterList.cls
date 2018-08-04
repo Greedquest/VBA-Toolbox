@@ -31,7 +31,7 @@ Private Sub Class_Initialize()
 End Sub
 
 Public Property Get Data() As Object
-    Attribute Data.VB_UserMemId = 0
+Attribute Data.VB_UserMemId = 0
     Set Data = dataSet
 End Property
 

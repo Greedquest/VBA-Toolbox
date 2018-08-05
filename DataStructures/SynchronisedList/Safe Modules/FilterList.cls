@@ -44,9 +44,9 @@ Public Function Contains(ByVal Value As Variant) As Boolean
 End Function
 
 Public Function Clone() As FilterList
-    Dim Result As New FilterList
-    Set Result.Data = Me.Data.Clone
-    Set Clone = Result
+    Dim result As New FilterList
+    Set result.Data = Me.Data.Clone
+    Set Clone = result
 End Function
 
 Public Sub Add(ByVal Value As Variant)
@@ -68,7 +68,7 @@ Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode)
         'do nothing
     Case Else
         Err.Description = "Invalid filter mode"
-        Err.raise 5
+        Err.Raise 5
     End Select
 End Sub
 
@@ -112,7 +112,7 @@ Public Sub filter(ByVal testValue As Variant, ByVal FilterMode As lstFilterMode,
         'do nothing
     Case Else
         Err.Description = "Invalid filter mode"
-        Err.raise 5
+        Err.Raise 5
     End Select
 End Sub
 

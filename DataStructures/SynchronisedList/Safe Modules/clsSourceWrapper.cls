@@ -23,7 +23,7 @@ Public Event NeedsSortingAndFiltering(ByRef PartialFilterSet) 'trigger filter to
 
 Private Type TSource
     Data As FilterList                           'Complete source data for grid
-    Output As FilterList                         'Temporary data to be passed to the grid
+    output As FilterList                         'Temporary data to be passed to the grid
     Buffer As clsBuffer
 End Type
 
@@ -71,7 +71,7 @@ Private Sub sourceBuffer_ItemsRemoved()
     Dim i As Long
     For i = 1 To UBound(markedItems)
         this.Data.Remove markedItems(i)
-        this.Output.Remove markedItems(i)        'remove from output too if present
+        this.output.Remove markedItems(i)        'remove from output too if present
     Next i
     RaiseEvent DataRemoved(markedItems)          'triggers grid to remove items
 End Sub
@@ -90,7 +90,7 @@ Private Sub sourceBuffer_ItemsAdded()
             'But then stuff caught in a truly async buffer will be overlooked
             'So a buffer.Flush method and an grid.add(vals,addingNewStuff As boolean)
             Err.Description = "You can't add the same item to the list twice!"
-            Err.raise 5
+            Err.Raise 5
         Else
             this.Data.Add newArray(i)
         End If
@@ -102,15 +102,15 @@ Public Sub SortAndFilterToOutput(FilterObject As Variant, FilterMode As lstFilte
     'Pass filtered and sorted copy of data to output queue, which will be buffered into Grid
     'TODO Sort ascending, descending or maintain order - maintain order makes it hard to find first index
 
-    If this.Output Is Nothing Then
-        Set this.Output = this.Data.Clone
+    If this.output Is Nothing Then
+        Set this.output = this.Data.Clone
     ElseIf isIterable(PartialSet) Then
         Dim outboundItem As Variant
         For Each outboundItem In PartialSet
-            this.Output.Add outboundItem
+            this.output.Add outboundItem
         Next outboundItem
     Else                                         'no partial set, i.e. grid was cleared
-        Set this.Output = this.Data.Clone
+        Set this.output = this.Data.Clone
     End If
 
     '    If IsMissing(PartialSet) Then
@@ -128,16 +128,16 @@ Public Sub SortAndFilterToOutput(FilterObject As Variant, FilterMode As lstFilte
 
     '    Dim tempOutput As FilterList
     '    Set tempOutput = this.Output
-    this.Output.filter FilterObject, FilterMode, filterComparer 'Filter list using dummy object based on current settings
-    If this.Output.Count > 0 Then
-        this.Output.Sort sortComparer, SortMode
+    this.output.filter FilterObject, FilterMode, filterComparer 'Filter list using dummy object based on current settings
+    If this.output.Count > 0 Then
+        this.output.Sort sortComparer, SortMode
         RaiseEvent DataAdded                     'Let gridManager know there's new data ready
     End If
 End Sub
 
 Public Function AddedData() As FilterList
-    Set AddedData = this.Output.Clone            'or it gets cleared immediately
-    this.Output.Clear
+    Set AddedData = this.output.Clone            'or it gets cleared immediately
+    this.output.Clear
 End Function
 
 'User Interface

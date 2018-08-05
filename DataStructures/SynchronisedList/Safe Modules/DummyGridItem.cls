@@ -80,11 +80,11 @@ Private this As TDummyItem
 'End Property
 
 Private Property Let ISortable_SortingProperty(ByVal Value As Variant)
-    Err.raise 5                                  'TODO implement interface member
+    Err.Raise 5                                  'TODO implement interface member
 End Property
 
 Private Property Get ISortable_SortingProperty() As Variant
-    Err.raise 5                                  'TODO implement interface member
+    Err.Raise 5                                  'TODO implement interface member
 End Property
 
 Private Property Get ISortable_Properties() As Properties

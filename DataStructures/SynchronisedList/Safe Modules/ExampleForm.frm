@@ -80,14 +80,13 @@ End Sub
 
 Public Sub RemoveItem(ByVal itemIndex As Long)
     With dataDisplayBox
-        .List
-        .RemoveItem itemIndex
+
     End With
 End Sub
 
 Public Sub AddItem(ByVal itemIndex As Long)
     With dataDisplayBox
-        .AddItem itemIndex
+
     End With
 End Sub
 

@@ -48,7 +48,7 @@ Private Property Let ISortable_SortingProperty(ByVal SortMode As Variant)
     'do nothing, always sort by value
     If Not UCase(SortMode) = "VALUE" Then
         Err.Description = "filter list test class can only be sorted by value"
-        Err.raise 4
+        Err.Raise 4
     End If
 End Property
 

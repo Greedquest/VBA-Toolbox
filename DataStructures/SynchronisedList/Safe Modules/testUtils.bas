@@ -29,7 +29,7 @@ Public Function getDummyClassesWithProperties(Optional N As Variant, Optional pr
         If Not IsMissing(propertyPairs) Then
             If UBound(propertyPairs) <> N - 1 Then
                 Err.Description = "property pairs aren't of same size as n"
-                Err.raise 5
+                Err.Raise 5
             End If
         End If
     End If
@@ -59,17 +59,17 @@ Public Function getDummyClassesWithProperties(Optional N As Variant, Optional pr
 End Function
 
 Public Function IterableToArray(ByVal iterableObject As Variant) As Variant
-    If Not isIterable(iterableObject) Then Err.Description = "You can only convert iterable objects to arrays": Err.raise 5
+    If Not isIterable(iterableObject) Then Err.Description = "You can only convert iterable objects to arrays": Err.Raise 5
     Dim item
-    Dim Result()
+    Dim result()
     Dim Count As Long
     Count = 0
     For Each item In iterableObject
         If isIterable(item) Then LetSet item, IterableToArray(item)
-        ReDim Preserve Result(0 To Count)
-        LetSet Result(Count), item
+        ReDim Preserve result(0 To Count)
+        LetSet result(Count), item
         Count = Count + 1
     Next
-    IterableToArray = Result
+    IterableToArray = result
 End Function
 

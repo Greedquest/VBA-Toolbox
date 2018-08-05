@@ -46,20 +46,20 @@ End Sub
 
 Public Sub Add(ParamArray gridItems())
     'adds any iterables to the source
-    If UBound(gridItems) < 0 Then Err.raise 5    'check for non empty array
-    this.SourceData.AddItems FlattenArray(Array(gridItems))
+    If UBound(gridItems) < 0 Then Err.Raise 5    'check for non empty array
+    this.SourceData.AddItems flattenArray(Array(gridItems))
 End Sub
 
 Public Sub Remove(ParamArray gridItems())
     'removes any iterables from the source
-    If UBound(gridItems) < 0 Then Err.raise 5    'check for non empty array
-    this.SourceData.RemoveItems FlattenArray(Array(gridItems)) 'should auto trigger removal in grid
+    If UBound(gridItems) < 0 Then Err.Raise 5    'check for non empty array
+    this.SourceData.RemoveItems flattenArray(Array(gridItems)) 'should auto trigger removal in grid
 End Sub
 
 Public Sub MarkAsAmmended(ParamArray gridItems())
     'Ammends items by removing them from the grid and re-adding from the source
-    If UBound(gridItems) < 0 Then Err.raise 5    'check for non empty array
-    this.SourceData.AmmendItems FlattenArray(Array(gridItems)) 'should auto trigger removal in grid
+    If UBound(gridItems) < 0 Then Err.Raise 5    'check for non empty array
+    this.SourceData.AmmendItems flattenArray(Array(gridItems)) 'should auto trigger removal in grid
 End Sub
 
 Public Sub Sort(Optional newComparer As IComparer, Optional overrideSortMode As lstSortMode = 0)

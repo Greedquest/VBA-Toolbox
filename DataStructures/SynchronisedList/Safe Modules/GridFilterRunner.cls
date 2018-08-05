@@ -79,10 +79,10 @@ End Sub
 Public Sub SortAndFilterSourceToOutput(source As clsSourceWrapper, Optional PartialSet As Variant)
     If Not isSafeToFilter Then
         Err.Description = "No IComparer has been set for Filtering, please setFilterMode"
-        Err.raise 5
+        Err.Raise 5
     ElseIf Not isSafeToSort Then
         Err.Description = "No IComparer has been set for Sorting, please setSortMode"
-        Err.raise 5
+        Err.Raise 5
     Else
         source.SortAndFilterToOutput this.filterAgainst, this.FilterMode, filterComparer, sortComparer, this.SortMode, PartialSet
     End If
@@ -93,7 +93,7 @@ Public Sub filterGrid(grid As clsGridDataWrapper)
         grid.filter this.filterAgainst, this.FilterMode, filterComparer
     Else
         Err.Description = "No IComparer has been set for filtering, please setFilterMode"
-        Err.raise 5
+        Err.Raise 5
     End If
 End Sub
 

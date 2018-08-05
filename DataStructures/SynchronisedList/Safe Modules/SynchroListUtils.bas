@@ -2,22 +2,60 @@ Attribute VB_Name = "SynchroListUtils"
 '@Folder(SynchronisedList.Utils)
 Option Explicit
 
-Public Function FlattenArray(iterableToFlatten As Variant, Optional level As Long = 0) As Collection
-    If Not isIterable(iterableToFlatten) Then Err.raise 5
-    Dim item As Variant
-    Dim flattenedResult As New Collection        'store added items in a temp collection which preserves order
-    For Each item In iterableToFlatten
-        If isIterable(item) Then
-            Dim contentToAdd As Variant
-Debug.Print level
-            For Each contentToAdd In FlattenArray(item, level + 1)
-                flattenedResult.Add contentToAdd
-            Next contentToAdd
+'Public Function FlattenArray(iterableToFlatten As Variant, Optional level As Long = 0) As Collection
+'    If Not isIterable(iterableToFlatten) Then Err.Raise 5
+'    Dim item As Variant
+'    Dim flattenedResult As New Collection        'store added items in a temp collection which preserves order
+'    For Each item In iterableToFlatten
+'        If isIterable(item) Then
+'            Dim contentToAdd As Variant
+'Debug.Print level
+'            For Each contentToAdd In FlattenArray(item, level + 1)
+'                flattenedResult.Add contentToAdd
+'            Next contentToAdd
+'        Else
+'            flattenedResult.Add item
+'        End If
+'    Next item
+'    Set FlattenArray = flattenedResult
+'End Function
+
+
+Public Function flattenArray(ParamArray passedParams() As Variant) As Collection
+    
+    Dim argSet As Variant
+    argSet = passedParams(0)
+    If NumElements(Array(passedParams)(0)) <> 1 Then
+        Err.Description = "Only pass one paramarray to the function"
+        Err.Raise 5
+    Else
+        argSet = passedParams(0)
+    End If
+    Dim result() As Variant
+    Dim i As Long
+    Dim noErrors As Boolean
+    noErrors = True
+    For i = LBound(argSet) To UBound(argSet)
+        If IsArray(argSet(i)) Then
+            noErrors = noErrors And ConcatenateArrays(result, argSet(i))
         Else
-            flattenedResult.Add item
+            noErrors = noErrors And ConcatenateArrays(result, Array(argSet(i)))
         End If
+        If Not noErrors Then
+            Err.Description = "Unable to merge all the items in paramarray, possible type conflict"
+            Err.Raise 5
+        End If
+    Next
+    
+    Set flattenArray = ToCollection(result)
+End Function
+
+Private Function ToCollection(a As Variant) As Collection
+    Dim c As New Collection
+    For Each item In a
+      c.Add item
     Next item
-    Set FlattenArray = flattenedResult
+    Set ToCollection = c
 End Function
 
 Public Sub LetSet(ByRef Variable As Variant, ByVal Value As Variant)
@@ -45,27 +83,27 @@ Public Function removeDuplicates(ByVal inArray As Variant, ByVal dataSet As Filt
         Dim upperBound As Long
         upperBound = UBound(inArray)
         If upperBound >= lowerBound Then
-            Dim Result()
-            ReDim Result(lowerBound To upperBound)
+            Dim result()
+            ReDim result(lowerBound To upperBound)
             Dim i As Long, matchCount As Long
             For i = lowerBound To upperBound
                 If Not dataSet.Contains(inArray(i)) Then
-                    LetSet Result(lowerBound + matchCount), inArray(i)
+                    LetSet result(lowerBound + matchCount), inArray(i)
                     matchCount = matchCount + 1
                 End If
             Next i
             If matchCount = 0 Then
                 Set removeDuplicates = Nothing
             Else
-                ReDim Preserve Result(lowerBound To lowerBound + matchCount - 1)
-                removeDuplicates = Result
+                ReDim Preserve result(lowerBound To lowerBound + matchCount - 1)
+                removeDuplicates = result
             End If
         Else
             Set removeDuplicates = Nothing
         End If
     Else
         Err.Description = "You must pass an array, not a " & TypeName(inArray)
-        Err.raise 5
+        Err.Raise 5
     End If
 End Function
 

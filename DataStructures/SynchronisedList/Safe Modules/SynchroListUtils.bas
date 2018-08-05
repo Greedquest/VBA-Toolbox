@@ -21,7 +21,7 @@ Option Explicit
 'End Function
 
 
-Public Function flattenArray(ParamArray passedParams() As Variant) As Collection
+Public Function flattenParamArray(ParamArray passedParams() As Variant) As Variant
     
     Dim argSet As Variant
     argSet = passedParams(0)
@@ -47,15 +47,7 @@ Public Function flattenArray(ParamArray passedParams() As Variant) As Collection
         End If
     Next
     
-    Set flattenArray = ToCollection(result)
-End Function
-
-Private Function ToCollection(a As Variant) As Collection
-    Dim c As New Collection
-    For Each item In a
-      c.Add item
-    Next item
-    Set ToCollection = c
+    flattenParamArray = result
 End Function
 
 Public Sub LetSet(ByRef Variable As Variant, ByVal Value As Variant)

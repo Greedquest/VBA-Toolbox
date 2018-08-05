@@ -44,9 +44,9 @@ Public Function Contains(ByVal Value As Variant) As Boolean
 End Function
 
 Public Function Clone() As FilterList
-    Dim result As New FilterList
-    Set result.Data = Me.Data.Clone
-    Set Clone = result
+    Dim Result As New FilterList
+    Set Result.Data = Me.Data.Clone
+    Set Clone = Result
 End Function
 
 Public Sub Add(ByVal Value As Variant)
@@ -79,6 +79,10 @@ End Sub
 Public Sub Reverse()
     dataSet.Reverse
 End Sub
+
+Public Function ToArray() As Variant
+    ToArray = dataSet.ToArray
+End Function
 
 Public Property Get IndexOf(ByVal Value As Variant) As Long
     IndexOf = dataSet.IndexOf_3(Value)           '0 indexed

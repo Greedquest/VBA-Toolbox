@@ -20,11 +20,11 @@ Debug.Print level
     Set FlattenArray = flattenedResult
 End Function
 
-Public Sub LetSet(ByRef variable As Variant, ByVal Value As Variant)
+Public Sub LetSet(ByRef Variable As Variant, ByVal Value As Variant)
     If IsObject(Value) Then
-        Set variable = Value
+        Set Variable = Value
     Else
-        variable = Value
+        Variable = Value
     End If
 End Sub
 
@@ -45,20 +45,20 @@ Public Function removeDuplicates(ByVal inArray As Variant, ByVal dataSet As Filt
         Dim upperBound As Long
         upperBound = UBound(inArray)
         If upperBound >= lowerBound Then
-            Dim result()
-            ReDim result(lowerBound To upperBound)
+            Dim Result()
+            ReDim Result(lowerBound To upperBound)
             Dim i As Long, matchCount As Long
             For i = lowerBound To upperBound
                 If Not dataSet.Contains(inArray(i)) Then
-                    LetSet result(lowerBound + matchCount), inArray(i)
+                    LetSet Result(lowerBound + matchCount), inArray(i)
                     matchCount = matchCount + 1
                 End If
             Next i
             If matchCount = 0 Then
                 Set removeDuplicates = Nothing
             Else
-                ReDim Preserve result(lowerBound To lowerBound + matchCount - 1)
-                removeDuplicates = result
+                ReDim Preserve Result(lowerBound To lowerBound + matchCount - 1)
+                removeDuplicates = Result
             End If
         Else
             Set removeDuplicates = Nothing

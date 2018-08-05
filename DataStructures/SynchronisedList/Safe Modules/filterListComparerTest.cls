@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'@Folder("Tests.Utils.DummyItems)
+'@Folder("Tests.Utils.DummyItems")
 
 Implements ISortable
 Private propertySet As New Properties

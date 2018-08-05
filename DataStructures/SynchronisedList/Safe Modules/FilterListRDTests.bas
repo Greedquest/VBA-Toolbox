@@ -150,10 +150,10 @@ Public Sub testIndexOf()                         'TODO Rename test
     'Arrange:
 
     'Act:
-    Dim index As Long
-    index = myList.IndexOf(a(2))
+    Dim Index As Long
+    Index = myList.IndexOf(a(2))
     'Assert:
-    Assert.AreEqual "1", index
+    Assert.AreEqual "1", Index
     Assert.AreEqual "-1", myList.IndexOf("blah") 'not in list
 
 TestExit:

@@ -18,10 +18,10 @@ Attribute synchro.VB_VarHelpID = -1
 Public Sub init(ByVal dataTable As ListObject)
     Dim tableItem As ListRow
     For Each tableItem In dataTable.ListRows
-        synchro.Add toArray(tableItem)
+        synchro.Add ToArray(tableItem)
     Next
 End Sub
 
-Private Function toArray(tableItem As ListRow) As Variant
-    toArray = WorksheetFunction.Transpose(tableItem.Range)
+Private Function ToArray(tableItem As ListRow) As Variant
+    ToArray = WorksheetFunction.Transpose(tableItem.Range)
 End Function

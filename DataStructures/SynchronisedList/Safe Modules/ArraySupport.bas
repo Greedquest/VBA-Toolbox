@@ -1,6 +1,8 @@
 Attribute VB_Name = "ArraySupport"
 Option Explicit
 Option Compare Text
+'@Folder("SynchronisedList.Utils")
+
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' modArraySupport
 ' By Chip Pearson, chip@cpearson.com, www.cpearson.com

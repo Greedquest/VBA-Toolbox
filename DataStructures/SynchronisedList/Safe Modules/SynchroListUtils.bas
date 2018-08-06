@@ -1,30 +1,18 @@
 Attribute VB_Name = "SynchroListUtils"
 '@Folder(SynchronisedList.Utils)
 Option Explicit
+Sub test()
+    makeMyArgumentsFlat [a1] 'Sheet2.ListObjects("ExampleData").ListRows(1).Range
+End Sub
 
-'Public Function FlattenArray(iterableToFlatten As Variant, Optional level As Long = 0) As Collection
-'    If Not isIterable(iterableToFlatten) Then Err.Raise 5
-'    Dim item As Variant
-'    Dim flattenedResult As New Collection        'store added items in a temp collection which preserves order
-'    For Each item In iterableToFlatten
-'        If isIterable(item) Then
-'            Dim contentToAdd As Variant
-'Debug.Print level
-'            For Each contentToAdd In FlattenArray(item, level + 1)
-'                flattenedResult.Add contentToAdd
-'            Next contentToAdd
-'        Else
-'            flattenedResult.Add item
-'        End If
-'    Next item
-'    Set FlattenArray = flattenedResult
-'End Function
-
+Sub makeMyArgumentsFlat(ParamArray args() As Variant)
+    Dim flatArray As Variant
+    flatArray = flattenParamArray(args)
+End Sub
 
 Public Function flattenParamArray(ParamArray passedParams() As Variant) As Variant
     
     Dim argSet As Variant
-    argSet = passedParams(0)
     If NumElements(Array(passedParams)(0)) <> 1 Then
         Err.Description = "Only pass one paramarray to the function"
         Err.Raise 5

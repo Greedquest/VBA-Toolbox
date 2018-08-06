@@ -37,7 +37,7 @@ Public Event ItemsAdded(ByRef itemSet As Variant)
 Public Event ItemsRemoved(ByRef itemSet As Variant)
 
 Private Type TGridData
-    Data As FilterList                           'Filtered Data in Grid
+    data As FilterList                           'Filtered Data in Grid
     Buffer As clsBuffer
     AlignOnRemoval As Boolean
     SortOnAddition As Boolean
@@ -47,7 +47,7 @@ Private this As TGridData
 Private Const alignAll = 0
 
 Private Sub Class_Initialize()
-    Set this.Data = New FilterList
+    Set this.data = New FilterList
     Set gridDataBuffer = New clsBuffer
     Set this.Buffer = gridDataBuffer
     this.AlignOnRemoval = True
@@ -68,7 +68,7 @@ End Sub
 
 Public Sub ClearGrid()
     'this.Data.Clear won't change visibility necessarily unless good garbage collection
-    this.Buffer.RemoveItems this.Data.Clone.Data 'this.Data.Clone.Data if removing data breaks for loop
+    this.Buffer.RemoveItems this.data.Clone.data 'this.Data.Clone.Data if removing data breaks for loop
 End Sub
 
 '''
@@ -78,14 +78,14 @@ Private Sub gridDataBuffer_ItemsAdded()
     'add items which match filter requirements
     Dim newItems
     newItems = this.Buffer.AddedItems
-    LetSet newItems, removeDuplicates(newItems, this.Data)
+    LetSet newItems, removeDuplicates(newItems, this.data)
     If IsNothing(newItems) Then
         'do nothing
     Else
         Dim i As Long, firstChangeIndex As Long
-        firstChangeIndex = this.Data.Count       'without sorting, first change is just the end of the array
+        firstChangeIndex = this.data.Count       'without sorting, first change is just the end of the array
         For i = 1 To UBound(newItems)
-            this.Data.Add newItems(i)
+            this.data.Add newItems(i)
         Next i
         RaiseEvent ItemsAdded(newItems)
         If this.SortOnAddition Then
@@ -100,10 +100,10 @@ Private Sub gridDataBuffer_ItemsRemoved()
     Dim markedItems                              'remove items from grid and mark for removal from source
     markedItems = gridDataBuffer.RemovalItems
     Dim firstChangeIndex As Long
-    firstChangeIndex = this.Data.IndexOf(markedItems(1))
+    firstChangeIndex = this.data.IndexOf(markedItems(1))
     Dim item
     For Each item In markedItems
-        this.Data.Remove item
+        this.data.Remove item
     Next item
     RaiseEvent ItemsRemoved(markedItems)
     If this.AlignOnRemoval Then RaiseEvent NeedsAligning(firstChangeIndex)
@@ -116,29 +116,29 @@ End Sub
 Public Sub filter(FilterObject As Variant, FilterMode As lstFilterMode, Comparer As IComparer)
     'Filter data references
     Dim unFilteredData As FilterList
-    Set unFilteredData = this.Data.Clone
-    this.Data.filter FilterObject, FilterMode, Comparer
+    Set unFilteredData = this.data.Clone
+    this.data.filter FilterObject, FilterMode, Comparer
     
     Dim firstChangeIndex As Long
     firstChangeIndex = -1                        '0 index
     Dim gridItem As Variant
-    For Each gridItem In unFilteredData.Data
+    For Each gridItem In unFilteredData.data
         firstChangeIndex = firstChangeIndex + 1
-        If this.Data.Contains(gridItem) = False Then Exit For
+        If this.data.Contains(gridItem) = False Then Exit For
     Next gridItem
     RaiseEvent NeedsAligning(firstChangeIndex)   'off by 1
 End Sub
 
 Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Optional ByRef itemToTrack As Variant)
-    this.Data.Sort Comparer, SortMode
+    this.data.Sort Comparer, SortMode
     If IsMissing(itemToTrack) Or IsNothing(itemToTrack) Then
         RaiseEvent NeedsAligning(alignAll)       'to everything
     Else
-        RaiseEvent NeedsAligning(this.Data.IndexOf(itemToTrack))
+        RaiseEvent NeedsAligning(this.data.IndexOf(itemToTrack))
     End If
 End Sub
 
 Public Property Get RawData() As FilterList
-    Set RawData = this.Data.Clone
+    Set RawData = this.data.Clone
 End Property
 

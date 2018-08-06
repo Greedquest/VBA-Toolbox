@@ -30,12 +30,12 @@ Private Sub Class_Initialize()
     Set dataSet = CreateObject("System.Collections.ArrayList")
 End Sub
 
-Public Property Get Data() As Object
-Attribute Data.VB_UserMemId = 0
-    Set Data = dataSet
+Public Property Get data() As Object
+Attribute data.VB_UserMemId = 0
+    Set data = dataSet
 End Property
 
-Public Property Set Data(Value As Object)
+Public Property Set data(Value As Object)
     Set dataSet = Value
 End Property
 
@@ -45,7 +45,7 @@ End Function
 
 Public Function Clone() As FilterList
     Dim result As New FilterList
-    Set result.Data = Me.Data.Clone
+    Set result.data = Me.data.Clone
     Set Clone = result
 End Function
 

@@ -52,7 +52,7 @@ Public Sub AddItems(iterableItems As Variant)
     ' - Also raise event when nothing more to add TODO buffer with async timer
     Dim item As Variant
     Dim justRaised As Boolean
-    If Not isIterable(iterableItems) Then Err.Description = "Items added to buffer must be iterable": Err.Raise 5
+    If Not isIterable(iterableItems) Then Err.Description = "Items added to buffer must be iterable, not " & TypeName(iterableItems): Err.Raise 5
     For Each item In iterableItems
         justRaised = False
         Enqueue item, this.BufferQueue

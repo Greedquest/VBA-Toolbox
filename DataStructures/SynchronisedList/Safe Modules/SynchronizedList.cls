@@ -107,7 +107,7 @@ End Sub
 Private Sub sourceDataWrapper_DataAdded()
     'When something flagged as added to source (and has made it through the source filter
     'put it on the grid
-    this.GridData.AddItems this.SourceData.AddedData.Data
+    this.GridData.AddItems this.SourceData.AddedData.data
     'sort and align triggered
 End Sub
 

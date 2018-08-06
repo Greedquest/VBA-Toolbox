@@ -39,10 +39,10 @@ Private Function IComparer_Compare(ByVal X As Variant, ByVal Y As Variant) As Lo
     End If
 End Function
 
-Public Sub init(ProcName As String, CallType As VbCallType, ParamArray Args())
+Public Sub init(ProcName As String, CallType As VbCallType, ParamArray args())
     mProcName = ProcName
     mCallType = CallType
-    mArgs = Args
+    mArgs = args
 End Sub
 
 ' http://www.vbforums.com/showthread.php?405366-RESOLVED-Using-CallByName-with-variable-number-of-arguments

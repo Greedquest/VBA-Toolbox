@@ -22,7 +22,7 @@ Public Event DataRemoved(ByRef RemovedItems)
 Public Event NeedsSortingAndFiltering(ByRef PartialFilterSet) 'trigger filter to output
 
 Private Type TSource
-    Data As FilterList                           'Complete source data for grid
+    data As FilterList                           'Complete source data for grid
     output As FilterList                         'Temporary data to be passed to the grid
     Buffer As clsBuffer
 End Type
@@ -30,7 +30,7 @@ End Type
 Private this As TSource
 
 Private Sub Class_Initialize()
-    Set this.Data = New FilterList               'data store
+    Set this.data = New FilterList               'data store
     Set sourceBuffer = New clsBuffer             'events version of buffer
     Set this.Buffer = sourceBuffer               'readable version of buffer
 End Sub
@@ -70,7 +70,7 @@ Private Sub sourceBuffer_ItemsRemoved()
     markedItems = sourceBuffer.RemovalItems
     Dim i As Long
     For i = 1 To UBound(markedItems)
-        this.Data.Remove markedItems(i)
+        this.data.Remove markedItems(i)
         this.output.Remove markedItems(i)        'remove from output too if present
     Next i
     RaiseEvent DataRemoved(markedItems)          'triggers grid to remove items
@@ -84,7 +84,7 @@ Private Sub sourceBuffer_ItemsAdded()
     newArray = this.Buffer.AddedItems
     Dim i As Long
     For i = 1 To UBound(newArray)
-        If this.Data.Contains(newArray(i)) Then
+        If this.data.Contains(newArray(i)) Then
             'check for duplicates as these will confuse the re-filtering system
             'Could check whether adding new stuff or just refiltering
             'But then stuff caught in a truly async buffer will be overlooked
@@ -92,7 +92,7 @@ Private Sub sourceBuffer_ItemsAdded()
             Err.Description = "You can't add the same item to the list twice!"
             Err.Raise 5
         Else
-            this.Data.Add newArray(i)
+            this.data.Add newArray(i)
         End If
     Next i
     RaiseEvent NeedsSortingAndFiltering(newArray) 'Tell grid manager to filter source to output (only added items though)
@@ -103,14 +103,14 @@ Public Sub SortAndFilterToOutput(FilterObject As Variant, FilterMode As lstFilte
     'TODO Sort ascending, descending or maintain order - maintain order makes it hard to find first index
 
     If this.output Is Nothing Then
-        Set this.output = this.Data.Clone
+        Set this.output = this.data.Clone
     ElseIf isIterable(PartialSet) Then
         Dim outboundItem As Variant
         For Each outboundItem In PartialSet
             this.output.Add outboundItem
         Next outboundItem
     Else                                         'no partial set, i.e. grid was cleared
-        Set this.output = this.Data.Clone
+        Set this.output = this.data.Clone
     End If
 
     '    If IsMissing(PartialSet) Then
@@ -143,7 +143,7 @@ End Function
 'User Interface
 
 Public Property Get RawData() As FilterList
-    Set RawData = this.Data.Clone
+    Set RawData = this.data.Clone
 End Property
 
 Public Sub ReSortAndFilter()

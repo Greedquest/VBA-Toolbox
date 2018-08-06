@@ -15,13 +15,29 @@ Attribute userInterface.VB_VarHelpID = -1
 Private WithEvents synchro As SynchronizedList
 Attribute synchro.VB_VarHelpID = -1
 
-Public Sub init(ByVal dataTable As ListObject)
-    Dim tableItem As ListRow
-    For Each tableItem In dataTable.ListRows
-        synchro.Add ToArray(tableItem)
-    Next
+Private Type tRunner
+    headerRange As Range
+    UIForm As ExampleForm
+    data As SynchronizedList
+End Type
+Private this As tRunner
+
+
+Private Sub Class_Initialize()
+    Set synchro = New SynchronizedList
+    Set this.data = synchro
 End Sub
 
-Private Function ToArray(tableItem As ListRow) As Variant
-    ToArray = WorksheetFunction.Transpose(tableItem.Range)
-End Function
+Public Sub init(ByVal dataTable As ListObject)
+    Set this.headerRange = dataTable.HeaderRowRange
+    Dim tableItem As ListRow
+    For Each tableItem In dataTable.ListRows
+        synchro.Add tableItem.Range
+    Next
+    
+    Set userInterface = New ExampleForm
+    Set this.UIForm = userInterface
+    
+    this.UIForm.DisplayData this.data.SourceData.ToArray
+End Sub
+

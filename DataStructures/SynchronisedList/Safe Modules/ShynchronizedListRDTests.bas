@@ -163,7 +163,7 @@ Public Sub TestSorting()
     
     'Assert:
 
-    Assert.SequenceEquals IterableToArray(CorrectList), IterableToArray(synchro.GridData.Data)
+    Assert.SequenceEquals IterableToArray(CorrectList), IterableToArray(synchro.GridData.data)
     
 TestExit:
     Exit Sub
@@ -216,4 +216,39 @@ TestExit:
 TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
 End Sub
+
+'@TestMethod
+Public Sub TestAddingOne() 'TODO Rename test
+    On Error GoTo TestFail
+    
+    'Arrange:
+
+    Dim item As DummyGridItem
+    Set item = getEmptyDummyClasses(2)(1)
+
+    
+    'Act:
+    With synchro
+        .Add item
+    End With
+    
+    'Assert:
+    With synchro
+        Assert.AreSame item, .SourceData(0), "SourceData added incorrectly"
+        Assert.AreEqual "1", .SourceData.Count, "SourceData affected by reading"
+        Assert.AreEqual "1", .GridData.Count, "Default Grid behaviour not as expected"
+    End With
+    
+    'check events
+    With EventMonitor
+        Assert.AreEqual "1", .OrderEventRaised   're-order on addition
+        Assert.AreEqual "0", .LastChangeIndex    'assumes 1st 2 ordered, so now handle from 2 onwards
+        Assert.AreEqual "0", .PropertiesEventRaised 'no ammendments made
+    End With
+TestExit:
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+End Sub
+
 

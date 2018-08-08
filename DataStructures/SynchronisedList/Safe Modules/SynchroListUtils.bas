@@ -1,14 +1,6 @@
 Attribute VB_Name = "SynchroListUtils"
 '@Folder(SynchronisedList.Utils)
 Option Explicit
-Sub test()
-    makeMyArgumentsFlat [a1] 'Sheet2.ListObjects("ExampleData").ListRows(1).Range
-End Sub
-
-Sub makeMyArgumentsFlat(ParamArray args() As Variant)
-    Dim flatArray As Variant
-    flatArray = flattenParamArray(args)
-End Sub
 
 Public Function flattenParamArray(ParamArray passedParams() As Variant) As Variant
     
@@ -24,7 +16,7 @@ Public Function flattenParamArray(ParamArray passedParams() As Variant) As Varia
     Dim noErrors As Boolean
     noErrors = True
     For i = LBound(argSet) To UBound(argSet)
-        If IsArray(argSet(i)) Then
+        If IsArrayNotObj(argSet(i)) Then
             noErrors = noErrors And ConcatenateArrays(result, argSet(i))
         Else
             noErrors = noErrors And ConcatenateArrays(result, Array(argSet(i)))
@@ -54,6 +46,10 @@ Public Function IsNothing(valueToTest As Variant) As Boolean
     Else
         IsNothing = False
     End If
+End Function
+
+Public Function IsArrayNotObj(valueToTest As Variant) As Boolean
+    IsArrayNotObj = IsArray(valueToTest) And Not IsObject(valueToTest)
 End Function
 
 Public Function removeDuplicates(ByVal inArray As Variant, ByVal dataSet As FilterList) As Variant

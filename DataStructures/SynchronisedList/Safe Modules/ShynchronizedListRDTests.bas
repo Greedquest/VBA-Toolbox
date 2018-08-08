@@ -260,8 +260,8 @@ Public Sub TestAddingRange() 'TODO Rename test
     'Act:
     synchro.Add [a1:a5]
     'Assert:
-    Assert.AreEqual "1", synchro.SourceData.Count
-    Assert.AreEqual "A1:A5", UCase(synchro.SourceData(0).Address)
+    Assert.AreEqual "1", synchro.SourceData.Count, "Count incorrect"
+    Assert.AreEqual "$A$1:$A$5", UCase(synchro.SourceData(0).Address), "Addresses don't line up"
 
 TestExit:
     Exit Sub

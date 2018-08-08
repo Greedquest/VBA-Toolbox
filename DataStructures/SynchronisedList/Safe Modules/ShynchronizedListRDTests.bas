@@ -251,4 +251,22 @@ TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
 End Sub
 
+'@TestMethod
+Public Sub TestAddingRange() 'TODO Rename test
+    On Error GoTo TestFail
+    
+    'Arrange:
+
+    'Act:
+    synchro.Add [a1:a5]
+    'Assert:
+    Assert.AreEqual "1", synchro.SourceData.Count
+    Assert.AreEqual "A1:A5", UCase(synchro.SourceData(0).Address)
+
+TestExit:
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+End Sub
+
 

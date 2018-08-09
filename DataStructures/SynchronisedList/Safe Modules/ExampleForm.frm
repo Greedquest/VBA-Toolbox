@@ -75,19 +75,42 @@ Private boolEnter As Boolean
 'Form Control Methods
 
 Public Sub DisplayData(ByRef dataArray As Variant)
-    dataDisplayBox.List = WorksheetFunction.Transpose(WorksheetFunction.Transpose(dataArray))
+    If IsArray(dataArray) And ArraySupport.NumberOfArrayDimensions(dataArray) = 1 Then
+        dataDisplayBox.List = WorksheetFunction.Transpose(WorksheetFunction.Transpose(dataArray))
+    Else
+        Err.Raise 5
+    End If
 End Sub
 
 Public Sub RemoveItem(ByVal itemIndex As Long)
-    With dataDisplayBox
-
-    End With
+    dataDisplayBox.RemoveItem itemIndex
 End Sub
 
-Public Sub AddItem(ByVal itemIndex As Long)
-    With dataDisplayBox
+Public Sub AddItem(itemArray As Variant)
+'    If TypeOf itemArray Is Range Then
+'        If dataDisplayBox.RowSource = "" Then
+'            dataDisplayBox.RowSource = itemArray.Address
+'        Else
+'            dataDisplayBox.RowSource = Union(Range(dataDisplayBox.RowSource), itemArray).Address
+'        End If
+    If IsArray(itemArray) Then 'assume 1 indexed
+        With dataDisplayBox
+            dataDisplayBox.AddItem
+            Dim i As Long
+            For i = 0 To dataDisplayBox.ColumnCount - 1
+                .List(.ListCount - 1, i) = itemArray(i + 1)
+            Next
+        End With
+    Else
+        Err.Raise 5
+    End If
+End Sub
 
-    End With
+Public Sub ClearFromIndex(startingIndex As Long)
+    Dim i As Long
+    For i = dataDisplayBox.ListCount To startingIndex Step -1 'count backwards
+        RemoveItem i
+    Next
 End Sub
 
 'Form GUI
@@ -106,3 +129,5 @@ ByVal X As Single, ByVal Y As Single)
         boolEnter = False
     End If
 End Sub
+
+

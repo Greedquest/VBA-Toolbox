@@ -18,6 +18,8 @@ Public Function flattenParamArray(ParamArray passedParams() As Variant) As Varia
     For i = LBound(argSet) To UBound(argSet)
         If IsArrayNotObj(argSet(i)) Then
             noErrors = noErrors And ConcatenateArrays(result, argSet(i))
+        ElseIf isIterable(argSet(i)) Then
+            noErrors = noErrors And ConcatenateArrays(result, IterableToArray(argSet(i)))
         Else
             noErrors = noErrors And ConcatenateArrays(result, Array(argSet(i)))
         End If

@@ -27,7 +27,7 @@ Public Sub ClearCounts()
     Set this.ChangeIndecies = New Collection
 End Sub
 
-Private Sub Synchro_OrderChanged(ByVal firstChangeIndex As Long)
+Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
     this.OrderEventRaised = this.OrderEventRaised + 1
     this.LastChangeIndex = firstChangeIndex
     this.ChangeIndecies.Add firstChangeIndex

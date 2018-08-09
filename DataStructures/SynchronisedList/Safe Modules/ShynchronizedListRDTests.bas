@@ -258,7 +258,7 @@ Public Sub TestAddingRange() 'TODO Rename test
     'Arrange:
 
     'Act:
-    synchro.Add [a1:a5]
+    synchro.Add Array([a1:a5]) 'wrap iterables we don't want flattened
     'Assert:
     Assert.AreEqual "1", synchro.SourceData.Count, "Count incorrect"
     Assert.AreEqual "$A$1:$A$5", UCase(synchro.SourceData(0).Address), "Addresses don't line up"

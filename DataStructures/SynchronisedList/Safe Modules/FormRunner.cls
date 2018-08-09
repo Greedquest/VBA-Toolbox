@@ -34,14 +34,12 @@ Public Sub init(ByVal dataTable As ListObject)
     Set userInterface = New ExampleForm
     Set this.UIForm = userInterface
     this.UIForm.dataDisplayBox.ColumnCount = this.headerRange.Cells.Count 'set number of columns
+    
+    
+    
+    'show form and start adding data to it
     this.UIForm.Show False
-    
-    synchro.Add IterableToArray(dataTable.DataBodyRange.Rows)
-    
-'    Dim tableItem As ListRow
-'    For Each tableItem In dataTable.ListRows
-'        synchro.Add tableItem.Range
-'    Next
+    synchro.Add dataTable.DataBodyRange.Rows
     
 
 End Sub
@@ -53,6 +51,6 @@ Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
     For i = firstChangeIndex To this.data.GridData.Count - 1 '0 indexed
         this.UIForm.AddItem this.data.GridData(i)
     Next
-
     this.UIForm.Repaint
+    DoEvents
 End Sub

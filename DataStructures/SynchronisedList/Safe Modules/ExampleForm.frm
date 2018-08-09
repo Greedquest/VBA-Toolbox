@@ -74,9 +74,19 @@ Private boolEnter As Boolean
 
 'Form Control Methods
 
+Sub populateSortBox(ByVal options As Variant)
+    Me.SortBy.List = doubleTranspose(options)
+End Sub
+    
+    
+Sub populateFilterBox(ByVal options As Variant)
+    Me.FilterBy.List = doubleTranspose(options)
+End Sub
+
+
 Public Sub DisplayData(ByRef dataArray As Variant)
     If IsArray(dataArray) And ArraySupport.NumberOfArrayDimensions(dataArray) = 1 Then
-        dataDisplayBox.List = WorksheetFunction.Transpose(WorksheetFunction.Transpose(dataArray))
+        dataDisplayBox.List = doubleTranspose(dataArray)
     Else
         Err.Raise 5
     End If
@@ -87,18 +97,15 @@ Public Sub RemoveItem(ByVal itemIndex As Long)
 End Sub
 
 Public Sub AddItem(itemArray As Variant)
-'    If TypeOf itemArray Is Range Then
-'        If dataDisplayBox.RowSource = "" Then
-'            dataDisplayBox.RowSource = itemArray.Address
-'        Else
-'            dataDisplayBox.RowSource = Union(Range(dataDisplayBox.RowSource), itemArray).Address
-'        End If
+
     If IsArray(itemArray) Then 'assume 1 indexed
+        Dim transposedArray
+        transposedArray = doubleTranspose(itemArray)
         With dataDisplayBox
-            dataDisplayBox.AddItem
+            .AddItem
             Dim i As Long
-            For i = 0 To dataDisplayBox.ColumnCount - 1
-                .List(.ListCount - 1, i) = itemArray(i + 1)
+            For i = 0 To .ColumnCount - 1
+                .List(.ListCount - 1, i) = transposedArray(i + 1)
             Next
         End With
     Else
@@ -112,6 +119,10 @@ Public Sub ClearFromIndex(startingIndex As Long)
         RemoveItem i
     Next
 End Sub
+
+Private Function doubleTranspose(ByVal arrayToTranspose As Variant) As Variant
+    doubleTranspose = WorksheetFunction.Transpose(WorksheetFunction.Transpose(arrayToTranspose))
+End Function
 
 'Form GUI
 
@@ -129,5 +140,4 @@ ByVal X As Single, ByVal Y As Single)
         boolEnter = False
     End If
 End Sub
-
 

@@ -106,7 +106,7 @@ Public Sub AddItem(itemArray As Variant)
             .AddItem
             Dim i As Long
             For i = 0 To .ColumnCount - 1
-                .List(.ListCount - 1, i) = transposedArray(i + 1)
+                .List(.listCount - 1, i) = transposedArray(i + 1)
             Next
         End With
     Else
@@ -116,7 +116,11 @@ End Sub
 
 Public Sub ClearFromIndex(startingIndex As Long)
     Dim i As Long
-    For i = dataDisplayBox.ListCount To startingIndex Step -1 'count backwards
+    Dim listCount As Long
+    listCount = dataDisplayBox.listCount
+    'nothing to clear if first change > end of list 0 indexed
+    If listCount = startingIndex Then Exit Sub
+    For i = listCount - 1 To startingIndex Step -1 'count backwards
         RemoveItem i
     Next
 End Sub

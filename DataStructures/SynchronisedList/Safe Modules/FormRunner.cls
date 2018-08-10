@@ -19,7 +19,7 @@ Private Type tRunner
     headerRange As Range
     UIForm As ExampleForm
     data As SynchronizedList
-    comparer As CallByNameComparer
+    Comparer As CallByNameComparer
     'filterObj As dummyRange
 End Type
 Private this As tRunner
@@ -29,7 +29,7 @@ Private Sub Class_Initialize()
 
     Set synchro = New SynchronizedList
     Set this.data = synchro
-    Set this.comparer = New CallByNameComparer
+    Set this.Comparer = New CallByNameComparer
 End Sub
 
 Public Sub init(ByVal dataTable As ListObject)
@@ -51,7 +51,7 @@ End Sub
 
 
 Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
-    this.UIForm.ClearFromIndex firstChangeIndex + 1 'listbox is 1 indexed
+    this.UIForm.ClearFromIndex firstChangeIndex 'listbox is 0 indexed too
     Dim i As Long
     For i = firstChangeIndex To this.data.GridData.Count - 1 '0 indexed
         this.UIForm.AddItem this.data.GridData(i)
@@ -61,8 +61,8 @@ Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
 End Sub
 
 Private Sub userInterface_sortModeSet(ByVal SortBy As String)
-    this.comparer.init "Cells", VbGet, 1, columnIndexFromName(SortBy)
-    this.data.Sort this.comparer
+    this.Comparer.init "Cells", VbGet, 1, columnIndexFromName(SortBy)
+    this.data.Sort this.Comparer
 End Sub
 Private Function columnIndexFromName(ByVal colName As String) As Long
     Const EXACT_MATCH As Long = 0

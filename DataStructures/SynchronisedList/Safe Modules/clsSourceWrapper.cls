@@ -98,7 +98,7 @@ Private Sub sourceBuffer_ItemsAdded()
     RaiseEvent NeedsSortingAndFiltering(newArray) 'Tell grid manager to filter source to output (only added items though)
 End Sub
 
-Public Sub SortAndFilterToOutput(FilterObject As Variant, FilterMode As lstFilterMode, filterComparer As IComparer, sortComparer As IComparer, SortMode As lstSortMode, Optional PartialSet As Variant)
+Public Sub SortAndFilterToOutput(FilterObject As Variant, FilterMode As lstFilterMode, FilterComparer As IComparer, SortComparer As IComparer, SortMode As lstSortMode, Optional PartialSet As Variant)
     'Pass filtered and sorted copy of data to output queue, which will be buffered into Grid
     'TODO Sort ascending, descending or maintain order - maintain order makes it hard to find first index
 
@@ -128,9 +128,9 @@ Public Sub SortAndFilterToOutput(FilterObject As Variant, FilterMode As lstFilte
 
     '    Dim tempOutput As FilterList
     '    Set tempOutput = this.Output
-    this.output.filter FilterObject, FilterMode, filterComparer 'Filter list using dummy object based on current settings
+    this.output.filter FilterObject, FilterMode, FilterComparer 'Filter list using dummy object based on current settings
     If this.output.Count > 0 Then
-        this.output.Sort sortComparer, SortMode
+        this.output.Sort SortComparer, SortMode
         RaiseEvent DataAdded                     'Let gridManager know there's new data ready
     End If
 End Sub

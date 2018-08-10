@@ -11,8 +11,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Type tFilter
-    sortComparer As IComparer
-    filterComparer As IComparer
+    SortComparer As IComparer
+    FilterComparer As IComparer
     FilterMode As lstFilterMode
     SortMode As lstSortMode
     filterAgainst As Variant
@@ -26,34 +26,34 @@ Private Const defaultSortMode = lstSortMode.lstSortAscending
 Private this As tFilter
 
 Private Sub Class_Initialize()
-    Set this.sortComparer = New propertyComparer
+    Set this.SortComparer = New propertyComparer
     this.FilterMode = defaultFilterMode
     this.SortMode = defaultSortMode
     this.filterModeSet = False
     this.sortModeSet = False
 End Sub
 
-Public Property Get filterComparer() As IComparer
-    Set filterComparer = this.filterComparer
+Public Property Get FilterComparer() As IComparer
+    Set FilterComparer = this.FilterComparer
 End Property
 
-Public Property Set filterComparer(Value As IComparer)
-    Set this.filterComparer = Value
+Public Property Set FilterComparer(Value As IComparer)
+    Set this.FilterComparer = Value
     this.filterModeSet = Not Value Is Nothing    'filter mode set as long as valid IComparer set
 End Property
 
-Public Property Get sortComparer() As IComparer
-    Set sortComparer = this.sortComparer
+Public Property Get SortComparer() As IComparer
+    Set SortComparer = this.SortComparer
 End Property
 
-Public Property Set sortComparer(Value As IComparer)
-    Set this.sortComparer = Value
+Public Property Set SortComparer(Value As IComparer)
+    Set this.SortComparer = Value
     this.sortModeSet = Not Value Is Nothing      'sort mode set as long as valid IComparer set
 End Property
 
 Public Sub SetFilterMode(Optional compareTo As Variant = vbNullString, Optional newComparer As IComparer, Optional overrideFilterMode As lstFilterMode = 0)
     'If overrides not set, revert to default mode
-    If Not newComparer Is Nothing Then Set filterComparer = newComparer
+    If Not newComparer Is Nothing Then Set FilterComparer = newComparer
     If overrideFilterMode = 0 Then
         this.FilterMode = defaultFilterMode
     Else
@@ -68,7 +68,7 @@ End Sub
 
 Public Sub SetSortMode(Optional newComparer As IComparer, Optional overrideSortMode As lstSortMode = 0)
     
-    If Not newComparer Is Nothing Then Set sortComparer = newComparer
+    If Not newComparer Is Nothing Then Set SortComparer = newComparer
     If overrideSortMode = 0 Then
         this.SortMode = defaultSortMode
     Else
@@ -84,13 +84,13 @@ Public Sub SortAndFilterSourceToOutput(source As clsSourceWrapper, Optional Part
         Err.Description = "No IComparer has been set for Sorting, please setSortMode"
         Err.Raise 5
     Else
-        source.SortAndFilterToOutput this.filterAgainst, this.FilterMode, filterComparer, sortComparer, this.SortMode, PartialSet
+        source.SortAndFilterToOutput this.filterAgainst, this.FilterMode, FilterComparer, SortComparer, this.SortMode, PartialSet
     End If
 End Sub
 
 Public Sub filterGrid(grid As clsGridDataWrapper)
     If isSafeToFilter Then
-        grid.filter this.filterAgainst, this.FilterMode, filterComparer
+        grid.filter this.filterAgainst, this.FilterMode, FilterComparer
     Else
         Err.Description = "No IComparer has been set for filtering, please setFilterMode"
         Err.Raise 5
@@ -98,7 +98,7 @@ Public Sub filterGrid(grid As clsGridDataWrapper)
 End Sub
 
 Public Sub sortGrid(grid As clsGridDataWrapper, itemToTrack As Variant)
-    grid.Sort sortComparer, this.SortMode, itemToTrack
+    grid.Sort SortComparer, this.SortMode, itemToTrack
 End Sub
 
 Private Function isSafeToFilter() As Boolean

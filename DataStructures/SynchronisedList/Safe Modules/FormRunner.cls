@@ -19,8 +19,9 @@ Private Type tRunner
     headerRange As Range
     UIForm As ExampleForm
     data As SynchronizedList
-    Comparer As CallByNameComparer
-    'filterObj As dummyRange
+    SortComparer As CallByNameComparer
+    FilterComparer As CallByNameComparer
+    filterObj As dummyRange
 End Type
 Private this As tRunner
 
@@ -29,7 +30,9 @@ Private Sub Class_Initialize()
 
     Set synchro = New SynchronizedList
     Set this.data = synchro
-    Set this.Comparer = New CallByNameComparer
+    Set this.SortComparer = New CallByNameComparer
+    Set this.FilterComparer = New CallByNameComparer
+    Set this.filterObj = New dummyRange
 End Sub
 
 Public Sub init(ByVal dataTable As ListObject)
@@ -60,9 +63,15 @@ Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
     DoEvents
 End Sub
 
+Private Sub userInterface_filterModeSet(ByVal FilterBy As String, ByVal FilterValue As String)
+    this.FilterComparer.init "Cells", VbGet, 1, columnIndexFromName(FilterBy)
+    this.filterObj.Cells(1, columnIndexFromName(FilterBy)) = FilterValue
+    this.data.filter this.filterObj, this.FilterComparer
+End Sub
+
 Private Sub userInterface_sortModeSet(ByVal SortBy As String)
-    this.Comparer.init "Cells", VbGet, 1, columnIndexFromName(SortBy)
-    this.data.Sort this.Comparer
+    this.SortComparer.init "Cells", VbGet, 1, columnIndexFromName(SortBy)
+    this.data.Sort this.SortComparer
 End Sub
 Private Function columnIndexFromName(ByVal colName As String) As Long
     Const EXACT_MATCH As Long = 0

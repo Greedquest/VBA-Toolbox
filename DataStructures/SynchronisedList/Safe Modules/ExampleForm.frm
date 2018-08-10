@@ -74,6 +74,7 @@ Private boolEnter As Boolean
 
 'Form Control Methods
 
+
 Sub populateSortBox(ByVal options As Variant)
     Me.SortBy.List = doubleTranspose(options)
 End Sub
@@ -141,3 +142,10 @@ ByVal X As Single, ByVal Y As Single)
     End If
 End Sub
 
+Private Sub SortButton_Click()
+    RaiseEvent sortModeSet(Me.SortBy.Value)
+End Sub
+
+Private Sub FilterButton_Click()
+    RaiseEvent filterModeSet(Me.FilterBy.Value, Me.FilterValue.Value)
+End Sub

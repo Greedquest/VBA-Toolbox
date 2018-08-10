@@ -19,13 +19,17 @@ Private Type tRunner
     headerRange As Range
     UIForm As ExampleForm
     data As SynchronizedList
+    comparer As CallByNameComparer
+    'filterObj As dummyRange
 End Type
 Private this As tRunner
 
 
 Private Sub Class_Initialize()
+
     Set synchro = New SynchronizedList
     Set this.data = synchro
+    Set this.comparer = New CallByNameComparer
 End Sub
 
 Public Sub init(ByVal dataTable As ListObject)
@@ -55,3 +59,15 @@ Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
     this.UIForm.Repaint
     DoEvents
 End Sub
+
+Private Sub userInterface_sortModeSet(ByVal SortBy As String)
+    this.comparer.init "Cells", VbGet, 1, columnIndexFromName(SortBy)
+    this.data.Sort this.comparer
+End Sub
+Private Function columnIndexFromName(ByVal colName As String) As Long
+    Const EXACT_MATCH As Long = 0
+    Dim result
+    On Error Resume Next
+    result = WorksheetFunction.Match(colName, this.headerRange, EXACT_MATCH)
+    columnIndexFromName = IIf(Err.Number = 0, result, 1)
+End Function

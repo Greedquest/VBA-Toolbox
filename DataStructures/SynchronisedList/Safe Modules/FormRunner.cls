@@ -35,7 +35,8 @@ Public Sub init(ByVal dataTable As ListObject)
     Set this.UIForm = userInterface
     this.UIForm.dataDisplayBox.ColumnCount = this.headerRange.Cells.Count 'set number of columns
     
-    
+    this.UIForm.populateFilterBox this.headerRange
+    this.UIForm.populateSortBox this.headerRange
     
     'show form and start adding data to it
     this.UIForm.Show False

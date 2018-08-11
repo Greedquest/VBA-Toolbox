@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "GridFilterRunner"
+Attribute VB_Name = "FilterRunner"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -88,7 +88,7 @@ Public Sub SortAndFilterSourceToOutput(source As SourceDataWrapper, Optional Par
     End If
 End Sub
 
-Public Sub filterGrid(grid As SynchronisedDataWrapper)
+Public Sub filterSynchronised(grid As SynchronisedDataWrapper)
     If isSafeToFilter Then
         grid.filter this.filterAgainst, this.FilterMode, FilterComparer
     Else
@@ -97,7 +97,7 @@ Public Sub filterGrid(grid As SynchronisedDataWrapper)
     End If
 End Sub
 
-Public Sub sortGrid(grid As SynchronisedDataWrapper, itemToTrack As Variant)
+Public Sub sortSynchronised(grid As SynchronisedDataWrapper, itemToTrack As Variant)
     grid.Sort SortComparer, this.SortMode, itemToTrack
 End Sub
 

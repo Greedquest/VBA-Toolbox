@@ -22,7 +22,7 @@ Attribute synchronisedWrapper.VB_VarHelpID = -1
 Private Type TList
     SourceData As SourceDataWrapper
     GridData As SynchronisedDataWrapper
-    FilterSortMethods As GridFilterRunner
+    FilterSortMethods As FilterRunner
     SortOnAddition As Boolean
 End Type
 
@@ -39,7 +39,7 @@ Private Sub Class_Initialize()
     Set synchronisedWrapper = New SynchronisedDataWrapper
     Set this.GridData = synchronisedWrapper
     'set up FilterRunner
-    Set this.FilterSortMethods = New GridFilterRunner
+    Set this.FilterSortMethods = New FilterRunner
     this.FilterSortMethods.SetFilterMode , , initialFiltering
     this.FilterSortMethods.SetSortMode , initialSorting
 End Sub
@@ -64,7 +64,7 @@ End Sub
 
 Public Sub Sort(Optional newComparer As IComparer, Optional overrideSortMode As lstSortMode = 0)
     this.FilterSortMethods.SetSortMode newComparer, overrideSortMode
-    this.FilterSortMethods.sortGrid this.GridData, Nothing
+    this.FilterSortMethods.sortSynchronised this.GridData, Nothing
     'this.SourceData.ReSortAndFilter 'doubles grid data
 End Sub
 
@@ -84,7 +84,7 @@ Public Property Get GridData() As FilterList
 End Property
 
 Private Sub synchronisedWrapper_ItemsAdded(itemArray As Variant)
-    If this.SortOnAddition Then this.FilterSortMethods.sortGrid this.GridData, itemArray(1)
+    If this.SortOnAddition Then this.FilterSortMethods.sortSynchronised this.GridData, itemArray(1)
     RaiseEvent OnAddition(itemArray)
 End Sub
 
@@ -97,11 +97,11 @@ Private Sub synchronisedWrapper_NeedsAligning(ByVal firstChangeIndex As Long)
 End Sub
 
 Private Sub synchronisedWrapper_NeedsFiltering()
-    this.FilterSortMethods.filterGrid this.GridData
+    this.FilterSortMethods.filterSynchronised this.GridData
 End Sub
 
 Private Sub synchronisedWrapper_NeedsSorting(itemToTrack As Variant)
-    this.FilterSortMethods.sortGrid this.GridData, itemToTrack
+    this.FilterSortMethods.sortSynchronised this.GridData, itemToTrack
 End Sub
 
 Private Sub sourceWrapper_DataAdded()
@@ -117,7 +117,7 @@ End Sub
 
 Private Sub sourceWrapper_NeedsSortingAndFiltering(PartialFilterSet As Variant)
     'Empty partial set means complete resort/filter
-    If IsNothing(PartialFilterSet) Then this.FilterSortMethods.filterGrid this.GridData
+    If IsNothing(PartialFilterSet) Then this.FilterSortMethods.filterSynchronised this.GridData
     'the next will trigger a resort when new data is added
     this.FilterSortMethods.SortAndFilterSourceToOutput this.SourceData, PartialFilterSet
 End Sub

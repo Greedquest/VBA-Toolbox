@@ -53,7 +53,7 @@ Public Sub TestAddingTwo()
         .AddItems items2
     End With
     
-    With New GridFilterRunner                    'this triggers an event, but let's bypass it
+    With New FilterRunner                    'this triggers an event, but let's bypass it
         .SetFilterMode , , lstKeepAll
         .SetSortMode , lstNoSorting
         .SortAndFilterSourceToOutput sourceWrapper
@@ -80,7 +80,7 @@ Public Sub testRemoval()
     dummyItems = getEmptyDummyClasses(5)
     sourceWrapper.AddItems dummyItems
     
-    With New GridFilterRunner                    'adding triggers an event, let's assume that happened
+    With New FilterRunner                    'adding triggers an event, let's assume that happened
         .SetFilterMode , , lstKeepAll
         .SetSortMode , lstNoSorting
         .SortAndFilterSourceToOutput sourceWrapper
@@ -113,7 +113,7 @@ Public Sub testRemovalOfNonPresent()
     Set itemToRemove = getEmptyDummyClasses(1)(1)
     sourceWrapper.AddItems dummyItems
     
-    With New GridFilterRunner                    'adding triggers an event, let's assume that happened
+    With New FilterRunner                    'adding triggers an event, let's assume that happened
         .SetFilterMode , , lstKeepAll
         .SetSortMode , lstNoSorting
         .SortAndFilterSourceToOutput sourceWrapper
@@ -152,7 +152,7 @@ Public Sub TestFilteringError()
     sourceWrapper.AddItems dummyItems
     
     'Act:
-    With New GridFilterRunner                    'adding triggers an event, let's assume that happened
+    With New FilterRunner                    'adding triggers an event, let's assume that happened
         '.setFilterMode
         .SortAndFilterSourceToOutput sourceWrapper
     End With

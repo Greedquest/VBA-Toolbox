@@ -88,7 +88,7 @@ Public Sub SortAndFilterSourceToOutput(source As SourceDataWrapper, Optional Par
     End If
 End Sub
 
-Public Sub filterSynchronised(grid As SynchronisedDataWrapper)
+Public Sub filterSelected(grid As SelectedDataWrapper)
     If isSafeToFilter Then
         grid.filter this.filterAgainst, this.FilterMode, FilterComparer
     Else
@@ -97,7 +97,7 @@ Public Sub filterSynchronised(grid As SynchronisedDataWrapper)
     End If
 End Sub
 
-Public Sub sortSynchronised(grid As SynchronisedDataWrapper, itemToTrack As Variant)
+Public Sub sortSelected(grid As SelectedDataWrapper, itemToTrack As Variant)
     grid.Sort SortComparer, this.SortMode, itemToTrack
 End Sub
 

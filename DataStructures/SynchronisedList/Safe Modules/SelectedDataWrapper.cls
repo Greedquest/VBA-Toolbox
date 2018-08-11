@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "SynchronisedDataWrapper"
+Attribute VB_Name = "SelectedDataWrapper"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -36,14 +36,14 @@ Public Event NeedsSorting(ByRef itemToTrack As Variant)
 Public Event ItemsAdded(ByRef itemSet As Variant)
 Public Event ItemsRemoved(ByRef itemSet As Variant)
 
-Private Type TGridData
+Private Type TSelectedData
     data As FilterList                           'Filtered Data in Grid
     Buffer As ListBuffer
     AlignOnRemoval As Boolean
     SortOnAddition As Boolean
 End Type
 
-Private this As TGridData
+Private this As TSelectedData
 Private Const alignAll = 0
 
 Private Sub Class_Initialize()

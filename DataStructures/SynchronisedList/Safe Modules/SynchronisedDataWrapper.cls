@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "clsGridDataWrapper"
+Attribute VB_Name = "SynchronisedDataWrapper"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -25,7 +25,7 @@ Attribute VB_Exposed = False
 'Therefore: Filter, Sort and Arrange all need to be implemented separately
 
 
-Private WithEvents gridDataBuffer As clsBuffer
+Private WithEvents gridDataBuffer As ListBuffer
 Attribute gridDataBuffer.VB_VarHelpID = -1
 
 Public Event NeedsFiltering()
@@ -38,7 +38,7 @@ Public Event ItemsRemoved(ByRef itemSet As Variant)
 
 Private Type TGridData
     data As FilterList                           'Filtered Data in Grid
-    Buffer As clsBuffer
+    Buffer As ListBuffer
     AlignOnRemoval As Boolean
     SortOnAddition As Boolean
 End Type
@@ -48,7 +48,7 @@ Private Const alignAll = 0
 
 Private Sub Class_Initialize()
     Set this.data = New FilterList
-    Set gridDataBuffer = New clsBuffer
+    Set gridDataBuffer = New ListBuffer
     Set this.Buffer = gridDataBuffer
     this.AlignOnRemoval = True
     this.SortOnAddition = True

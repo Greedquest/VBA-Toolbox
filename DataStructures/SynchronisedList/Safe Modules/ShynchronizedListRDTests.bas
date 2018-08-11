@@ -7,7 +7,7 @@ Option Private Module
 
 Private Assert As Rubberduck.PermissiveAssertClass
 Private Fakes As Rubberduck.FakesProvider
-Private synchro As SynchronizedList
+Private synchro As SynchronisedList
 Private EventMonitor As SynchroEventsTest
 
 '@ModuleInitialize
@@ -28,7 +28,7 @@ End Sub
 '@TestInitialize
 Public Sub TestInitialize()
     'this method runs before every test in the module.
-    Set synchro = New SynchronizedList
+    Set synchro = New SynchronisedList
     Set EventMonitor = New SynchroEventsTest
     Set EventMonitor.synchro = synchro
 End Sub

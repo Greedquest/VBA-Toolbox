@@ -7,7 +7,7 @@ Option Private Module
 
 Private Assert As Rubberduck.PermissiveAssertClass
 Private Fakes As Rubberduck.FakesProvider
-Private Buffer As clsBuffer
+Private Buffer As ListBuffer
 Private BufferEvents As BufferEventTests
 
 '@ModuleInitialize
@@ -15,7 +15,7 @@ Public Sub ModuleInitialize()
     'this method runs once per module.
     Set Assert = New Rubberduck.PermissiveAssertClass
     Set Fakes = New Rubberduck.FakesProvider
-    Set Buffer = New clsBuffer
+    Set Buffer = New ListBuffer
     Set BufferEvents = New BufferEventTests
     Set BufferEvents.Buffer = Buffer
 End Sub
@@ -30,7 +30,7 @@ End Sub
 '@TestInitialize
 Public Sub TestInitialize()
     'this method runs before every test in the module.
-    Set Buffer = New clsBuffer
+    Set Buffer = New ListBuffer
     BufferEvents.ClearCounts
 End Sub
 

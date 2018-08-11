@@ -76,7 +76,7 @@ Public Sub SetSortMode(Optional newComparer As IComparer, Optional overrideSortM
     End If
 End Sub
 
-Public Sub SortAndFilterSourceToOutput(source As clsSourceWrapper, Optional PartialSet As Variant)
+Public Sub SortAndFilterSourceToOutput(source As SourceDataWrapper, Optional PartialSet As Variant)
     If Not isSafeToFilter Then
         Err.Description = "No IComparer has been set for Filtering, please setFilterMode"
         Err.Raise 5
@@ -88,7 +88,7 @@ Public Sub SortAndFilterSourceToOutput(source As clsSourceWrapper, Optional Part
     End If
 End Sub
 
-Public Sub filterGrid(grid As clsGridDataWrapper)
+Public Sub filterGrid(grid As SynchronisedDataWrapper)
     If isSafeToFilter Then
         grid.filter this.filterAgainst, this.FilterMode, FilterComparer
     Else
@@ -97,7 +97,7 @@ Public Sub filterGrid(grid As clsGridDataWrapper)
     End If
 End Sub
 
-Public Sub sortGrid(grid As clsGridDataWrapper, itemToTrack As Variant)
+Public Sub sortGrid(grid As SynchronisedDataWrapper, itemToTrack As Variant)
     grid.Sort SortComparer, this.SortMode, itemToTrack
 End Sub
 

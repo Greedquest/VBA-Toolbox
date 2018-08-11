@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 '@Folder("Tests.TestEventHandlers")
-Public WithEvents Buffer As clsBuffer
+Public WithEvents Buffer As ListBuffer
 Attribute Buffer.VB_VarHelpID = -1
 Private Type tBufferTest
     AddedEventRaised As Long

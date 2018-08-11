@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "clsSourceWrapper"
+Attribute VB_Name = "SourceDataWrapper"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -15,7 +15,7 @@ Attribute VB_Exposed = False
 '''
 
 
-Private WithEvents sourceBuffer As clsBuffer     'input buffer to chunkify data
+Private WithEvents sourceBuffer As ListBuffer     'input buffer to chunkify data
 Attribute sourceBuffer.VB_VarHelpID = -1
 Public Event DataAdded()
 Public Event DataRemoved(ByRef RemovedItems)
@@ -24,14 +24,14 @@ Public Event NeedsSortingAndFiltering(ByRef PartialFilterSet) 'trigger filter to
 Private Type TSource
     data As FilterList                           'Complete source data for grid
     output As FilterList                         'Temporary data to be passed to the grid
-    Buffer As clsBuffer
+    Buffer As ListBuffer
 End Type
 
 Private this As TSource
 
 Private Sub Class_Initialize()
     Set this.data = New FilterList               'data store
-    Set sourceBuffer = New clsBuffer             'events version of buffer
+    Set sourceBuffer = New ListBuffer             'events version of buffer
     Set this.Buffer = sourceBuffer               'readable version of buffer
 End Sub
 

@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "SynchronizedList"
+Attribute VB_Name = "SynchronisedList"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -14,14 +14,14 @@ Public Event OrderChanged(ByVal firstChangeIndex As Long) '0 indexed location of
 Public Event OnAddition(ByRef itemArray As Variant)
 Public Event AfterRemoval(ByRef itemArray As Variant)
 
-Private WithEvents sourceDataWrapper As clsSourceWrapper
-Attribute sourceDataWrapper.VB_VarHelpID = -1
-Private WithEvents gridDataWrapper As clsGridDataWrapper
-Attribute gridDataWrapper.VB_VarHelpID = -1
+Private WithEvents sourceWrapper As SourceDataWrapper
+Attribute sourceWrapper.VB_VarHelpID = -1
+Private WithEvents synchronisedWrapper As SynchronisedDataWrapper
+Attribute synchronisedWrapper.VB_VarHelpID = -1
 
 Private Type TList
-    SourceData As clsSourceWrapper
-    GridData As clsGridDataWrapper
+    SourceData As SourceDataWrapper
+    GridData As SynchronisedDataWrapper
     FilterSortMethods As GridFilterRunner
     SortOnAddition As Boolean
 End Type
@@ -33,11 +33,11 @@ Private this As TList
 
 Private Sub Class_Initialize()
     'set up source and its events
-    Set sourceDataWrapper = New clsSourceWrapper
-    Set this.SourceData = sourceDataWrapper
+    Set sourceWrapper = New SourceDataWrapper
+    Set this.SourceData = sourceWrapper
     'set up Grid Data and its events
-    Set gridDataWrapper = New clsGridDataWrapper
-    Set this.GridData = gridDataWrapper
+    Set synchronisedWrapper = New SynchronisedDataWrapper
+    Set this.GridData = synchronisedWrapper
     'set up FilterRunner
     Set this.FilterSortMethods = New GridFilterRunner
     this.FilterSortMethods.SetFilterMode , , initialFiltering
@@ -83,39 +83,39 @@ Public Property Get GridData() As FilterList
     Set GridData = this.GridData.RawData
 End Property
 
-Private Sub gridDataWrapper_ItemsAdded(itemArray As Variant)
+Private Sub synchronisedWrapper_ItemsAdded(itemArray As Variant)
     If this.SortOnAddition Then this.FilterSortMethods.sortGrid this.GridData, itemArray(1)
     RaiseEvent OnAddition(itemArray)
 End Sub
 
-Private Sub gridDataWrapper_ItemsRemoved(itemSet As Variant)
+Private Sub synchronisedWrapper_ItemsRemoved(itemSet As Variant)
     RaiseEvent AfterRemoval(itemSet)
 End Sub
 
-Private Sub gridDataWrapper_NeedsAligning(ByVal firstChangeIndex As Long)
+Private Sub synchronisedWrapper_NeedsAligning(ByVal firstChangeIndex As Long)
     RaiseEvent OrderChanged(firstChangeIndex)
 End Sub
 
-Private Sub gridDataWrapper_NeedsFiltering()
+Private Sub synchronisedWrapper_NeedsFiltering()
     this.FilterSortMethods.filterGrid this.GridData
 End Sub
 
-Private Sub gridDataWrapper_NeedsSorting(itemToTrack As Variant)
+Private Sub synchronisedWrapper_NeedsSorting(itemToTrack As Variant)
     this.FilterSortMethods.sortGrid this.GridData, itemToTrack
 End Sub
 
-Private Sub sourceDataWrapper_DataAdded()
+Private Sub sourceWrapper_DataAdded()
     'When something flagged as added to source (and has made it through the source filter
     'put it on the grid
     this.GridData.AddItems this.SourceData.AddedData.data
     'sort and align triggered
 End Sub
 
-Private Sub sourceDataWrapper_DataRemoved(RemovedItems As Variant)
+Private Sub sourceWrapper_DataRemoved(RemovedItems As Variant)
     this.GridData.RemoveItems RemovedItems
 End Sub
 
-Private Sub sourceDataWrapper_NeedsSortingAndFiltering(PartialFilterSet As Variant)
+Private Sub sourceWrapper_NeedsSortingAndFiltering(PartialFilterSet As Variant)
     'Empty partial set means complete resort/filter
     If IsNothing(PartialFilterSet) Then this.FilterSortMethods.filterGrid this.GridData
     'the next will trigger a resort when new data is added

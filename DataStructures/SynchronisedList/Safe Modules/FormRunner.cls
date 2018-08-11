@@ -12,13 +12,13 @@ Option Explicit
 
 Private WithEvents userInterface As ExampleForm
 Attribute userInterface.VB_VarHelpID = -1
-Private WithEvents synchro As SynchronizedList
+Private WithEvents synchro As SynchronisedList
 Attribute synchro.VB_VarHelpID = -1
 
 Private Type tRunner
     headerRange As Range
     UIForm As ExampleForm
-    data As SynchronizedList
+    data As SynchronisedList
     SortComparer As CallByNameComparer
     FilterComparer As CallByNameComparer
     filterObj As dummyRange
@@ -28,7 +28,7 @@ Private this As tRunner
 
 Private Sub Class_Initialize()
 
-    Set synchro = New SynchronizedList
+    Set synchro = New SynchronisedList
     Set this.data = synchro
     Set this.SortComparer = New CallByNameComparer
     Set this.FilterComparer = New CallByNameComparer

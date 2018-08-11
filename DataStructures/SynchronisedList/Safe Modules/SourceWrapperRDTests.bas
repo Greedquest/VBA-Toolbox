@@ -7,7 +7,7 @@ Option Private Module
 
 Private Assert As Rubberduck.PermissiveAssertClass
 Private Fakes As Rubberduck.FakesProvider
-Private SourceWrapper As clsSourceWrapper
+Private sourceWrapper As SourceDataWrapper
 
 '@ModuleInitialize
 Public Sub ModuleInitialize()
@@ -27,7 +27,7 @@ End Sub
 '@TestInitialize
 Public Sub TestInitialize()
     'this method runs before every test in the module.
-    Set SourceWrapper = New clsSourceWrapper
+    Set sourceWrapper = New SourceDataWrapper
 End Sub
 
 '@TestCleanup
@@ -46,8 +46,8 @@ Public Sub TestAddingTwo()
     items2() = getEmptyDummyClasses(3)
     
     'Act:
-    Set SourceWrapper = New clsSourceWrapper
-    With SourceWrapper
+    Set sourceWrapper = New SourceDataWrapper
+    With sourceWrapper
  
         .AddItems items1
         .AddItems items2
@@ -56,11 +56,11 @@ Public Sub TestAddingTwo()
     With New GridFilterRunner                    'this triggers an event, but let's bypass it
         .SetFilterMode , , lstKeepAll
         .SetSortMode , lstNoSorting
-        .SortAndFilterSourceToOutput SourceWrapper
+        .SortAndFilterSourceToOutput sourceWrapper
     End With
     
     'Assert:
-    With SourceWrapper
+    With sourceWrapper
         Assert.AreEqual .AddedData.Count, "4", "Items weren't added correctly" 'add total of 4 items"
         Assert.AreEqual .AddedData.Count, "0", "Added data was not cleared as expected" 'Should wipe added data when read
     End With
@@ -78,19 +78,19 @@ Public Sub testRemoval()
     'Arrange:
     Dim dummyItems() As DummyGridItem
     dummyItems = getEmptyDummyClasses(5)
-    SourceWrapper.AddItems dummyItems
+    sourceWrapper.AddItems dummyItems
     
     With New GridFilterRunner                    'adding triggers an event, let's assume that happened
         .SetFilterMode , , lstKeepAll
         .SetSortMode , lstNoSorting
-        .SortAndFilterSourceToOutput SourceWrapper
+        .SortAndFilterSourceToOutput sourceWrapper
     End With
 
     'Act:
-    SourceWrapper.RemoveItems Array(dummyItems(3)) 'need to remove an iterable
+    sourceWrapper.RemoveItems Array(dummyItems(3)) 'need to remove an iterable
         
     'Assert:
-    With SourceWrapper.AddedData
+    With sourceWrapper.AddedData
         Assert.IsTrue .Count = 4                 '1 removed
         Assert.IsTrue .Contains(dummyItems(1))
         Assert.IsFalse .Contains(dummyItems(3))
@@ -111,19 +111,19 @@ Public Sub testRemovalOfNonPresent()
     dummyItems = getEmptyDummyClasses(5)
     Dim itemToRemove As DummyGridItem
     Set itemToRemove = getEmptyDummyClasses(1)(1)
-    SourceWrapper.AddItems dummyItems
+    sourceWrapper.AddItems dummyItems
     
     With New GridFilterRunner                    'adding triggers an event, let's assume that happened
         .SetFilterMode , , lstKeepAll
         .SetSortMode , lstNoSorting
-        .SortAndFilterSourceToOutput SourceWrapper
+        .SortAndFilterSourceToOutput sourceWrapper
     End With
 
     'Act:
-    SourceWrapper.RemoveItems Array(itemToRemove) 'need to remove an iterable
+    sourceWrapper.RemoveItems Array(itemToRemove) 'need to remove an iterable
         
     'Assert:
-    With SourceWrapper.AddedData
+    With sourceWrapper.AddedData
         Assert.IsTrue .Count = 5                 '1 removed
         Assert.IsTrue .Contains(dummyItems(1))
         Assert.IsFalse .Contains(itemToRemove)
@@ -149,12 +149,12 @@ Public Sub TestFilteringError()
     'Arrange:
     Dim dummyItems() As DummyGridItem
     dummyItems = getEmptyDummyClasses(5)
-    SourceWrapper.AddItems dummyItems
+    sourceWrapper.AddItems dummyItems
     
     'Act:
     With New GridFilterRunner                    'adding triggers an event, let's assume that happened
         '.setFilterMode
-        .SortAndFilterSourceToOutput SourceWrapper
+        .SortAndFilterSourceToOutput sourceWrapper
     End With
 
 Assert:

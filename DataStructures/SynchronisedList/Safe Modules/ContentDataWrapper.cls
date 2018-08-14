@@ -7,6 +7,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+Option Explicit
+
 '@Folder("SynchronisedList")
 
 '''
@@ -40,7 +42,7 @@ Private Type TContentData
 End Type
 
 Private this As TContentData
-Private Const alignAll = 0
+Private Const alignAll As Long = 0
 
 Private Sub Class_Initialize()
     Set this.data = New FilterList
@@ -54,11 +56,11 @@ End Sub
 'Buffer Interface
 '''
 
-Public Sub AddItems(IterableToAdd As Variant)
+Public Sub AddItems(ByRef IterableToAdd As Variant)
     this.Buffer.AddItems IterableToAdd
 End Sub
 
-Public Sub RemoveItems(IterableToRemove As Variant)
+Public Sub RemoveItems(ByRef IterableToRemove As Variant)
     this.Buffer.RemoveItems IterableToRemove
 End Sub
 
@@ -71,7 +73,8 @@ End Sub
 'Buffer Events
 '''
 Private Sub contentDataBuffer_ItemsAdded()
-    'add items which match filter requirements
+
+'add items which match filter requirements
     Dim newItems
     newItems = this.Buffer.AddedItems
     LetSet newItems, removeDuplicates(newItems, this.data)
@@ -109,7 +112,7 @@ End Sub
 'Grid Methods
 '''
 
-Public Sub Filter(FilterObject As Variant, FilterMode As lstFilterMode, Comparer As IComparer)
+Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMode, ByVal Comparer As IComparer)
     'Filter data references
     Dim unFilteredData As FilterList
     Set unFilteredData = this.data.Clone

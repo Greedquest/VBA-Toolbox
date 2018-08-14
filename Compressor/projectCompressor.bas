@@ -94,6 +94,7 @@ Private Function ListBoxChoice(ByVal wb As Workbook) As String()
         Dim formName As String
         formName = newForm.Name
         designForm newForm, wb 'populate form
+        Application.VBE.MainWindow.Visible = True
         newForm.Show
         
         Dim selections() As String                   'hold output of list
@@ -228,6 +229,7 @@ Private Function WriteSkeleton(ByRef codeItems() As codeItem, ByRef book As Work
     Dim extractorModule As Object                'VBComponent
     Set extractorModule = book.VBProject.VBComponents.Add(vbext_ct_StdModule)
     On Error GoTo cleanExit
+
     WriteProjectName projectName, extractorModule 'avoid err if duplicate - changes
 Debug.Print , "Project file added"
     'write code to module
@@ -448,6 +450,7 @@ End Function
 
 Private Function FillModule(ByVal codeSection As Object) As Long()
     With codeSection
+        .DeleteLines 1, .CountOfLines 'clear module
         .InsertLines 1, "Option Explicit"
         .InsertLines 2, "Private Type codeItem"
         .InsertLines 3, "    extension As String"

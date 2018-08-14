@@ -85,3 +85,28 @@ Public Function removeDuplicates(ByVal inArray As Variant, ByVal dataSet As Filt
     End If
 End Function
 
+
+Public Function IterableToArray(ByVal iterableObject As Variant, Optional ByVal itemCount As Long = 8, Optional ByVal base As Long = 0) As Variant
+    If Not isIterable(iterableObject) Then Err.Description = "You can only convert iterable objects to arrays": Err.Raise 5
+    Dim item
+    Dim result()
+    Dim arraySize As Long
+    arraySize = IIf(itemCount = 0, 1, itemCount)
+    ReDim result(base To arraySize + base - 1)
+    Dim Count As Long
+    Count = base
+    For Each item In iterableObject
+        If Count > UBound(result) Then
+            arraySize = arraySize * 2
+            ReDim Preserve result(base To arraySize + base - 1)
+        End If
+        LetSet result(Count), item
+        Count = Count + 1
+    Next
+    arraySize = Count - 1
+    If UBound(result) > arraySize Then
+        ReDim Preserve result(base To arraySize)
+    End If
+    IterableToArray = result
+End Function
+

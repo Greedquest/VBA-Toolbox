@@ -26,7 +26,7 @@ Private Const defaultSortMode = lstSortMode.lstSortAscending
 Private this As tFilter
 
 Private Sub Class_Initialize()
-    Set this.SortComparer = New propertyComparer
+    'Set this.SortComparer = New propertyComparer
     this.FilterMode = defaultFilterMode
     this.SortMode = defaultSortMode
     this.filterModeSet = False

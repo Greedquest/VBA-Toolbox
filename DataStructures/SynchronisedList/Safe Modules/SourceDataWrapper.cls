@@ -128,7 +128,7 @@ Public Sub SortAndFilterToOutput(FilterObject As Variant, FilterMode As lstFilte
 
     '    Dim tempOutput As FilterList
     '    Set tempOutput = this.Output
-    this.output.filter FilterObject, FilterMode, FilterComparer 'Filter list using dummy object based on current settings
+    this.output.Filter FilterObject, FilterMode, FilterComparer 'Filter list using dummy object based on current settings
     If this.output.Count > 0 Then
         this.output.Sort SortComparer, SortMode
         RaiseEvent DataAdded                     'Let gridManager know there's new data ready

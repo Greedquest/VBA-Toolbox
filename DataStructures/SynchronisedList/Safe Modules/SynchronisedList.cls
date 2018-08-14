@@ -16,12 +16,12 @@ Public Event AfterRemoval(ByRef itemArray As Variant)
 
 Private WithEvents sourceWrapper As SourceDataWrapper
 Attribute sourceWrapper.VB_VarHelpID = -1
-Private WithEvents synchronisedWrapper As SelectedDataWrapper
-Attribute synchronisedWrapper.VB_VarHelpID = -1
+Private WithEvents contentWrapper As ContentDataWrapper
+Attribute contentWrapper.VB_VarHelpID = -1
 
 Private Type TList
     SourceData As SourceDataWrapper
-    GridData As SelectedDataWrapper
+    ContentData As ContentDataWrapper
     FilterSortMethods As FilterRunner
     SortOnAddition As Boolean
 End Type
@@ -36,8 +36,8 @@ Private Sub Class_Initialize()
     Set sourceWrapper = New SourceDataWrapper
     Set this.SourceData = sourceWrapper
     'set up Grid Data and its events
-    Set synchronisedWrapper = New SelectedDataWrapper
-    Set this.GridData = synchronisedWrapper
+    Set contentWrapper = New ContentDataWrapper
+    Set this.ContentData = contentWrapper
     'set up FilterRunner
     Set this.FilterSortMethods = New FilterRunner
     this.FilterSortMethods.SetFilterMode , , initialFiltering
@@ -64,11 +64,11 @@ End Sub
 
 Public Sub Sort(Optional newComparer As IComparer, Optional overrideSortMode As lstSortMode = 0)
     this.FilterSortMethods.SetSortMode newComparer, overrideSortMode
-    this.FilterSortMethods.sortSelected this.GridData, Nothing
+    this.FilterSortMethods.sortContent this.ContentData, Nothing
     'this.SourceData.ReSortAndFilter 'doubles grid data
 End Sub
 
-Public Sub filter(Optional compareTo As Variant = vbNullString, Optional newComparer As IComparer, Optional overrideFilterMode As lstFilterMode = 0)
+Public Sub Filter(Optional compareTo As Variant = vbNullString, Optional newComparer As IComparer, Optional overrideFilterMode As lstFilterMode = 0)
     this.FilterSortMethods.SetFilterMode compareTo, newComparer, overrideFilterMode
     this.SourceData.ReSortAndFilter
 End Sub
@@ -78,46 +78,46 @@ Public Property Get SourceData() As FilterList
     Set SourceData = this.SourceData.RawData
 End Property
 
-Public Property Get GridData() As FilterList
+Public Property Get ContentData() As FilterList
     'If this.GridData Is Nothing Then Set this.GridData = New clsGridDataWrapper
-    Set GridData = this.GridData.RawData
+    Set ContentData = this.ContentData.RawData
 End Property
 
-Private Sub synchronisedWrapper_ItemsAdded(itemArray As Variant)
-    If this.SortOnAddition Then this.FilterSortMethods.sortSelected this.GridData, itemArray(1)
+Private Sub contentWrapper_ItemsAdded(itemArray As Variant)
+    If this.SortOnAddition Then this.FilterSortMethods.sortContent this.ContentData, itemArray(1)
     RaiseEvent OnAddition(itemArray)
 End Sub
 
-Private Sub synchronisedWrapper_ItemsRemoved(itemSet As Variant)
+Private Sub contentWrapper_ItemsRemoved(itemSet As Variant)
     RaiseEvent AfterRemoval(itemSet)
 End Sub
 
-Private Sub synchronisedWrapper_NeedsAligning(ByVal firstChangeIndex As Long)
+Private Sub contentWrapper_NeedsAligning(ByVal firstChangeIndex As Long)
     RaiseEvent OrderChanged(firstChangeIndex)
 End Sub
 
-Private Sub synchronisedWrapper_NeedsFiltering()
-    this.FilterSortMethods.filterSelected this.GridData
+Private Sub contentWrapper_NeedsFiltering()
+    this.FilterSortMethods.filterContent this.ContentData
 End Sub
 
-Private Sub synchronisedWrapper_NeedsSorting(itemToTrack As Variant)
-    this.FilterSortMethods.sortSelected this.GridData, itemToTrack
+Private Sub contentWrapper_NeedsSorting(itemToTrack As Variant)
+    this.FilterSortMethods.sortContent this.ContentData, itemToTrack
 End Sub
 
 Private Sub sourceWrapper_DataAdded()
     'When something flagged as added to source (and has made it through the source filter
     'put it on the grid
-    this.GridData.AddItems this.SourceData.AddedData.data
+    this.ContentData.AddItems this.SourceData.AddedData.data
     'sort and align triggered
 End Sub
 
 Private Sub sourceWrapper_DataRemoved(RemovedItems As Variant)
-    this.GridData.RemoveItems RemovedItems
+    this.ContentData.RemoveItems RemovedItems
 End Sub
 
 Private Sub sourceWrapper_NeedsSortingAndFiltering(PartialFilterSet As Variant)
     'Empty partial set means complete resort/filter
-    If IsNothing(PartialFilterSet) Then this.FilterSortMethods.filterSelected this.GridData
+    If IsNothing(PartialFilterSet) Then this.FilterSortMethods.filterContent this.ContentData
     'the next will trigger a resort when new data is added
     this.FilterSortMethods.SortAndFilterSourceToOutput this.SourceData, PartialFilterSet
 End Sub

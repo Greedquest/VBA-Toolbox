@@ -88,17 +88,17 @@ Public Sub SortAndFilterSourceToOutput(source As SourceDataWrapper, Optional Par
     End If
 End Sub
 
-Public Sub filterSelected(grid As SelectedDataWrapper)
+Public Sub filterContent(content As ContentDataWrapper)
     If isSafeToFilter Then
-        grid.filter this.filterAgainst, this.FilterMode, FilterComparer
+        content.Filter this.filterAgainst, this.FilterMode, FilterComparer
     Else
         Err.Description = "No IComparer has been set for filtering, please setFilterMode"
         Err.Raise 5
     End If
 End Sub
 
-Public Sub sortSelected(grid As SelectedDataWrapper, itemToTrack As Variant)
-    grid.Sort SortComparer, this.SortMode, itemToTrack
+Public Sub sortContent(content As ContentDataWrapper, itemToTrack As Variant)
+    content.Sort SortComparer, this.SortMode, itemToTrack
 End Sub
 
 Private Function isSafeToFilter() As Boolean

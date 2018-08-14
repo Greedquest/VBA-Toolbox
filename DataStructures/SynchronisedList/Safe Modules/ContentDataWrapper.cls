@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "SelectedDataWrapper"
+Attribute VB_Name = "ContentDataWrapper"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -10,23 +10,19 @@ Attribute VB_Exposed = False
 '@Folder("SynchronisedList")
 
 '''
-'Class to hold data currently displayed/ in the grid
-'Should be able to trigger display changes to images (make visible or not)
-'Trigger re-arrangements of images
+'Class to hold data currently after sorting/filtering
+'Trigger re-ordering event
 'When Items added:
-' - These are filtered into the grid, so only need sorting
-'When Items ammended:
-' - The source undergoes a complete re-filter and outputs a new set for the grid
-' - The items are ammended byRef so may have updated their own UI
-' - However in case their properties have changed, a re-sorting is required here
+' - Duplicates are removed so item can't be added to grid twice
+' - Entire contentData is optionally re-sorted
 'When Items are removed:
 ' - These need references deleted and to be filtered out
 ' - Won't change sorting order
 'Therefore: Filter, Sort and Arrange all need to be implemented separately
 
 
-Private WithEvents gridDataBuffer As ListBuffer
-Attribute gridDataBuffer.VB_VarHelpID = -1
+Private WithEvents contentDataBuffer As ListBuffer
+Attribute contentDataBuffer.VB_VarHelpID = -1
 
 Public Event NeedsFiltering()
 Public Event NeedsAligning(ByVal firstChangeIndex As Long) 'Range to re-align
@@ -36,20 +32,20 @@ Public Event NeedsSorting(ByRef itemToTrack As Variant)
 Public Event ItemsAdded(ByRef itemSet As Variant)
 Public Event ItemsRemoved(ByRef itemSet As Variant)
 
-Private Type TSelectedData
+Private Type TContentData
     data As FilterList                           'Filtered Data in Grid
     Buffer As ListBuffer
     AlignOnRemoval As Boolean
     SortOnAddition As Boolean
 End Type
 
-Private this As TSelectedData
+Private this As TContentData
 Private Const alignAll = 0
 
 Private Sub Class_Initialize()
     Set this.data = New FilterList
-    Set gridDataBuffer = New ListBuffer
-    Set this.Buffer = gridDataBuffer
+    Set contentDataBuffer = New ListBuffer
+    Set this.Buffer = contentDataBuffer
     this.AlignOnRemoval = True
     this.SortOnAddition = True
 End Sub
@@ -66,7 +62,7 @@ Public Sub RemoveItems(IterableToRemove As Variant)
     this.Buffer.RemoveItems IterableToRemove
 End Sub
 
-Public Sub ClearGrid()
+Public Sub ClearContent()
     'this.Data.Clear won't change visibility necessarily unless good garbage collection
     this.Buffer.RemoveItems this.data.Clone.data 'this.Data.Clone.Data if removing data breaks for loop
 End Sub
@@ -74,7 +70,7 @@ End Sub
 '''
 'Buffer Events
 '''
-Private Sub gridDataBuffer_ItemsAdded()
+Private Sub contentDataBuffer_ItemsAdded()
     'add items which match filter requirements
     Dim newItems
     newItems = this.Buffer.AddedItems
@@ -96,9 +92,9 @@ Private Sub gridDataBuffer_ItemsAdded()
     End If
 End Sub
 
-Private Sub gridDataBuffer_ItemsRemoved()
+Private Sub contentDataBuffer_ItemsRemoved()
     Dim markedItems                              'remove items from grid and mark for removal from source
-    markedItems = gridDataBuffer.RemovalItems
+    markedItems = contentDataBuffer.RemovalItems
     Dim firstChangeIndex As Long
     firstChangeIndex = this.data.IndexOf(markedItems(1))
     Dim item
@@ -113,11 +109,11 @@ End Sub
 'Grid Methods
 '''
 
-Public Sub filter(FilterObject As Variant, FilterMode As lstFilterMode, Comparer As IComparer)
+Public Sub Filter(FilterObject As Variant, FilterMode As lstFilterMode, Comparer As IComparer)
     'Filter data references
     Dim unFilteredData As FilterList
     Set unFilteredData = this.data.Clone
-    this.data.filter FilterObject, FilterMode, Comparer
+    this.data.Filter FilterObject, FilterMode, Comparer
     
     Dim firstChangeIndex As Long
     firstChangeIndex = -1                        '0 index

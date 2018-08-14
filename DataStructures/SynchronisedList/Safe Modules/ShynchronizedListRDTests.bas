@@ -58,7 +58,7 @@ Public Sub TestAddingTwo()
     With synchro
         Assert.AreEqual "5", .SourceData.Count, "SourceData added incorrectly"
         Assert.AreEqual "5", .SourceData.Count, "SourceData affected by reading"
-        Assert.AreEqual "5", .GridData.Count, "Default Grid behaviour not as expected"
+        Assert.AreEqual "5", .ContentData.Count, "Default Grid behaviour not as expected"
     End With
     
     'check events
@@ -88,11 +88,11 @@ Public Sub testRemoval()
     'Assert:
     With synchro
         Assert.AreEqual "4", .SourceData.Count
-        Assert.AreEqual "4", .GridData.Count
+        Assert.AreEqual "4", .ContentData.Count
         Assert.IsTrue .SourceData.Contains(dummyItems(1))
         Assert.IsFalse .SourceData.Contains(dummyItems(3))
-        Assert.IsTrue .GridData.Contains(dummyItems(1))
-        Assert.IsFalse .GridData.Contains(dummyItems(3))
+        Assert.IsTrue .ContentData.Contains(dummyItems(1))
+        Assert.IsFalse .ContentData.Contains(dummyItems(3))
     End With
     
     'Events check
@@ -121,7 +121,7 @@ Public Sub TestAmmedment()
     
     'Assert:
     With synchro
-        Assert.AreSame items(3), .GridData(4)    'last item since added to end of grid
+        Assert.AreSame items(3), .ContentData(4)    'last item since added to end of grid
         Assert.AreSame items(3), .SourceData(2)  '3rd item since no change
     End With
     
@@ -163,7 +163,7 @@ Public Sub TestSorting()
     
     'Assert:
 
-    Assert.SequenceEquals IterableToArray(CorrectList), IterableToArray(synchro.GridData.data)
+    Assert.SequenceEquals IterableToArray(CorrectList), IterableToArray(synchro.ContentData.data)
     
 TestExit:
     Exit Sub
@@ -187,20 +187,20 @@ Public Sub TestFilter()
     synchro.Add testClasses
     
     'Act:
-    synchro.filter filterAgainst, Filterer       'auto filter mode is remove matching
+    synchro.Filter filterAgainst, Filterer       'auto filter mode is remove matching
 
     'Assert:
     'check if items with matching name are removed from  grid
     Assert.IsTrue synchro.SourceData.Contains(testClasses(1))
-    Assert.IsFalse synchro.GridData.Contains(testClasses(1))
+    Assert.IsFalse synchro.ContentData.Contains(testClasses(1))
     
     'Act:
     Set filterAgainst = getEmptyDummyClasses(2)(2)
-    synchro.filter filterAgainst, Filterer, lstKeepMatching
+    synchro.Filter filterAgainst, Filterer, lstKeepMatching
 
     'Assert:
-    Assert.IsTrue synchro.GridData.Contains(testClasses(2))
-    Assert.IsFalse synchro.GridData.Contains(testClasses(1))
+    Assert.IsTrue synchro.ContentData.Contains(testClasses(2))
+    Assert.IsFalse synchro.ContentData.Contains(testClasses(1))
     
     'Event assertions
     'expected an order change on addition
@@ -236,7 +236,7 @@ Public Sub TestAddingOne() 'TODO Rename test
     With synchro
         Assert.AreSame item, .SourceData(0), "SourceData added incorrectly"
         Assert.AreEqual "1", .SourceData.Count, "SourceData affected by reading"
-        Assert.AreEqual "1", .GridData.Count, "Default Grid behaviour not as expected"
+        Assert.AreEqual "1", .ContentData.Count, "Default Grid behaviour not as expected"
     End With
     
     'check events

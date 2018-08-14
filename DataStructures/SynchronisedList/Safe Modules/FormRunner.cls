@@ -56,8 +56,8 @@ End Sub
 Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
     this.UIForm.ClearFromIndex firstChangeIndex 'listbox is 0 indexed too
     Dim i As Long
-    For i = firstChangeIndex To this.data.GridData.Count - 1 '0 indexed
-        this.UIForm.AddItem this.data.GridData(i)
+    For i = firstChangeIndex To this.data.ContentData.Count - 1 '0 indexed
+        this.UIForm.AddItem this.data.ContentData(i)
     Next
     this.UIForm.Repaint
     DoEvents
@@ -66,7 +66,7 @@ End Sub
 Private Sub userInterface_filterModeSet(ByVal FilterBy As String, ByVal FilterValue As String)
     this.FilterComparer.init "Cells", VbGet, 1, columnIndexFromName(FilterBy)
     this.filterObj.Cells(1, columnIndexFromName(FilterBy)) = FilterValue
-    this.data.filter this.filterObj, this.FilterComparer
+    this.data.Filter this.filterObj, this.FilterComparer
 End Sub
 
 Private Sub userInterface_sortModeSet(ByVal SortBy As String)

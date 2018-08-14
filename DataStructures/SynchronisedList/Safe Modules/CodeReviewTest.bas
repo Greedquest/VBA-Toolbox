@@ -18,5 +18,10 @@ Toolbox.CompressProject ThisWorkbook, "Filterlist" _
                                     , "SourceDataWrapper" _
                                     , "SynchronisedList"
                                     
+Toolbox.CompressProject ThisWorkbook, "CodeReviewTest" _
+                                    , "ExampleForm" _
+                                    , "FormRunner" _
+                                    , "dummyRange" _
+                                    , "CallByNameComparer"
 End Sub
 

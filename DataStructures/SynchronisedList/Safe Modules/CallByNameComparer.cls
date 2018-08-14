@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
-'@Folder("Tests.Utils.IComparers")
+'@Folder("CodeReview.Utils")
 
 'From PropertyComparer Class Implementing IComparer with ArrayList
 'https://codereview.stackexchange.com/q/180937/146810

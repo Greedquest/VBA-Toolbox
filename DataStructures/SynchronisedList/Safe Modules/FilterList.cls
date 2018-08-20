@@ -35,7 +35,7 @@ Attribute data.VB_UserMemId = 0
     Set data = dataSet
 End Property
 
-Public Property Set data(Value As Object)
+Public Property Set data(ByVal Value As Object)
     Set dataSet = Value
 End Property
 

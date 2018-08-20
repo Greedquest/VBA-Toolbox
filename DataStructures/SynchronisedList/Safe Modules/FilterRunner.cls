@@ -37,7 +37,7 @@ Public Property Get FilterComparer() As IComparer
     Set FilterComparer = this.FilterComparer
 End Property
 
-Public Property Set FilterComparer(Value As IComparer)
+Public Property Set FilterComparer(ByVal Value As IComparer)
     Set this.FilterComparer = Value
     this.filterModeSet = Not Value Is Nothing    'filter mode set as long as valid IComparer set
 End Property
@@ -46,12 +46,12 @@ Public Property Get SortComparer() As IComparer
     Set SortComparer = this.SortComparer
 End Property
 
-Public Property Set SortComparer(Value As IComparer)
+Public Property Set SortComparer(ByVal Value As IComparer)
     Set this.SortComparer = Value
     this.sortModeSet = Not Value Is Nothing      'sort mode set as long as valid IComparer set
 End Property
 
-Public Sub SetFilterMode(Optional compareTo As Variant = vbNullString, Optional newComparer As IComparer, Optional overrideFilterMode As lstFilterMode = 0)
+Public Sub SetFilterMode(Optional ByVal compareTo As Variant = vbNullString, Optional ByVal newComparer As IComparer, Optional ByVal overrideFilterMode As lstFilterMode = 0)
     'If overrides not set, revert to default mode
     If Not newComparer Is Nothing Then Set FilterComparer = newComparer
     If overrideFilterMode = 0 Then
@@ -66,7 +66,7 @@ Public Sub SetFilterMode(Optional compareTo As Variant = vbNullString, Optional 
     End If
 End Sub
 
-Public Sub SetSortMode(Optional newComparer As IComparer, Optional overrideSortMode As lstSortMode = 0)
+Public Sub SetSortMode(Optional ByVal newComparer As IComparer, Optional ByVal overrideSortMode As lstSortMode = 0)
     
     If Not newComparer Is Nothing Then Set SortComparer = newComparer
     If overrideSortMode = 0 Then

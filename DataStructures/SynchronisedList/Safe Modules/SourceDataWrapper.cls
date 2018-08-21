@@ -8,6 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 '@Folder("SynchronisedList")
+Option Explicit
 '''
 'Object to hold source data, and filter it into the grid
 ' - Raises events when grid might need to do something
@@ -98,7 +99,7 @@ Private Sub sourceBuffer_ItemsAdded()
     RaiseEvent NeedsSortingAndFiltering(newArray) 'Tell grid manager to filter source to output (only added items though)
 End Sub
 
-Public Sub SortAndFilterToOutput(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMode, ByVal FilterComparer As IComparer, SortComparer As IComparer, SortMode As lstSortMode, Optional PartialSet As Variant)
+Public Sub SortAndFilterToOutput(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMode, ByVal FilterComparer As IComparer, ByVal SortComparer As IComparer, ByVal SortMode As lstSortMode, Optional ByVal PartialSet As Variant)
     'Pass filtered and sorted copy of data to output queue, which will be buffered into Grid
     'TODO Sort ascending, descending or maintain order - maintain order makes it hard to find first index
 

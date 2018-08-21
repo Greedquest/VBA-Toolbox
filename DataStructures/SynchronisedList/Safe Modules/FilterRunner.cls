@@ -76,7 +76,7 @@ Public Sub SetSortMode(Optional ByVal newComparer As IComparer, Optional ByVal o
     End If
 End Sub
 
-Public Sub SortAndFilterSourceToOutput(source As SourceDataWrapper, Optional PartialSet As Variant)
+Public Sub SortAndFilterSourceToOutput(ByVal source As SourceDataWrapper, Optional ByVal PartialSet As Variant)
     If Not isSafeToFilter Then
         Err.Description = "No IComparer has been set for Filtering, please setFilterMode"
         Err.Raise 5
@@ -88,7 +88,7 @@ Public Sub SortAndFilterSourceToOutput(source As SourceDataWrapper, Optional Par
     End If
 End Sub
 
-Public Sub filterContent(content As ContentDataWrapper)
+Public Sub filterContent(ByRef content As ContentDataWrapper)
     If isSafeToFilter Then
         content.Filter this.filterAgainst, this.FilterMode, FilterComparer
     Else
@@ -97,7 +97,7 @@ Public Sub filterContent(content As ContentDataWrapper)
     End If
 End Sub
 
-Public Sub sortContent(content As ContentDataWrapper, itemToTrack As Variant)
+Public Sub sortContent(ByRef content As ContentDataWrapper, ByVal itemToTrack As Variant)
     content.Sort SortComparer, this.SortMode, itemToTrack
 End Sub
 

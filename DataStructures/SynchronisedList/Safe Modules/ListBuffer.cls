@@ -92,7 +92,7 @@ End Sub
 
 Public Function AddedItems() As Variant
     'get array of items out
-    Dim results()
+    Dim results() As Variant
     Dim noItems As Long: noItems = this.BufferQueue.Count
     If noItems > 0 Then
         ReDim results(1 To noItems)
@@ -108,7 +108,7 @@ Public Function AddedItems() As Variant
 End Function
 
 Public Function RemovalItems() As Variant
-    Dim results()
+    Dim results() As Variant
     Dim noItems As Long: noItems = this.RemovalQueue.Count
     ReDim results(1 To noItems)
     Dim i As Long
@@ -119,7 +119,7 @@ Public Function RemovalItems() As Variant
 End Function
 
 Public Function AmmendedItems() As Variant
-    Dim results()
+    Dim results() As Variant
     Dim noItems As Long: noItems = this.AmmendmentsQueue.Count
     ReDim results(1 To noItems)
     Dim i As Long

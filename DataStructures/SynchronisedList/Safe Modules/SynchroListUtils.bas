@@ -63,7 +63,8 @@ Public Function removeDuplicates(ByVal inArray As Variant, ByVal dataSet As Filt
         If upperBound >= lowerBound Then
             Dim result()
             ReDim result(lowerBound To upperBound)
-            Dim i As Long, matchCount As Long
+            Dim i As Long
+            Dim matchCount As Long
             For i = lowerBound To upperBound
                 If Not dataSet.Contains(inArray(i)) Then
                     LetSet result(lowerBound + matchCount), inArray(i)

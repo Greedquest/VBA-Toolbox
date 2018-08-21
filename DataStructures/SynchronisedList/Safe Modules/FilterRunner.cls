@@ -20,8 +20,8 @@ Private Type tFilter
     sortModeSet As Boolean
 End Type
 
-Private Const defaultFilterMode = lstFilterMode.lstRemoveMatching
-Private Const defaultSortMode = lstSortMode.lstSortAscending
+Private Const defaultFilterMode As Long = lstFilterMode.lstRemoveMatching
+Private Const defaultSortMode As Long = lstSortMode.lstSortAscending
 
 Private this As tFilter
 

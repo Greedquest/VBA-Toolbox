@@ -18,8 +18,8 @@ Attribute VB_Exposed = False
 Private WithEvents sourceBuffer As ListBuffer     'input buffer to chunkify data
 Attribute sourceBuffer.VB_VarHelpID = -1
 Public Event DataAdded()
-Public Event DataRemoved(ByRef RemovedItems)
-Public Event NeedsSortingAndFiltering(ByRef PartialFilterSet) 'trigger filter to output
+Public Event DataRemoved(ByVal RemovedItems As Variant)
+Public Event NeedsSortingAndFiltering(ByVal PartialFilterSet As Variant) 'trigger filter to output
 
 Private Type TSource
     data As FilterList                           'Complete source data for grid
@@ -40,15 +40,15 @@ End Sub
 'Push items through buffer for better UX
 '''
 
-Public Sub AddItems(IterableToAdd As Variant)
+Public Sub AddItems(ByVal IterableToAdd As Variant)
     this.Buffer.AddItems IterableToAdd
 End Sub
 
-Public Sub AmmendItems(IterableToAmmend As Variant)
+Public Sub AmmendItems(ByVal IterableToAmmend As Variant)
     this.Buffer.AmmendItems IterableToAmmend
 End Sub
 
-Public Sub RemoveItems(IterableToRemove As Variant)
+Public Sub RemoveItems(ByVal IterableToRemove As Variant)
     this.Buffer.RemoveItems IterableToRemove
 End Sub
 
@@ -98,7 +98,7 @@ Private Sub sourceBuffer_ItemsAdded()
     RaiseEvent NeedsSortingAndFiltering(newArray) 'Tell grid manager to filter source to output (only added items though)
 End Sub
 
-Public Sub SortAndFilterToOutput(FilterObject As Variant, FilterMode As lstFilterMode, FilterComparer As IComparer, SortComparer As IComparer, SortMode As lstSortMode, Optional PartialSet As Variant)
+Public Sub SortAndFilterToOutput(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMode, ByVal FilterComparer As IComparer, SortComparer As IComparer, SortMode As lstSortMode, Optional PartialSet As Variant)
     'Pass filtered and sorted copy of data to output queue, which will be buffered into Grid
     'TODO Sort ascending, descending or maintain order - maintain order makes it hard to find first index
 
@@ -113,21 +113,6 @@ Public Sub SortAndFilterToOutput(FilterObject As Variant, FilterMode As lstFilte
         Set this.output = this.data.Clone
     End If
 
-    '    If IsMissing(PartialSet) Then
-    '        Set this.Output = this.Data.Clone
-    '    ElseIf this.Output Is Nothing Then           'OR patrialset Is Nothing
-    '        Set this.Output = this.Data.Clone
-    '    ElseIf PartialSet Is Nothing Then
-    '        Set this.Output = this.Data.Clone
-    '    Else                                         'only want to add new items
-    '        Dim outboundItem
-    '        For Each outboundItem In PartialSet
-    '            this.Output.Add outboundItem
-    '        Next outboundItem
-    '    End If
-
-    '    Dim tempOutput As FilterList
-    '    Set tempOutput = this.Output
     this.output.Filter FilterObject, FilterMode, FilterComparer 'Filter list using dummy object based on current settings
     If this.output.Count > 0 Then
         this.output.Sort SortComparer, SortMode

@@ -40,7 +40,7 @@ Public Sub LetSet(ByRef Variable As Variant, ByVal Value As Variant)
     End If
 End Sub
 
-Public Function IsNothing(valueToTest As Variant) As Boolean
+Public Function IsNothing(ByVal valueToTest As Variant) As Boolean
     If Not IsObject(valueToTest) Then
         IsNothing = False
     ElseIf valueToTest Is Nothing Then
@@ -50,7 +50,7 @@ Public Function IsNothing(valueToTest As Variant) As Boolean
     End If
 End Function
 
-Public Function IsArrayNotObj(valueToTest As Variant) As Boolean
+Public Function IsArrayNotObj(ByVal valueToTest As Variant) As Boolean
     IsArrayNotObj = IsArray(valueToTest) And Not IsObject(valueToTest)
 End Function
 

@@ -83,12 +83,12 @@ Public Property Get ContentData() As FilterList
     Set ContentData = this.ContentData.RawData
 End Property
 
-Private Sub contentWrapper_ItemsAdded(itemArray As Variant)
+Private Sub contentWrapper_ItemsAdded(ByVal itemArray As Variant)
     If this.SortOnAddition Then this.FilterSortMethods.sortContent this.ContentData, itemArray(1)
     RaiseEvent OnAddition(itemArray)
 End Sub
 
-Private Sub contentWrapper_ItemsRemoved(itemSet As Variant)
+Private Sub contentWrapper_ItemsRemoved(ByVal itemSet As Variant)
     RaiseEvent AfterRemoval(itemSet)
 End Sub
 
@@ -100,7 +100,7 @@ Private Sub contentWrapper_NeedsFiltering()
     this.FilterSortMethods.filterContent this.ContentData
 End Sub
 
-Private Sub contentWrapper_NeedsSorting(itemToTrack As Variant)
+Private Sub contentWrapper_NeedsSorting(ByVal itemToTrack As Variant)
     this.FilterSortMethods.sortContent this.ContentData, itemToTrack
 End Sub
 
@@ -111,11 +111,11 @@ Private Sub sourceWrapper_DataAdded()
     'sort and align triggered
 End Sub
 
-Private Sub sourceWrapper_DataRemoved(RemovedItems As Variant)
+Private Sub sourceWrapper_DataRemoved(ByVal RemovedItems As Variant)
     this.ContentData.RemoveItems RemovedItems
 End Sub
 
-Private Sub sourceWrapper_NeedsSortingAndFiltering(PartialFilterSet As Variant)
+Private Sub sourceWrapper_NeedsSortingAndFiltering(ByVal PartialFilterSet As Variant)
     'Empty partial set means complete resort/filter
     If IsNothing(PartialFilterSet) Then this.FilterSortMethods.filterContent this.ContentData
     'the next will trigger a resort when new data is added

@@ -32,12 +32,12 @@ End Type
 
 Private this As TBuffer
 
-Private Sub Enqueue(item As Variant, queue As Object)
+Private Sub Enqueue(ByVal item As Variant, ByRef queue As Object)
     queue.Enqueue item
 End Sub
 
-Private Sub Dequeue(queue As Object, ByRef writeTo As Variant)
-    'On Error Resume Next
+Private Sub Dequeue(ByRef queue As Object, ByRef writeTo As Variant)
+    'TODO could use LetSet?
     If IsObject(queue.peek) Then
         Set writeTo = queue.Dequeue
     Else
@@ -45,7 +45,7 @@ Private Sub Dequeue(queue As Object, ByRef writeTo As Variant)
     End If
 End Sub
 
-Public Sub AddItems(iterableItems As Variant)
+Public Sub AddItems(ByVal iterableItems As Variant)
     'add iterable load of items to buffer
     ' - raise event every n items (according to adding trigger
     '   to push through buffer
@@ -64,7 +64,7 @@ Public Sub AddItems(iterableItems As Variant)
     If Not justRaised Then RaiseEvent ItemsAdded 'clear out tail end
 End Sub
 
-Public Sub AmmendItems(iterableItems As Variant)
+Public Sub AmmendItems(ByVal iterableItems As Variant)
     'Mark items as ammended (by key)
     Dim item As Variant
     Dim justRaised As Boolean
@@ -79,7 +79,7 @@ Public Sub AmmendItems(iterableItems As Variant)
     If Not justRaised Then RaiseEvent ItemsAmmended
 End Sub
 
-Public Sub RemoveItems(iterableItems As Variant)
+Public Sub RemoveItems(ByVal iterableItems As Variant)
     'Mark items for removal (byRef)
     Dim item As Variant
     Dim justRaised As Boolean
@@ -168,4 +168,3 @@ Private Sub Class_Initialize()
     Me.RemovingTrigger = 5
     Me.AmmendingTrigger = 5
 End Sub
-

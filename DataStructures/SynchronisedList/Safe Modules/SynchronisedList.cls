@@ -11,8 +11,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Public Event OrderChanged(ByVal firstChangeIndex As Long) '0 indexed location of first different item
-Public Event OnAddition(ByRef itemArray As Variant)
-Public Event AfterRemoval(ByRef itemArray As Variant)
+Public Event OnAddition(ByVal itemArray As Variant)
+Public Event AfterRemoval(ByVal itemArray As Variant)
 
 Private WithEvents sourceWrapper As SourceDataWrapper
 Attribute sourceWrapper.VB_VarHelpID = -1
@@ -26,8 +26,8 @@ Private Type TList
     SortOnAddition As Boolean
 End Type
 
-Private Const initialFiltering = lstFilterMode.lstKeepAll 'ensures we can filter without FilterComparer set
-Private Const initialSorting = lstSortMode.lstNoSorting 'ensures we can sort without SortComparer set
+Private Const initialFiltering As Long = lstFilterMode.lstKeepAll 'ensures we can filter without FilterComparer set
+Private Const initialSorting As Long = lstSortMode.lstNoSorting 'ensures we can sort without SortComparer set
 
 Private this As TList
 
@@ -40,8 +40,8 @@ Private Sub Class_Initialize()
     Set this.ContentData = contentWrapper
     'set up FilterRunner
     Set this.FilterSortMethods = New FilterRunner
-    this.FilterSortMethods.SetFilterMode , , initialFiltering
-    this.FilterSortMethods.SetSortMode , initialSorting
+    this.FilterSortMethods.SetFilterMode overrideFilterMode:=initialFiltering
+    this.FilterSortMethods.SetSortMode overrideSortMode:=initialSorting
 End Sub
 
 Public Sub Add(ParamArray gridItems())
@@ -62,13 +62,13 @@ Public Sub MarkAsAmmended(ParamArray gridItems())
     this.SourceData.AmmendItems flattenParamArray(gridItems) 'should auto trigger removal in grid
 End Sub
 
-Public Sub Sort(Optional newComparer As IComparer, Optional overrideSortMode As lstSortMode = 0)
+Public Sub Sort(Optional ByVal newComparer As IComparer, Optional ByVal overrideSortMode As lstSortMode = 0)
     this.FilterSortMethods.SetSortMode newComparer, overrideSortMode
     this.FilterSortMethods.sortContent this.ContentData, Nothing
-    'this.SourceData.ReSortAndFilter 'doubles grid data
+    'this.SourceData.ReSortAndFilter 'TODO what does this do, it breaks no unit tests whether there or not!'doubles grid data
 End Sub
 
-Public Sub Filter(Optional compareTo As Variant = vbNullString, Optional newComparer As IComparer, Optional overrideFilterMode As lstFilterMode = 0)
+Public Sub Filter(Optional ByVal compareTo As Variant = vbNullString, Optional ByVal newComparer As IComparer, Optional ByVal overrideFilterMode As lstFilterMode = 0)
     this.FilterSortMethods.SetFilterMode compareTo, newComparer, overrideFilterMode
     this.SourceData.ReSortAndFilter
 End Sub

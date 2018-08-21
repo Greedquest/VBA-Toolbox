@@ -26,7 +26,7 @@ Option Explicit
 Private WithEvents contentDataBuffer As ListBuffer
 Attribute contentDataBuffer.VB_VarHelpID = -1
 
-Public Event NeedsFiltering()
+'Public Event NeedsFiltering()
 Public Event NeedsAligning(ByVal firstChangeIndex As Long) 'Range to re-align
 Public Event NeedsSorting(ByVal itemToTrack As Variant)
 
@@ -64,7 +64,7 @@ Public Sub RemoveItems(ByVal IterableToRemove As Variant)
     this.Buffer.RemoveItems IterableToRemove
 End Sub
 
-Public Sub ClearContent()
+Public Sub ClearContent() 'Not used atm
     'this.Data.Clear won't change visibility necessarily unless good garbage collection
     this.Buffer.RemoveItems this.data.Clone.data 'this.Data.Clone.Data if removing data breaks for loop
 End Sub

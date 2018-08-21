@@ -37,12 +37,7 @@ Private Sub Enqueue(ByVal item As Variant, ByRef queue As Object)
 End Sub
 
 Private Sub Dequeue(ByRef queue As Object, ByRef writeTo As Variant)
-    'TODO could use LetSet?
-    If IsObject(queue.peek) Then
-        Set writeTo = queue.Dequeue
-    Else
-        writeTo = queue.Dequeue
-    End If
+    LetSet writeTo, queue.Dequeue
 End Sub
 
 Public Sub AddItems(ByVal iterableItems As Variant)
@@ -95,7 +90,7 @@ Public Sub RemoveItems(ByVal iterableItems As Variant)
 
 End Sub
 
-Public Function AddedItems()
+Public Function AddedItems() As Variant
     'get array of items out
     Dim results()
     Dim noItems As Long: noItems = this.BufferQueue.Count
@@ -112,7 +107,7 @@ Public Function AddedItems()
     AddedItems = results
 End Function
 
-Public Function RemovalItems()
+Public Function RemovalItems() As Variant
     Dim results()
     Dim noItems As Long: noItems = this.RemovalQueue.Count
     ReDim results(1 To noItems)
@@ -123,7 +118,7 @@ Public Function RemovalItems()
     RemovalItems = results
 End Function
 
-Public Function AmmendedItems()
+Public Function AmmendedItems() As Variant
     Dim results()
     Dim noItems As Long: noItems = this.AmmendmentsQueue.Count
     ReDim results(1 To noItems)

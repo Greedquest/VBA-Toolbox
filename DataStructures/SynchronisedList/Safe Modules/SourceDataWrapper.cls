@@ -136,3 +136,7 @@ Public Sub ReSortAndFilter()
     RaiseEvent NeedsSortingAndFiltering(Nothing)
 End Sub
 
+Public Property Get Buffer() As ListBuffer
+    Set Buffer = this.Buffer
+End Property
+

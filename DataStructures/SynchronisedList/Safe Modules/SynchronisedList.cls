@@ -122,3 +122,8 @@ Private Sub sourceWrapper_NeedsSortingAndFiltering(ByVal PartialFilterSet As Var
     this.FilterSortMethods.SortAndFilterSourceToOutput this.SourceData, PartialFilterSet
 End Sub
 
+
+'''
+'Settings
+'''
+

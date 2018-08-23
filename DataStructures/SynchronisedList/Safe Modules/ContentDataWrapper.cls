@@ -137,7 +137,14 @@ Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Opti
     End If
 End Sub
 
+'''
+'Public interface
+'''
 Public Property Get RawData() As FilterList
     Set RawData = this.data.Clone
+End Property
+
+Public Property Get Buffer() As ListBuffer
+    Set Buffer = this.Buffer
 End Property
 

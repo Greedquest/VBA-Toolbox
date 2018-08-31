@@ -10,6 +10,8 @@ Attribute VB_Exposed = False
 '@Folder("SynchronisedList")
 Option Explicit
 
+Implements IListSettings
+
 Public Event OrderChanged(ByVal firstChangeIndex As Long) '0 indexed location of first different item
 Public Event OnAddition(ByVal itemArray As Variant)
 Public Event AfterRemoval(ByVal itemArray As Variant)
@@ -126,4 +128,53 @@ End Sub
 '''
 'Settings
 '''
+
+
+Private Property Get IListSettings_SourceBufferRemovalTrigger() As Long
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Let IListSettings_SourceBufferRemovalTrigger(ByVal size As Long)
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Get IListSettings_SourceBufferAddingTrigger() As Long
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Let IListSettings_SourceBufferAddingTrigger(ByVal size As Long)
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Get IListSettings_SourceBufferAmmendingTrigger() As Long
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Let IListSettings_SourceBufferAmmendingTrigger(ByVal size As Long)
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Get IListSettings_ContentBufferRemovalTrigger() As Long
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Let IListSettings_ContentBufferRemovalTrigger(ByVal size As Long)
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Get IListSettings_ContentBufferAddingTrigger() As Long
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Let IListSettings_ContentBufferAddingTrigger(ByVal size As Long)
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Get IListSettings_ContentBufferAmmendmendingTrigger() As Long
+    Err.Raise 5 'TODO implement interface member
+End Property
+
+Private Property Let IListSettings_ContentBufferAmmendmendingTrigger(ByVal size As Long)
+    Err.Raise 5 'TODO implement interface member
+End Property
 

@@ -269,4 +269,23 @@ TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
 End Sub
 
+'@TestMethod
+Public Sub TestChangingSettings()
+    On Error GoTo TestFail
+    
+    'Arrange:
+    
+    'Act:
+    synchro.Settings.SourceBufferAddingTrigger = 3
+    synchro.Add Range("a1:a5")
+    'Assert:
+    Assert.AreEqual "3", synchro.Settings.SourceBufferAddingTrigger, "Settings not changed"
+    Assert.AreEqual "2", EventMonitor.ChangeIndecies.Count, "Unexpected number of events raised - " & EventMonitor.ChangeIndecies.Count
+
+TestExit:
+    Exit Sub
+TestFail:
+    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
+End Sub
+
 

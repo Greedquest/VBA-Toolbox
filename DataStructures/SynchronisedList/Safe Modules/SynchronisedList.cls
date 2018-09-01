@@ -128,53 +128,54 @@ End Sub
 '''
 'Settings
 '''
-
+Public Property Get Settings() As IListSettings
+    Set Settings = Me
+End Property
 
 Private Property Get IListSettings_SourceBufferRemovalTrigger() As Long
-    Err.Raise 5 'TODO implement interface member
+    IListSettings_SourceBufferRemovalTrigger = this.SourceData.Buffer.RemovingTrigger
 End Property
 
 Private Property Let IListSettings_SourceBufferRemovalTrigger(ByVal size As Long)
-    Err.Raise 5 'TODO implement interface member
+    this.SourceData.Buffer.RemovingTrigger = size
 End Property
 
 Private Property Get IListSettings_SourceBufferAddingTrigger() As Long
-    Err.Raise 5 'TODO implement interface member
+    IListSettings_SourceBufferAddingTrigger = this.SourceData.Buffer.AddingTrigger
 End Property
 
 Private Property Let IListSettings_SourceBufferAddingTrigger(ByVal size As Long)
-    Err.Raise 5 'TODO implement interface member
+    this.SourceData.Buffer.AddingTrigger = size
 End Property
 
 Private Property Get IListSettings_SourceBufferAmmendingTrigger() As Long
-    Err.Raise 5 'TODO implement interface member
+    IListSettings_SourceBufferAmmendingTrigger = this.SourceData.Buffer.AmmendingTrigger
 End Property
 
 Private Property Let IListSettings_SourceBufferAmmendingTrigger(ByVal size As Long)
-    Err.Raise 5 'TODO implement interface member
+    this.SourceData.Buffer.AmmendingTrigger = size
 End Property
 
 Private Property Get IListSettings_ContentBufferRemovalTrigger() As Long
-    Err.Raise 5 'TODO implement interface member
+    IListSettings_ContentBufferRemovalTrigger = this.ContentData.Buffer.RemovingTrigger
 End Property
 
 Private Property Let IListSettings_ContentBufferRemovalTrigger(ByVal size As Long)
-    Err.Raise 5 'TODO implement interface member
+    this.ContentData.Buffer.RemovingTrigger = size
 End Property
 
 Private Property Get IListSettings_ContentBufferAddingTrigger() As Long
-    Err.Raise 5 'TODO implement interface member
+    IListSettings_ContentBufferAddingTrigger = this.ContentData.Buffer.AddingTrigger
 End Property
 
 Private Property Let IListSettings_ContentBufferAddingTrigger(ByVal size As Long)
-    Err.Raise 5 'TODO implement interface member
+    this.ContentData.Buffer.AddingTrigger = size
 End Property
 
-Private Property Get IListSettings_ContentBufferAmmendmendingTrigger() As Long
-    Err.Raise 5 'TODO implement interface member
+Private Property Get IListSettings_ContentBufferAmmendingTrigger() As Long
+    IListSettings_ContentBufferAmmendingTrigger = this.ContentData.Buffer.AmmendingTrigger
 End Property
 
-Private Property Let IListSettings_ContentBufferAmmendmendingTrigger(ByVal size As Long)
-    Err.Raise 5 'TODO implement interface member
+Private Property Let IListSettings_ContentBufferAmmendingTrigger(ByVal size As Long)
+    this.ContentData.Buffer.AmmendingTrigger = size
 End Property
-

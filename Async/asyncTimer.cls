@@ -15,7 +15,7 @@ Public Event Timeout()
 Private Const waitIndefinitely As Double = -1
 
 Private Type tTimer
-    tickFrequency As Double 'in seconds
+    tickFrequency As Double                      'in seconds
     timeoutTime As Date
     neverTimeout As Boolean
 End Type
@@ -44,7 +44,7 @@ Public Sub Tick()
     End If
 End Sub
 
-
 Private Sub Class_Terminate()
     stopTicking
 End Sub
+

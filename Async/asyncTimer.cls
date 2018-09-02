@@ -27,7 +27,7 @@ Public Sub await(ByRef waitUntil As Boolean, Optional ByVal tickFrequency As Dou
     If maxWait = waitIndefinitely Then
         this.neverTimeout = True
     ElseIf maxWait >= 0 Then
-        this.timeoutTime = Now + maxWait
+        this.timeoutTime = Now + TimeSerial(0, 0, maxWait)
     Else
         Err.Raise 5
     End If
@@ -42,4 +42,9 @@ Public Sub Tick()
     Else
         RaiseEvent Tick
     End If
+End Sub
+
+
+Private Sub Class_Terminate()
+    stopTicking
 End Sub

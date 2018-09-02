@@ -1,1 +1,28 @@
 ﻿Option Explicit
+
+Private WithEvents testclass As asyncTimer
+Private countReached As Boolean
+
+Sub runtests()
+Set testclass = New asyncTimer
+countReached = False
+testclass.await countReached, 0.5, 10
+End Sub
+
+Private Sub CommandButton1_Click()
+Range("A1") = Range("A1") + 1
+countReached = Range("A2")
+End Sub
+
+Private Sub testclass_Complete()
+Debug.Print "complete"
+End Sub
+
+Private Sub testclass_Tick()
+Debug.Print "tick"
+End Sub
+
+Private Sub testclass_Timeout()
+Debug.Print "timeout"
+End Sub
+

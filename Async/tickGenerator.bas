@@ -18,12 +18,14 @@ Public Sub startTicking(ByVal frequency As Double, ByVal caller As asyncTimer)
     Tick
 End Sub
 Public Sub Tick()
-    this.caller.Tick
     If this.keepTicking Then
-        Application.OnTime Now + this.tickFrequency, "Tick"
+        Application.OnTime Now + TimeSerial(0, 0, this.tickFrequency), "Tick"
     End If
+    Debug.Print "Tick generated"
+    this.caller.Tick
 End Sub
 
 Public Sub stopTicking()
     this.keepTicking = False
+    Debug.Print "Ticking stopped"
 End Sub

@@ -12,12 +12,12 @@ Option Explicit
 Private WithEvents ticker As asyncTimer
 Attribute ticker.VB_VarHelpID = -1
 
-
 Private Sub ticker_Tick()
 Debug.Print "Tick"
 End Sub
 
 Sub test()
-Set ticker = New asyncTimer
-ticker.await False
+    Set ticker = New asyncTimer
+    ticker.await False
 End Sub
+

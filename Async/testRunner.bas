@@ -3,6 +3,7 @@ Option Explicit
 Private runner As testClass
 
 Sub runTest()
-Set runner = New testClass
-runner.test
+    Set runner = New testClass
+    runner.test
 End Sub
+

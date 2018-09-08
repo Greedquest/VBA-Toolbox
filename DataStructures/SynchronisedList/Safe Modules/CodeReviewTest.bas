@@ -3,7 +3,9 @@ Attribute VB_Name = "CodeReviewTest"
 Option Explicit
 
 Sub showForm()
-    Static runner As New FormRunner
+    'display form with content from table. Static so it stays in scope
+    Static runner As FormRunner
+    Set runner = New FormRunner
     runner.init Worksheets("data").ListObjects("ExampleData")
 End Sub
 

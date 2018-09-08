@@ -1,0 +1,5 @@
+﻿Option Explicit
+Private Sub Workbook_Open()
+    Shell "C:\Users\Guy\AppData\Local\GitHubDesktop\GitHubDesktop.exe", vbMinimizedNoFocus
+    Application.CommandBars.ExecuteMso "VisualBasic"
+End Sub

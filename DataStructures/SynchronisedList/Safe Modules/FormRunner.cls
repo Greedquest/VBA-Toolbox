@@ -27,7 +27,6 @@ Private this As tRunner
 
 
 Private Sub Class_Initialize()
-
     Set synchro = New SynchronisedList
     Set this.data = synchro
     Set this.SortComparer = New CallByNameComparer
@@ -49,16 +48,17 @@ Public Sub init(ByVal dataTable As ListObject)
     this.UIForm.Show False
     synchro.Add dataTable.DataBodyRange.Rows
     
-
 End Sub
 
 
 Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
-    this.UIForm.ClearFromIndex firstChangeIndex 'listbox is 0 indexed too
-    Dim i As Long
-    For i = firstChangeIndex To this.data.ContentData.Count - 1 '0 indexed
-        this.UIForm.AddItem this.data.ContentData(i)
-    Next
+    'Debug.Print firstChangeIndex
+    this.UIForm.orderNum.Caption = firstChangeIndex
+'    this.UIForm.ClearFromIndex firstChangeIndex 'listbox is 0 indexed too
+'    Dim i As Long
+'    For i = firstChangeIndex To this.data.ContentData.Count - 1 '0 indexed
+'        this.UIForm.AddItem this.data.ContentData(i)
+'    Next
     this.UIForm.Repaint
     DoEvents
 End Sub

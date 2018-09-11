@@ -2,6 +2,7 @@ Attribute VB_Name = "projectCompressor"
 'Compressor module, compresses a load of files into strings to export
 Option Explicit
 '@Folder Compressor
+
 Private Type codeItem
     extension As String
     module_name As String
@@ -154,6 +155,7 @@ Private Function populatedForm(protected As Boolean) As Object
         With ThisWorkbook.VBProject.VBComponents.Add(vbext_ct_MSForm)
             .Designer.Controls.Add("Forms.listbox.1").Name = "lst_1"
             .Designer.Controls.Add("Forms.commandbutton.1").Name = "cmd_1"
+            .codeModule.DeleteLines 1, .codeModule.CountOfLines
             .codeModule.InsertLines 1, "Private Sub cmd_1_Click()"
             .codeModule.InsertLines 2, "Me.Hide"
             .codeModule.InsertLines 3, "End Sub"
@@ -450,6 +452,7 @@ End Function
 
 Private Function FillModule(ByVal codeSection As Object) As Long()
     With codeSection
+        .DeleteLines 1, .CountOfLines
         .InsertLines 1, "Option Explicit"
         .InsertLines 2, "Private Type codeItem"
         .InsertLines 3, "    extension As String"

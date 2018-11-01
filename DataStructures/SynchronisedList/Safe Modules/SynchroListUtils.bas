@@ -87,7 +87,7 @@ End Function
 
 
 Public Function IterableToArray(ByVal iterableObject As Variant, Optional ByVal itemCount As Long = 8, Optional ByVal base As Long = 0) As Variant
-    If Not isIterable(iterableObject) Then Err.Description = "You can only convert iterable objects to arrays": Err.Raise 5
+    If Not isIterable(iterableObject) Then Err.Description = "You can only convert iterable objects to arrays, not " & TypeName(iterableObject): Err.Raise 5
     Dim item
     Dim result()
     Dim arraySize As Long

@@ -140,6 +140,10 @@ End Sub
 '''
 'Public interface
 '''
+Public Sub ClearFromIndex(ByVal startingIndex As Long)
+    this.Buffer.RemoveItems this.data.data.GetRange()
+End Sub
+
 Public Property Get RawData() As FilterList
     Set RawData = this.data.Clone
 End Property

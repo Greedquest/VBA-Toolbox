@@ -96,7 +96,7 @@ End Sub
 
 Private Sub contentWrapper_NeedsAligning(ByVal firstChangeIndex As Long)
 'what is this blasphemy!!!!
-    this.ContentData
+    'this.ContentData
     RaiseEvent OrderChanged(firstChangeIndex)
 End Sub
 

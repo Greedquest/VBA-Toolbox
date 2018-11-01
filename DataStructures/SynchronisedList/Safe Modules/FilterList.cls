@@ -92,9 +92,17 @@ Public Property Get Count() As Long
     Count = dataSet.Count
 End Property
 
-Public Property Get Range(startIndex As Long, endIndex As Long) As FilterList
+Public Property Get Range(ByVal startIndex As Long, ByVal endIndex As Long) As FilterList
     Dim result As New FilterList
-    Set result.data = dataSet.GetRange(startIndex, endIndex)
+    If startIndex < 0 Then 'python style
+        startIndex = dataSet.Count + startIndex + 1
+    End If
+    If endIndex < 0 Then
+        endIndex = dataSet.Count + endIndex + 1
+    End If
+    Dim length As Long
+    length = endIndex - startIndex
+    Set result.data = dataSet.GetRange(startIndex, length)
     Set Range = result
 End Property
 

@@ -10,11 +10,10 @@ Attribute VB_Exposed = False
 '@Folder("SynchronisedList")
 Option Explicit
 
-Implements IListSettings
-
-Public Event OrderChanged(ByVal firstChangeIndex As Long) '0 indexed location of first different item
-Public Event OnAddition(ByVal itemArray As Variant)
-Public Event AfterRemoval(ByVal itemArray As Variant)
+'TODO rename these to smt like on show on hide, since this is not removing/adding overall, just to the content
+'Public Event OrderChanged(ByVal firstChangeIndex As Long) '0 indexed location of first different item
+Public Event OnAddition(ByRef itemArray As Variant) 'when stuff added to content wrapper
+Public Event AfterRemoval(ByRef itemArray As Variant) 'when stuff removed from content
 
 Private WithEvents sourceWrapper As SourceDataWrapper
 Attribute sourceWrapper.VB_VarHelpID = -1
@@ -95,9 +94,12 @@ Private Sub contentWrapper_ItemsRemoved(ByVal itemSet As Variant)
 End Sub
 
 Private Sub contentWrapper_NeedsAligning(ByVal firstChangeIndex As Long)
-'what is this blasphemy!!!!
-    'this.ContentData
-    RaiseEvent OrderChanged(firstChangeIndex)
+    'wehenever something happens that triggers a re-align, we clear source from that point
+    'and push through the content. This way the buffer can do its job of managing the rate of
+    'stuff going to the UI
+    this.ContentData.ClearFromIndex firstChangeIndex
+    this.SourceData.ReSortAndFilter
+    'RaiseEvent OrderChanged(firstChangeIndex)
 End Sub
 
 Private Sub contentWrapper_NeedsFiltering()

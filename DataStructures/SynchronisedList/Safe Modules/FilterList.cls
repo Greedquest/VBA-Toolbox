@@ -92,6 +92,12 @@ Public Property Get Count() As Long
     Count = dataSet.Count
 End Property
 
+Public Property Get Range(startIndex As Long, endIndex As Long) As FilterList
+    Dim result As New FilterList
+    Set result.data = dataSet.GetRange(startIndex, endIndex)
+    Set Range = result
+End Property
+
 Public Sub Filter(ByVal testValue As Variant, ByVal FilterMode As lstFilterMode, ByVal Comparer As IComparer)
     Dim i As Long
     Dim item As Variant

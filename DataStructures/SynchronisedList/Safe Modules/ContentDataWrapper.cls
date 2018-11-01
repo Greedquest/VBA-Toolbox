@@ -125,7 +125,7 @@ Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMo
         firstChangeIndex = firstChangeIndex + 1
         If this.data.Contains(gridItem) = False Then Exit For
     Next gridItem
-    RaiseEvent NeedsAligning(firstChangeIndex)   'off by 1
+    RaiseEvent NeedsAligning(firstChangeIndex)   'BUG off by 1
 End Sub
 
 Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Optional ByRef itemToTrack As Variant)
@@ -138,7 +138,7 @@ Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Opti
 End Sub
 
 Public Sub ClearFromIndex(ByVal startingIndex As Long)
-    this.Buffer.RemoveItems this.data.data.GetRange()
+    this.Buffer.RemoveItems this.data.Range(startingIndex, -1).data 'read as from starting index to the end
 End Sub
 
 Public Property Get RawData() As FilterList

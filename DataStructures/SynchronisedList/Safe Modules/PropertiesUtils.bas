@@ -33,13 +33,13 @@ End Function
 Function RandomString()
     'PURPOSE: Create a Randomized String of Characters
     'SOURCE: www.TheSpreadsheetGuru.com/the-code-vault
-    Const Length As Integer = 20
+    Const length As Integer = 20
     Dim CharacterBank As Variant
     Dim X As Long
     Dim str As String
 
     'Test Length Input
-    If Length < 1 Then
+    If length < 1 Then
         MsgBox "Length variable must be greater than 0"
         Exit Function
     End If
@@ -50,7 +50,7 @@ Function RandomString()
   
 
     'Randomly Select Characters One-by-One
-    For X = 1 To Length
+    For X = 1 To length
         'Randomize
         str = str & CharacterBank(Int((UBound(CharacterBank) - LBound(CharacterBank) + 1) * Rnd + LBound(CharacterBank)))
     Next X

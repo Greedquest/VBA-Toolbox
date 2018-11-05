@@ -114,7 +114,8 @@ End Sub
 '''
 
 Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMode, ByVal Comparer As IComparer)
-    'Filter data references
+    'Filter content and raise an event according to the location of the first change
+    'TODO: might be more efficient if this.data.Filter gave this info
     Dim unFilteredData As FilterList
     Set unFilteredData = this.data.Clone
     this.data.Filter FilterObject, FilterMode, Comparer
@@ -122,11 +123,11 @@ Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMo
     Dim firstChangeIndex As Long
     firstChangeIndex = -1                        '0 index
     Dim gridItem As Variant
-    For Each gridItem In unFilteredData.data
+    For Each gridItem In unFilteredData.data 'loop through original and filtered to find first difference then flag it
         firstChangeIndex = firstChangeIndex + 1
-        If this.data.Contains(gridItem) = False Then Exit For
+        If Not this.data.Contains(gridItem) Then Exit For
     Next gridItem
-    RaiseEvent NeedsAligning(firstChangeIndex)   'BUG off by 1
+    RaiseEvent NeedsAligning(firstChangeIndex)
 End Sub
 
 Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Optional ByRef itemToTrack As Variant)

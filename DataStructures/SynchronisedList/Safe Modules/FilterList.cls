@@ -92,7 +92,7 @@ Public Property Get Count() As Long
     Count = dataSet.Count
 End Property
 
-Public Property Get Range(ByVal startIndex As Long, ByVal endIndex As Long) As FilterList
+Public Function Range(ByVal startIndex As Long, ByVal endIndex As Long) As FilterList
     Dim result As New FilterList
     If startIndex < 0 Then 'python style
         startIndex = dataSet.Count + startIndex
@@ -104,7 +104,7 @@ Public Property Get Range(ByVal startIndex As Long, ByVal endIndex As Long) As F
     length = endIndex - startIndex
     Set result.data = dataSet.GetRange(startIndex, length)
     Set Range = result
-End Property
+End Function
 
 Public Sub Filter(ByVal testValue As Variant, ByVal FilterMode As lstFilterMode, ByVal Comparer As IComparer)
     Dim i As Long

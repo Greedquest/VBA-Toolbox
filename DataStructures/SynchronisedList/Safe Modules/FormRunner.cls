@@ -51,17 +51,34 @@ Public Sub init(ByVal dataTable As ListObject)
 End Sub
 
 
-Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
-'this is no good! The list list should only raise incremental changes from the buffer,
-'Instead we build up the list nicely but re-order all at once
-    this.UIForm.ClearFromIndex firstChangeIndex 'listbox is 0 indexed too
+Private Sub synchro_AfterRemoval(itemArray As Variant)
     Dim i As Long
-    For i = firstChangeIndex To this.data.ContentData.Count - 1 '0 indexed
-        this.UIForm.AddItem this.data.ContentData(i)
-    Next
-    this.UIForm.Repaint
-    DoEvents
+    'would be better to use order changed to clear then re-add
+    For i = LBound(itemArray) To UBound(itemArray)
+        'already removed from content data
+        this.UIForm.RemoveItem this.data.SourceData.IndexOf(itemArray(i))
+    Next i
 End Sub
+
+'Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
+''this is no good! The list list should only raise incremental changes from the buffer,
+''Instead we build up the list nicely but re-order all at once
+'    this.UIForm.ClearFromIndex firstChangeIndex 'listbox is 0 indexed too
+'    Dim i As Long
+'    For i = firstChangeIndex To this.data.ContentData.Count - 1 '0 indexed
+'        this.UIForm.AddItem this.data.ContentData(i)
+'    Next
+'    this.UIForm.Repaint
+'    DoEvents
+'End Sub
+
+Private Sub synchro_OnAddition(itemArray As Variant)
+    Dim i As Long
+    For i = LBound(itemArray) To UBound(itemArray)
+        this.UIForm.AddItem itemArray(i)
+    Next i
+End Sub
+
 
 Private Sub userInterface_filterModeSet(ByVal FilterBy As String, ByVal FilterValue As String)
     this.FilterComparer.init "Cells", VbGet, 1, columnIndexFromName(FilterBy)

@@ -11,7 +11,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 'TODO rename these to smt like on show on hide, since this is not removing/adding overall, just to the content
-Public Event OrderChanged(ByVal firstChangeIndex As Long) '0 indexed location of first different item
+'Public Event OrderChanged(ByVal firstChangeIndex As Long) '0 indexed location of first different item
 Public Event OnAddition(ByRef itemArray As Variant) 'when stuff added to content wrapper
 Public Event AfterRemoval(ByRef itemArray As Variant) 'when stuff removed from content
 
@@ -98,9 +98,8 @@ Private Sub contentWrapper_NeedsAligning(ByVal firstChangeIndex As Long)
     'and push through the content. This way the buffer can do its job of managing the rate of
     'stuff going to the UI
     this.ContentData.ClearFromIndex firstChangeIndex
-    RaiseEvent OrderChanged(firstChangeIndex)
     this.SourceData.ReSortAndFilter
-    
+    'RaiseEvent OrderChanged(firstChangeIndex)
 End Sub
 
 Private Sub contentWrapper_NeedsFiltering()

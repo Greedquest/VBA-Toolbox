@@ -77,7 +77,7 @@ Private Sub contentDataBuffer_ItemsAdded()
 'add items which match filter requirements
     Dim newItems
     newItems = this.Buffer.AddedItems
-    LetSet newItems, removeDuplicates(newItems, this.data) 'drop any items which are already present
+    LetSet newItems, removeDuplicates(newItems, this.data)
     If IsNothing(newItems) Then
         'do nothing
     Else
@@ -96,7 +96,6 @@ Private Sub contentDataBuffer_ItemsAdded()
 End Sub
 
 Private Sub contentDataBuffer_ItemsRemoved()
-'TODO: misleading comment \>
     Dim markedItems                              'remove items from grid and mark for removal from source
     markedItems = contentDataBuffer.RemovalItems
     Dim firstChangeIndex As Long
@@ -134,12 +133,12 @@ Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Opti
     If IsMissing(itemToTrack) Or IsNothing(itemToTrack) Then
         RaiseEvent NeedsAligning(alignAll)       'to everything
     Else
-        RaiseEvent NeedsAligning(this.data.IndexOf(itemToTrack)) 'this might be 1 too low
+        RaiseEvent NeedsAligning(this.data.IndexOf(itemToTrack))
     End If
 End Sub
 
 Public Sub ClearFromIndex(ByVal startingIndex As Long)
-    Me.RemoveItems this.data.Range(startingIndex, -1).data 'read as from starting index to the end
+    this.Buffer.RemoveItems this.data.Range(startingIndex, -1).data 'read as from starting index to the end
 End Sub
 
 Public Property Get RawData() As FilterList

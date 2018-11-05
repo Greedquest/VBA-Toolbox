@@ -84,7 +84,8 @@ Public Property Get ContentData() As FilterList
     Set ContentData = this.ContentData.RawData
 End Property
 
-Private Sub contentWrapper_ItemsAdded(ByVal itemArray As Variant)
+Private Sub contentWrapper_ItemsAdded(itemArray As Variant)
+'BUG: Uh oh, this is duplicated! (A9,05/11/18)
     If this.SortOnAddition Then this.FilterSortMethods.sortContent this.ContentData, itemArray(1)
     RaiseEvent OnAddition(itemArray)
 End Sub
@@ -114,6 +115,7 @@ End Sub
 Private Sub sourceWrapper_DataAdded()
     'When something flagged as added to source (and has made it through the source filter
     'put it on the grid
+    'The onAddition event is raised only by content, not source
     this.ContentData.AddItems this.SourceData.AddedData.data
     'sort and align triggered
 End Sub

@@ -95,7 +95,7 @@ End Property
 Public Property Get Range(ByVal startIndex As Long, ByVal endIndex As Long) As FilterList
     Dim result As New FilterList
     If startIndex < 0 Then 'python style
-        startIndex = dataSet.Count + startIndex
+        startIndex = dataSet.Count + startIndex + 1
     End If
     If endIndex < 0 Then
         endIndex = dataSet.Count + endIndex + 1

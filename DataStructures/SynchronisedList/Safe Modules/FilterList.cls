@@ -80,7 +80,7 @@ Public Sub Reverse()
     dataSet.Reverse
 End Sub
 
-Public Function ToArray() As Variant
+Public Function ToArray() As Variant 'Not used
     ToArray = dataSet.ToArray
 End Function
 

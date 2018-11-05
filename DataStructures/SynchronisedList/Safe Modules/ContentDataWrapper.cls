@@ -137,10 +137,6 @@ Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Opti
     End If
 End Sub
 
-Public Sub ClearFromIndex(ByVal startingIndex As Long)
-    this.Buffer.RemoveItems this.data.data.GetRange()
-End Sub
-
 Public Property Get RawData() As FilterList
     Set RawData = this.data.Clone
 End Property

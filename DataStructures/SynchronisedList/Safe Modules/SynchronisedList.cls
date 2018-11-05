@@ -124,6 +124,7 @@ End Sub
 
 Private Sub sourceWrapper_NeedsSortingAndFiltering(ByVal PartialFilterSet As Variant)
     'Empty partial set means complete resort/filter
+    'WHY do we filter when partialSet is nothing?
     If IsNothing(PartialFilterSet) Then this.FilterSortMethods.filterContent this.ContentData
     'the next will trigger a resort when new data is added
     this.FilterSortMethods.SortAndFilterSourceToOutput this.SourceData, PartialFilterSet

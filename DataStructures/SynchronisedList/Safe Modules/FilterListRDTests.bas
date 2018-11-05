@@ -150,35 +150,12 @@ Public Sub testIndexOf()                         'TODO Rename test
     'Arrange:
 
     'Act:
-    Dim index As Long
-    index = myList.IndexOf(a(2))
+    Dim Index As Long
+    Index = myList.IndexOf(a(2))
     'Assert:
-    Assert.AreEqual "1", index
+    Assert.AreEqual "1", Index
     Assert.AreEqual "-1", myList.IndexOf("blah") 'not in list
 
-TestExit:
-    Exit Sub
-TestFail:
-    Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
-End Sub
-
-'@TestMethod
-Public Sub TestSlice() 'TODO Rename test
-    On Error GoTo TestFail
-    
-    'Arrange:
-
-    'Act:
-    Dim sliced_normally, sliced_pythony, single_item
-    Set sliced_normally = myList.Range(0, 1)
-    Set sliced_pythony = myList.Range(-3, -1)
-    Set single_item = myList.Range(-1, -1)
-    
-    'Assert:
-    Assert.SequenceEquals Array(a(1)), IterableToArray(sliced_normally.data), "Classic failed"
-    Assert.SequenceEquals a, IterableToArray(sliced_pythony.data, base:=1), "Python failed"
-    Assert.AreEqual a(3), single_item.data(0)
-    
 TestExit:
     Exit Sub
 TestFail:

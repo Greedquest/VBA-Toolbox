@@ -26,7 +26,7 @@ Option Explicit
 Private WithEvents contentDataBuffer As ListBuffer
 Attribute contentDataBuffer.VB_VarHelpID = -1
 
-Public Event NeedsFiltering() 'never raised
+Public Event NeedsFiltering() 'NOTE never raised maybe
 Public Event NeedsAligning(ByVal firstChangeIndex As Long) 'Range to re-align
 Public Event NeedsSorting(ByVal itemToTrack As Variant)
 

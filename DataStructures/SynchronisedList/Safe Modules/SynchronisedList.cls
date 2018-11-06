@@ -85,8 +85,11 @@ Public Property Get ContentData() As FilterList
 End Property
 
 Private Sub contentWrapper_ItemsAdded(itemArray As Variant)
-'BUG: Uh oh, this is duplicated! (A9,05/11/18)
-    If this.SortOnAddition Then this.FilterSortMethods.sortContent this.ContentData, itemArray(1)
+    'BUG: Uh oh, this is duplicated! (A9,05/11/18)
+    'If this.SortOnAddition Then this.FilterSortMethods.sortContent this.ContentData, itemArray(1)
+    'For now at least, this is controlled with events from the data
+    'Which means we need to pass info on behaviour down
+    'But that's what we're doing for the buffers anyway, so no problem
     RaiseEvent OnAddition(itemArray)
 End Sub
 

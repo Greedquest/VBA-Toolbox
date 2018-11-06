@@ -26,13 +26,13 @@ Option Explicit
 Private WithEvents contentDataBuffer As ListBuffer
 Attribute contentDataBuffer.VB_VarHelpID = -1
 
-Public Event NeedsFiltering()
+Public Event NeedsFiltering() 'NOTE never raised maybe
 Public Event NeedsAligning(ByVal firstChangeIndex As Long) 'Range to re-align
-Public Event NeedsSorting(ByRef itemToTrack As Variant)
+Public Event NeedsSorting(ByVal itemToTrack As Variant)
 
 'Interface events so that custom onAddition/onRemoval handlers can be used
-Public Event ItemsAdded(ByRef itemSet As Variant)
-Public Event ItemsRemoved(ByRef itemSet As Variant)
+Public Event ItemsAdded(ByVal itemSet As Variant)
+Public Event ItemsRemoved(ByVal itemSet As Variant)
 
 Private Type TContentData
     data As FilterList                           'Filtered Data in Grid
@@ -56,15 +56,15 @@ End Sub
 'Buffer Interface
 '''
 
-Public Sub AddItems(ByRef IterableToAdd As Variant)
+Public Sub AddItems(ByVal IterableToAdd As Variant)
     this.Buffer.AddItems IterableToAdd
 End Sub
 
-Public Sub RemoveItems(ByRef IterableToRemove As Variant)
+Public Sub RemoveItems(ByVal IterableToRemove As Variant)
     this.Buffer.RemoveItems IterableToRemove
 End Sub
 
-Public Sub ClearContent()
+Public Sub ClearContent() 'Not used atm
     'this.Data.Clear won't change visibility necessarily unless good garbage collection
     this.Buffer.RemoveItems this.data.Clone.data 'this.Data.Clone.Data if removing data breaks for loop
 End Sub
@@ -130,7 +130,7 @@ Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMo
     RaiseEvent NeedsAligning(firstChangeIndex)
 End Sub
 
-Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Optional ByRef itemToTrack As Variant)
+Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Optional ByVal itemToTrack As Variant)
     this.data.Sort Comparer, SortMode
     If IsMissing(itemToTrack) Or IsNothing(itemToTrack) Then
         RaiseEvent NeedsAligning(alignAll)       'to everything

@@ -84,13 +84,13 @@ Public Property Get ContentData() As FilterList
     Set ContentData = this.ContentData.RawData
 End Property
 
-Private Sub contentWrapper_ItemsAdded(itemArray As Variant)
+Private Sub contentWrapper_ItemsAdded(ByVal itemSet As Variant)
     'BUG: Uh oh, this is duplicated! (A9,05/11/18)
     'If this.SortOnAddition Then this.FilterSortMethods.sortContent this.ContentData, itemArray(1)
     'For now at least, this is controlled with events from the data
     'Which means we need to pass info on behaviour down
     'But that's what we're doing for the buffers anyway, so no problem
-    RaiseEvent OnAddition(itemArray)
+    RaiseEvent OnAddition(itemSet)
 End Sub
 
 Private Sub contentWrapper_ItemsRemoved(ByVal itemSet As Variant)

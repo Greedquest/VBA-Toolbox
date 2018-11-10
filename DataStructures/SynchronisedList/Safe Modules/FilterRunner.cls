@@ -52,6 +52,7 @@ Public Property Set SortComparer(ByVal Value As IComparer)
 End Property
 
 Public Sub SetFilterMode(Optional ByVal compareTo As Variant = vbNullString, Optional ByVal newComparer As IComparer, Optional ByVal overrideFilterMode As lstFilterMode = 0)
+    'NOTE: why vbnullstring? shouldn't this be its own default
     'If overrides not set, revert to default mode
     If Not newComparer Is Nothing Then Set FilterComparer = newComparer
     If overrideFilterMode = 0 Then
@@ -59,15 +60,11 @@ Public Sub SetFilterMode(Optional ByVal compareTo As Variant = vbNullString, Opt
     Else
         this.FilterMode = overrideFilterMode
     End If
-    If IsObject(compareTo) Then
-        Set this.filterAgainst = compareTo
-    Else
-        this.filterAgainst = compareTo
-    End If
+    LetSet this.filterAgainst, compareTo
 End Sub
 
 Public Sub SetSortMode(Optional ByVal newComparer As IComparer, Optional ByVal overrideSortMode As lstSortMode = 0)
-    
+    'If overrides not set, revert to default mode
     If Not newComparer Is Nothing Then Set SortComparer = newComparer
     If overrideSortMode = 0 Then
         this.SortMode = defaultSortMode

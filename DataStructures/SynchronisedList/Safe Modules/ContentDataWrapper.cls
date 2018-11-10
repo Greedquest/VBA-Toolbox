@@ -100,7 +100,7 @@ Private Sub contentDataBuffer_ItemsRemoved()
     Dim markedItems                              'remove items from grid and mark for removal from source
     markedItems = contentDataBuffer.RemovalItems
     Dim firstChangeIndex As Long
-    firstChangeIndex = this.data.IndexOf(markedItems(1))
+    firstChangeIndex = this.data.IndexOf(markedItems(1)) 'assumes that markedItems are sorted, but they aren't
     Dim item
     For Each item In markedItems
         this.data.Remove item

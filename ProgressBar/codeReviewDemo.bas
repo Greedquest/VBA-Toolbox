@@ -1,4 +1,4 @@
-Attribute VB_Name = "Module1"
+Attribute VB_Name = "codeReviewDemo"
 Option Explicit
 Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 

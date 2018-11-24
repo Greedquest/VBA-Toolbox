@@ -77,11 +77,13 @@ Private Sub raiseError(ByVal errNum As progressError, ParamArray args() As Varia
     Err.Raise errNum
 End Sub
 
-Public Sub Init(Optional ByVal size As Long = 0, Optional ByVal base As Variant = vbNullString, _
+Public Sub Init(Optional ByVal size As Long = 0, Optional ByVal base As Variant, _
          Optional ByVal character As String = vbNullString, Optional ByVal whitespace As String = vbNullString, _
          Optional ByVal formatMask As String = vbNullString)
+    'Method to set appearence and other properties of the progress bar
 
-    'check is inputs were missing - base is allowed to be though
+    'check is inputs were missing - if so leave as they were
+    'Base can be any string so can't be checked in this way, needs special handling
     size = IIf(size = 0, this.size, size)
     character = IIf(character = vbNullString, this.character, character)
     whitespace = IIf(whitespace = vbNullString, this.whitespace, whitespace)
@@ -114,7 +116,6 @@ Public Sub Init(Optional ByVal size As Long = 0, Optional ByVal base As Variant 
     this.whitespace = whitespace
     this.character = character
     this.mask = formatMask
-    this.base = base
     
 End Sub
 

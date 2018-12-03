@@ -146,12 +146,13 @@ Public Sub ResetDefaults()
 End Sub
 
 Public Function Create(Optional ByVal size As Long = 0, Optional ByVal base As Variant, _
-                Optional ByVal character As String = vbNullString, Optional ByVal whitespace As String = vbNullString, _
-                Optional ByVal formatMask As String = vbNullString) As AsciiProgressBar
+                       Optional ByVal character As String = vbNullString, Optional ByVal whitespace As String = vbNullString, _
+                       Optional ByVal formatMask As String = vbNullString) As AsciiProgressBar
                 
     Dim result As New AsciiProgressBar
     result.Init size, base, character, whitespace, formatMask
     Set Create = result
 
 End Function
+
 

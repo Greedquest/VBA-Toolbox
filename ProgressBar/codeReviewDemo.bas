@@ -43,7 +43,7 @@ Public Sub StatusBarProgress()
 End Sub
 
 Public Sub errorTest()
-    With AsciiProgressBar.Create(size:=20, whitespace:="#")
+    With Toolbox.AsciiProgressBar.Create(size:=20, whitespace:="#")
 Debug.Print .Update(0.713)
     End With
 End Sub

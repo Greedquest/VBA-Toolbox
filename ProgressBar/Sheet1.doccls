@@ -1,0 +1,34 @@
+﻿Option Explicit
+
+Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+Private stillHeld As Boolean
+
+Private Sub CommandButton1_MouseDown(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
+    'start loading progress bar
+    
+    Const numberOfSteps As Long = 50
+    Dim progress As New AsciiProgressBar
+    progress.Init size:=20, base:="Loading: "
+    stillHeld = True
+    Dim i As Long
+    For i = 1 To numberOfSteps
+        CommandButton1.Caption = progress.Update(i / numberOfSteps)
+        If Not stillHeld Then Exit For
+        DoEvents
+        Sleep 20
+    Next i
+    If i > numberOfSteps Then
+        CommandButton1.Caption = "Held on long enough"
+        DoEvents
+        Sleep 1000
+    Else
+        CommandButton1.Caption = "Let go too early"
+        DoEvents
+        Sleep 1000
+    End If
+    CommandButton1.Caption = "Hold down"
+End Sub
+
+Private Sub CommandButton1_MouseUp(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
+    stillHeld = False
+End Sub

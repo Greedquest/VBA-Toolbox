@@ -155,7 +155,6 @@ Private Function populatedForm(protected As Boolean) As Object
         With ThisWorkbook.VBProject.VBComponents.Add(vbext_ct_MSForm)
             .Designer.Controls.Add("Forms.listbox.1").Name = "lst_1"
             .Designer.Controls.Add("Forms.commandbutton.1").Name = "cmd_1"
-            .codeModule.DeleteLines 1, .codeModule.CountOfLines
             .codeModule.InsertLines 1, "Private Sub cmd_1_Click()"
             .codeModule.InsertLines 2, "Me.Hide"
             .codeModule.InsertLines 3, "End Sub"

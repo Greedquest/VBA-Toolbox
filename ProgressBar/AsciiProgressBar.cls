@@ -55,31 +55,31 @@ End Property
 
 Private Sub raiseError(ByVal errNum As progressError, ParamArray args() As Variant)
     Select Case errNum
-        Case percentOutOfBoundsError
-            Err.Description = "Percent must lie between 0.0 and 1.0"
-        Case barSizeOutOfRangeError
-            Err.Description = printf("Bar size must be at least {0} characters", args(0))
-        Case singleCharacterRequiredError
-            Err.Description = printf("Only a single character should be used as {0}, not '{1}'", args(0), args(1))
-        Case baseIsNotAStringError
-            Err.Description = printf("Base must be of type string or left blank, not '{0}'", TypeName(args(0)))
-        Case maskMissingPositionalArgumentError
-            Err.Description = printf("formatMask must contain all three positional tokens ({0,1,2}){0}'{1}' does not", _
-                                vbCrLf, args(0))
-        Case Else 'some errNum we don't know what to do with
-            On Error Resume Next 'fake raise to grab description text
-                Err.Raise errNum
-                Dim errDescription As String
-                errDescription = Err.Description
-            On Error GoTo 0
-            Debug.Print printf("Warning: Unexpected error '{0}' with description '{1}'", errNum, errDescription)
+    Case percentOutOfBoundsError
+        Err.Description = "Percent must lie between 0.0 and 1.0"
+    Case barSizeOutOfRangeError
+        Err.Description = printf("Bar size must be at least {0} characters", args(0))
+    Case singleCharacterRequiredError
+        Err.Description = printf("Only a single character should be used as {0}, not '{1}'", args(0), args(1))
+    Case baseIsNotAStringError
+        Err.Description = printf("Base must be of type string or left blank, not '{0}'", TypeName(args(0)))
+    Case maskMissingPositionalArgumentError
+        Err.Description = printf("formatMask must contain all three positional tokens ({0,1,2}){0}'{1}' does not", _
+                                 vbCrLf, args(0))
+    Case Else                                    'some errNum we don't know what to do with
+        On Error Resume Next                     'fake raise to grab description text
+        Err.Raise errNum
+        Dim errDescription As String
+        errDescription = Err.Description
+        On Error GoTo 0
+Debug.Print printf("Warning: Unexpected error '{0}' with description '{1}'", errNum, errDescription)
     End Select
     Err.Raise errNum
 End Sub
 
 Public Sub Init(Optional ByVal size As Long = 0, Optional ByVal base As Variant, _
-         Optional ByVal character As String = vbNullString, Optional ByVal whitespace As String = vbNullString, _
-         Optional ByVal formatMask As String = vbNullString)
+                Optional ByVal character As String = vbNullString, Optional ByVal whitespace As String = vbNullString, _
+                Optional ByVal formatMask As String = vbNullString)
     'Method to set appearence and other properties of the progress bar
 
     'check is inputs were missing - if so leave as they were
@@ -102,9 +102,9 @@ Public Sub Init(Optional ByVal size As Long = 0, Optional ByVal base As Variant,
     ElseIf Not IsMissing(base) Then
         'base is variant so requires type checking
         On Error Resume Next
-            this.base = base 'may be type error if base can't be converted; e.g an object was passed
-            Dim errNum As Long
-            errNum = Err.Number
+        this.base = base                         'may be type error if base can't be converted; e.g an object was passed
+        Dim errNum As Long
+        errNum = Err.Number
         On Error GoTo 0
         If errNum <> 0 Then
             raiseError baseIsNotAStringError, base
@@ -131,6 +131,7 @@ Private Function MaskIsInvalid(ByVal mask As String) As Boolean
         If MaskIsInvalid Then Exit Function
     Next
 End Function
+
 Private Sub Class_Initialize()
     ResetDefaults
     Update this.percentComplete
@@ -143,4 +144,5 @@ Public Sub ResetDefaults()
     this.size = DEFAULT_SIZE
     this.mask = DEFAULT_MASK
 End Sub
+
 

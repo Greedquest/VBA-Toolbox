@@ -84,6 +84,16 @@ Public Property Get ContentData() As FilterList
     Set ContentData = this.ContentData.RawData
 End Property
 
+Private Sub contentWrapper_BufferEvent(ByVal mode As BufferMode)
+    Select Case mode
+    Case slAdding
+    Case slRemoving
+    Case slAmmending
+    Case Else
+        Err.Raise 5
+    End Select
+End Sub
+
 Private Sub contentWrapper_ItemsAdded(ByVal itemSet As Variant)
     'BUG: Uh oh, this is duplicated! (A9,05/11/18)
     'If this.SortOnAddition Then this.FilterSortMethods.sortContent this.ContentData, itemArray(1)

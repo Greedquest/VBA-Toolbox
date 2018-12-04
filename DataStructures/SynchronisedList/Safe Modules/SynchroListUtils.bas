@@ -15,7 +15,7 @@ Public Function ArrayToFilterList(ByVal itemArray As Variant) As FilterList
         Dim result As New FilterList
         Dim i As Long
         For i = LBound(itemArray) To UBound(itemArray)
-            .Add itemArray(i)
+            result.Add itemArray(i)
         Next i
         Set ArrayToFilterList = result
     End If

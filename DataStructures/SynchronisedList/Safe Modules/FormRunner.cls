@@ -23,8 +23,8 @@ Private Type tRunner
     FilterComparer As CallByNameComparer
     filterObj As dummyRange
 End Type
-Private this As tRunner
 
+Private this As tRunner
 
 Private Sub Class_Initialize()
     Set synchro = New SynchronisedList
@@ -49,7 +49,6 @@ Public Sub init(ByVal dataTable As ListObject)
     synchro.Add dataTable.DataBodyRange.Rows
     
 End Sub
-
 
 Private Sub synchro_AfterRemoval(itemArray As Variant)
     Dim i As Long
@@ -79,7 +78,6 @@ Private Sub synchro_OnAddition(itemArray As Variant)
     Next i
 End Sub
 
-
 Private Sub userInterface_filterModeSet(ByVal FilterBy As String, ByVal FilterValue As String)
     this.FilterComparer.init "Cells", VbGet, 1, columnIndexFromName(FilterBy)
     this.filterObj.Cells(1, columnIndexFromName(FilterBy)) = FilterValue
@@ -90,6 +88,7 @@ Private Sub userInterface_sortModeSet(ByVal SortBy As String)
     this.SortComparer.init "Cells", VbGet, 1, columnIndexFromName(SortBy)
     this.data.Sort this.SortComparer
 End Sub
+
 Private Function columnIndexFromName(ByVal colName As String) As Long
     Const EXACT_MATCH As Long = 0
     Dim result
@@ -97,3 +96,4 @@ Private Function columnIndexFromName(ByVal colName As String) As Long
     result = WorksheetFunction.Match(colName, this.headerRange, EXACT_MATCH)
     columnIndexFromName = IIf(Err.Number = 0, result, 1)
 End Function
+

@@ -19,7 +19,6 @@ End Type
 
 Private this As tSynchroTest
 
-
 Public Sub ClearCounts()
     this.LastChangeIndex = -1
     this.OrderEventRaised = 0

@@ -121,7 +121,7 @@ Public Sub TestAmmedment()
     
     'Assert:
     With synchro
-        Assert.AreSame items(3), .ContentData(4)    'last item since added to end of grid
+        Assert.AreSame items(3), .ContentData(4) 'last item since added to end of grid
         Assert.AreSame items(3), .SourceData(2)  '3rd item since no change
     End With
     
@@ -218,7 +218,7 @@ TestFail:
 End Sub
 
 '@TestMethod
-Public Sub TestAddingOne() 'TODO Rename test
+Public Sub TestAddingOne()                       'TODO Rename test
     On Error GoTo TestFail
     
     'Arrange:
@@ -252,13 +252,13 @@ TestFail:
 End Sub
 
 '@TestMethod
-Public Sub TestAddingRange() 'TODO Rename test
+Public Sub TestAddingRange()                     'TODO Rename test
     On Error GoTo TestFail
     
     'Arrange:
 
     'Act:
-    synchro.Add Array(Range("a1:a5")) 'wrap iterables we don't want flattened
+    synchro.Add Array(Range("a1:a5"))            'wrap iterables we don't want flattened
     'Assert:
     Assert.AreEqual "1", synchro.SourceData.Count, "Count incorrect"
     Assert.AreEqual "$A$1:$A$5", UCase(synchro.SourceData(0).Address), "Addresses don't line up"
@@ -268,3 +268,4 @@ TestExit:
 TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
 End Sub
+

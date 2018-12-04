@@ -26,16 +26,13 @@ Private justEnteredFilterBox As Boolean
 
 'Form Control Methods
 
-
 Sub populateSortBox(ByVal options As Variant)
     Me.SortBy.List = doubleTranspose(options)
 End Sub
-    
-    
+
 Sub populateFilterBox(ByVal options As Variant)
     Me.FilterBy.List = doubleTranspose(options)
 End Sub
-
 
 Public Sub DisplayData(ByRef dataArray As Variant)
     If IsArray(dataArray) And ArraySupport.NumberOfArrayDimensions(dataArray) = 1 Then
@@ -51,7 +48,7 @@ End Sub
 
 Public Sub AddItem(itemArray As Variant)
 
-    If IsArray(itemArray) Then 'assume 1 indexed
+    If IsArray(itemArray) Then                   'assume 1 indexed
         Dim transposedArray
         transposedArray = doubleTranspose(itemArray)
         With dataDisplayBox
@@ -88,7 +85,7 @@ Private Sub FilterValue_Enter()
 End Sub
 
 Private Sub FilterValue_MouseDown(ByVal Button As Integer, ByVal Shift As Integer, _
-ByVal X As Single, ByVal Y As Single)
+                                  ByVal X As Single, ByVal Y As Single)
 'highlight text to change when box first entered
     If justEnteredFilterBox Then
         With FilterValue
@@ -106,4 +103,3 @@ End Sub
 Private Sub FilterButton_Click()
     RaiseEvent filterModeSet(Me.FilterBy.Value, Me.FilterValue.Value)
 End Sub
-

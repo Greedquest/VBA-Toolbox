@@ -26,7 +26,7 @@ Option Explicit
 Private WithEvents contentDataBuffer As ListBuffer
 Attribute contentDataBuffer.VB_VarHelpID = -1
 
-Public Event NeedsFiltering() 'NOTE never raised maybe
+Public Event NeedsFiltering()                    'NOTE never raised maybe
 Public Event NeedsAligning(ByVal firstChangeIndex As Long) 'Range to re-align
 Public Event NeedsSorting(ByVal itemToTrack As Variant)
 
@@ -64,7 +64,7 @@ Public Sub RemoveItems(ByVal IterableToRemove As Variant)
     this.Buffer.RemoveItems IterableToRemove
 End Sub
 
-Public Sub ClearContent() 'Not used atm
+Public Sub ClearContent()                        'Not used atm
     'this.Data.Clear won't change visibility necessarily unless good garbage collection
     this.Buffer.RemoveItems this.data.Clone.data 'this.Data.Clone.Data if removing data breaks for loop
 End Sub
@@ -74,7 +74,7 @@ End Sub
 '''
 Private Sub contentDataBuffer_ItemsAdded()
 
-'add items which match filter requirements
+    'add items which match filter requirements
     Dim newItems
     newItems = this.Buffer.AddedItems
     LetSet newItems, removeDuplicates(newItems, this.data) 'drop any items which are already present
@@ -96,7 +96,7 @@ Private Sub contentDataBuffer_ItemsAdded()
 End Sub
 
 Private Sub contentDataBuffer_ItemsRemoved()
-'TODO: misleading comment \>
+    'TODO: misleading comment \>
     Dim markedItems                              'remove items from grid and mark for removal from source
     markedItems = contentDataBuffer.RemovalItems
     Dim firstChangeIndex As Long
@@ -123,7 +123,7 @@ Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMo
     Dim firstChangeIndex As Long
     firstChangeIndex = -1                        '0 index
     Dim gridItem As Variant
-    For Each gridItem In unFilteredData.data 'loop through original and filtered to find first difference then flag it
+    For Each gridItem In unFilteredData.data     'loop through original and filtered to find first difference then flag it
         firstChangeIndex = firstChangeIndex + 1
         If Not this.data.Contains(gridItem) Then Exit For
     Next gridItem
@@ -131,6 +131,8 @@ Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMo
 End Sub
 
 Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Optional ByVal itemToTrack As Variant)
+    'here we should instead track evey newly added item
+    'and check where they end up relative to original
     this.data.Sort Comparer, SortMode
     If IsMissing(itemToTrack) Or IsNothing(itemToTrack) Then
         RaiseEvent NeedsAligning(alignAll)       'to everything

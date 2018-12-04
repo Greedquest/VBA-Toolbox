@@ -10,20 +10,21 @@ Sub showForm()
 End Sub
 
 Sub compileSynchrolist()
-Toolbox.CompressProject ThisWorkbook, "Filterlist" _
-                                    , "FilterlistUtils" _
-                                    , "ArraySupport" _
-                                    , "FilterRunner" _
-                                    , "SynchroListUtils" _
-                                    , "ContentDataWrapper" _
-                                    , "ListBuffer" _
-                                    , "SourceDataWrapper" _
-                                    , "SynchronisedList"
+    Toolbox.CompressProject ThisWorkbook, "Filterlist" _
+                                         , "FilterlistUtils" _
+                                          , "ArraySupport" _
+                                           , "FilterRunner" _
+                                            , "SynchroListUtils" _
+                                             , "ContentDataWrapper" _
+                                              , "ListBuffer" _
+                                               , "SourceDataWrapper" _
+                                                , "SynchronisedList"
                                     
-Toolbox.CompressProject ThisWorkbook, "CodeReviewTest" _
-                                    , "ExampleForm" _
-                                    , "FormRunner" _
-                                    , "dummyRange" _
-                                    , "CallByNameComparer"
+    Toolbox.CompressProject ThisWorkbook, "CodeReviewTest" _
+                                         , "ExampleForm" _
+                                          , "FormRunner" _
+                                           , "dummyRange" _
+                                            , "CallByNameComparer"
 End Sub
+
 

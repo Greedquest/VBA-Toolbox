@@ -63,7 +63,6 @@ Public Const C_ERR_NO_ERROR = 0&
 Public Const C_ERR_SUBSCRIPT_OUT_OF_RANGE = 9&
 Public Const C_ERR_ARRAY_IS_FIXED_OR_LOCKED = 10&
 
-        
 Public Function CompareArrays(Array1 As Variant, Array2 As Variant, _
                               ResultArray As Variant, Optional CompareMode As VbCompareMethod = vbTextCompare) As Boolean
     '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1814,7 +1813,7 @@ Public Function IsVariantArrayConsistent(arr As Variant) As Boolean
     ' return TRUE and get out.
     ''''''''''''''''''''''''''''''''''''''''''
     If (VarType(arr) <= vbArray) And _
-       (VarType(arr) <> vbVariant) Then
+                                 (VarType(arr) <> vbVariant) Then
         IsVariantArrayConsistent = True
         Exit Function
     End If
@@ -3274,8 +3273,8 @@ Public Function CombineTwoDArrays(Arr1 As Variant, _
     ' Ensure that ALL the LBounds are equal.
     ''''''''''''''''''''''''''''''''''''''''
     If (LBoundRow1 <> LBoundRow2) Or _
-       (LBoundRow1 <> LBoundCol1) Or _
-       (LBoundRow1 <> LBoundCol2) Then
+                                  (LBoundRow1 <> LBoundCol1) Or _
+                                  (LBoundRow1 <> LBoundCol2) Then
         CombineTwoDArrays = Null
         Exit Function
     End If

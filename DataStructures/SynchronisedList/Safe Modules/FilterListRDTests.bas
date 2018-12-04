@@ -163,7 +163,7 @@ TestFail:
 End Sub
 
 '@TestMethod
-Public Sub TestSlice() 'TODO Rename test
+Public Sub TestSlice()                           'TODO Rename test
     On Error GoTo TestFail
     
     'Arrange:
@@ -184,3 +184,4 @@ TestExit:
 TestFail:
     Assert.Fail "Test raised an error: #" & Err.Number & " - " & Err.Description
 End Sub
+

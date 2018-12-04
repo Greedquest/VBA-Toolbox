@@ -7,7 +7,19 @@ Public Enum BufferMode
     slRemoving
     slAmmending
 End Enum
-    
+
+Public Function ArrayToFilterList(ByVal itemArray As Variant) As FilterList
+    If IsArrayEmpty(itemArray) Then
+        Exit Function
+    Else
+        Dim result As New FilterList
+        Dim i As Long
+        For i = LBound(itemArray) To UBound(itemArray)
+            .Add itemArray(i)
+        Next i
+        Set ArrayToFilterList = result
+    End If
+End Function
 
 Public Function flattenParamArray(ParamArray passedParams() As Variant) As Variant
     

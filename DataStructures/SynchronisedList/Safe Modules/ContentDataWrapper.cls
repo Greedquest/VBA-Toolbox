@@ -29,7 +29,7 @@ Attribute contentDataBuffer.VB_VarHelpID = -1
 Public Event NeedsFiltering()                    'NOTE never raised maybe
 Public Event NeedsAligning(ByVal firstChangeIndex As Long) 'Range to re-align
 Public Event NeedsSorting(ByVal itemToTrack As Variant)
-Public Event BufferEvent(ByVal mode As BufferMode, ByRef bufferItems As Variant) 'raised when stuff comes out of the buffer
+Public Event BufferEvent(ByVal mode As BufferMode, ByRef bufferItems As FilterList) 'raised when stuff comes out of the buffer
 
 'Interface events so that custom onAddition/onRemoval handlers can be used
 Public Event ItemsAdded(ByVal itemSet As Variant)
@@ -76,10 +76,13 @@ End Sub
 Private Sub contentDataBuffer_ItemsAdded()
 
     'Sort and filter items in place
-    Dim newItems
-    newItems = this.Buffer.AddedItems
-    RaiseEvent BufferEvent(slAdding, newItems)
+    Dim itemList As FilterList
+    Set itemList = ArrayToFilterList(this.Buffer.AddedItems)
+    RaiseEvent BufferEvent(slAdding, itemList)
     
+    Dim newItems As Variant
+    newItems = itemList.ToArray 'TODO make everything work with filterLists
+        
     'remove duplicated newItems in place
     LetSet newItems, removeDuplicates(newItems, this.data) 'drop any items which are already present
     If IsNothing(newItems) Then

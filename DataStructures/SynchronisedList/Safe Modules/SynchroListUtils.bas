@@ -2,6 +2,13 @@ Attribute VB_Name = "SynchroListUtils"
 '@Folder(SynchronisedList.Utils)
 Option Explicit
 
+Public Enum BufferMode
+    slAdding
+    slRemoving
+    slAmmending
+End Enum
+    
+
 Public Function flattenParamArray(ParamArray passedParams() As Variant) As Variant
     
     Dim argSet As Variant

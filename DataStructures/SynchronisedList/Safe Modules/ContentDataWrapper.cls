@@ -131,6 +131,7 @@ Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMo
 End Sub
 
 Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Optional ByVal itemToTrack As Variant)
+    'BUG
     'here we should instead track evey newly added item
     'and check where they end up relative to original
     this.data.Sort Comparer, SortMode

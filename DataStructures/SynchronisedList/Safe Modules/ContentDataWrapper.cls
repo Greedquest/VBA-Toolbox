@@ -29,7 +29,7 @@ Attribute contentDataBuffer.VB_VarHelpID = -1
 Public Event NeedsFiltering()                    'NOTE never raised maybe
 Public Event NeedsAligning(ByVal firstChangeIndex As Long) 'Range to re-align
 Public Event NeedsSorting(ByVal itemToTrack As Variant)
-Public Event BufferEvent(ByVal mode As BufferMode, ByRef bufferItems As FilterList) 'raised when stuff comes out of the buffer
+Public Event BufferEvent(ByVal mode As BufferMode, ByVal bufferItems As FilterList) 'raised when stuff comes out of the buffer
 
 'Interface events so that custom onAddition/onRemoval handlers can be used
 Public Event ItemsAdded(ByVal itemSet As Variant)
@@ -103,10 +103,14 @@ Private Sub contentDataBuffer_ItemsAdded()
 End Sub
 
 Private Sub contentDataBuffer_ItemsRemoved()
+    'Sort and filter items in place
+    Dim itemList As FilterList
+    Set itemList = ArrayToFilterList(this.Buffer.RemovalItems)
+    RaiseEvent BufferEvent(slRemoving, itemList)
+    
     'TODO: misleading comment \>
     Dim markedItems                              'remove items from grid and mark for removal from source
-    markedItems = contentDataBuffer.RemovalItems
-    RaiseEvent BufferEvent(slRemoving, markedItems)
+    markedItems = itemList.ToArray
     
     Dim firstChangeIndex As Long
     firstChangeIndex = this.data.IndexOf(markedItems(1))

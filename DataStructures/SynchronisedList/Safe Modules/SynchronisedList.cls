@@ -86,12 +86,18 @@ End Property
 
 
 
-Private Sub contentWrapper_BufferEvent(ByVal mode As BufferMode, bufferItems As FilterList)
+Private Sub contentWrapper_BufferEvent(ByVal mode As BufferMode, ByVal bufferItems As FilterList)
 'fresh from buffer, sort and filter in place
     Select Case mode
     Case slAdding
+        this.FilterSortMethods.FilterInPlace bufferItems
+        If bufferItems.Count > 0 Then
+            this.FilterSortMethods.SortInPlace bufferItems
+        End If
     Case slRemoving
-    Case slAmmending
+        If bufferItems.Count > 0 Then
+            this.FilterSortMethods.SortInPlace bufferItems
+        End If
     Case Else
         Err.Raise 5
     End Select

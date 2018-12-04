@@ -63,6 +63,24 @@ Public Sub SetFilterMode(Optional ByVal compareTo As Variant = vbNullString, Opt
     LetSet this.filterAgainst, compareTo
 End Sub
 
+Public Sub SortInPlace(ByVal list As FilterList)
+    If Not isSafeToSort Then
+        Err.Description = "No IComparer has been set for Sorting, please setSortMode"
+        Err.Raise 5
+    Else
+        list.Sort this.SortComparer, this.SortMode
+    End If
+End Sub
+
+Public Sub FilterInPlace(ByVal list As FilterList)
+    If Not isSafeToFilter Then
+        Err.Description = "No IComparer has been set for Filtering, please setFilterMode"
+        Err.Raise 5
+    Else
+        list.Filter this.filterAgainst, this.FilterMode, this.FilterComparer
+    End If
+End Sub
+
 Public Sub SetSortMode(Optional ByVal newComparer As IComparer, Optional ByVal overrideSortMode As lstSortMode = 0)
     'If overrides not set, revert to default mode
     If Not newComparer Is Nothing Then Set SortComparer = newComparer

@@ -62,7 +62,9 @@ Private Sub sourceBuffer_ItemsAmmended()
     markedItems = sourceBuffer.AmmendedItems
     
     RaiseEvent DataRemoved(markedItems)          'triggers grid to remove items, raises needs aligning event at index of 1st marked item
+    'TODO: only really needs filtering as sort definition may change whilst in buffer
     RaiseEvent NeedsSortingAndFiltering(markedItems) 'Filters newly ammended source to grid
+    
 End Sub
 
 Private Sub sourceBuffer_ItemsRemoved()

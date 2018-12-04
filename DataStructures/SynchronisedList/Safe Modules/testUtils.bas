@@ -57,3 +57,4 @@ Public Function getDummyClassesWithProperties(Optional N As Variant, Optional pr
     Next i
     getDummyClassesWithProperties = results
 End Function
+

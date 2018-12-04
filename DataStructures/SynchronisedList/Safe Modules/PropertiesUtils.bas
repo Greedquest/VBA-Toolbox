@@ -1,7 +1,6 @@
 Attribute VB_Name = "PropertiesUtils"
 '@Folder("Tests.Utils")
 
-
 Function GetRndDate(dtStartDate As Date, dtEndDate As Date) As Date
     On Error GoTo Error_Handler
     Dim dtTmp                 As Date

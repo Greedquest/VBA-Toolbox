@@ -15,7 +15,7 @@ Attribute VB_Exposed = False
 '''
 
 
-Private WithEvents sourceBuffer As ListBuffer     'input buffer to chunkify data
+Private WithEvents sourceBuffer As ListBuffer    'input buffer to chunkify data
 Attribute sourceBuffer.VB_VarHelpID = -1
 Public Event DataAdded()
 Public Event DataRemoved(ByRef RemovedItems)
@@ -31,7 +31,7 @@ Private this As TSource
 
 Private Sub Class_Initialize()
     Set this.data = New FilterList               'data store
-    Set sourceBuffer = New ListBuffer             'events version of buffer
+    Set sourceBuffer = New ListBuffer            'events version of buffer
     Set this.Buffer = sourceBuffer               'readable version of buffer
 End Sub
 

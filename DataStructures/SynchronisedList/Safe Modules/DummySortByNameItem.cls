@@ -13,7 +13,6 @@ Public Number As Long
 Public Time As Double
 Public CreationDate As Date
 
-
 Private Sub Class_Initialize()
     Name = RandomString
     Number = Application.WorksheetFunction.RandBetween(10, 100)

@@ -75,16 +75,16 @@ Private boolEnter As Boolean
 'Form Control Methods
 
 Sub populateSortBox(ByVal options As Variant)
-    Me.SortBy.List = doubleTranspose(options)
+    Me.SortBy.list = doubleTranspose(options)
 End Sub
 
 Sub populateFilterBox(ByVal options As Variant)
-    Me.FilterBy.List = doubleTranspose(options)
+    Me.FilterBy.list = doubleTranspose(options)
 End Sub
 
 Public Sub DisplayData(ByRef dataArray As Variant)
     If IsArray(dataArray) And ArraySupport.NumberOfArrayDimensions(dataArray) = 1 Then
-        dataDisplayBox.List = doubleTranspose(dataArray)
+        dataDisplayBox.list = doubleTranspose(dataArray)
     Else
         Err.Raise 5
     End If
@@ -103,7 +103,7 @@ Public Sub AddItem(itemArray As Variant)
             .AddItem
             Dim i As Long
             For i = 0 To .ColumnCount - 1
-                .List(.listCount - 1, i) = transposedArray(i + 1)
+                .list(.listCount - 1, i) = transposedArray(i + 1)
             Next
         End With
     Else

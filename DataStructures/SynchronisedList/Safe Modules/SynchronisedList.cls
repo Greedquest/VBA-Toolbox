@@ -84,10 +84,8 @@ Public Property Get ContentData() As FilterList
     Set ContentData = this.ContentData.RawData
 End Property
 
-
-
 Private Sub contentWrapper_BufferEvent(ByVal mode As BufferMode, ByVal bufferItems As FilterList)
-'fresh from buffer, sort and filter in place
+    'fresh from buffer, sort and filter in place
     Select Case mode
     Case slAdding
         this.FilterSortMethods.FilterInPlace bufferItems

@@ -81,7 +81,7 @@ Private Sub contentDataBuffer_ItemsAdded()
     RaiseEvent BufferEvent(slAdding, itemList)
     
     Dim newItems As Variant
-    newItems = itemList.ToArray 'TODO make everything work with filterLists
+    newItems = itemList.ToArray                  'TODO make everything work with filterLists
         
     'remove duplicated newItems in place
     LetSet newItems, removeDuplicates(newItems, this.data) 'drop any items which are already present

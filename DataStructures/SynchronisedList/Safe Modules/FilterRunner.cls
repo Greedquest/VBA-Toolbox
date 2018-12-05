@@ -112,7 +112,7 @@ Public Sub filterContent(content As ContentDataWrapper)
     End If
 End Sub
 
-Public Sub sortContent(content As ContentDataWrapper, itemToTrack As Variant)
+Public Sub sortContent(ByVal content As ContentDataWrapper, itemToTrack As Variant)
     content.Sort SortComparer, this.SortMode, itemToTrack
 End Sub
 

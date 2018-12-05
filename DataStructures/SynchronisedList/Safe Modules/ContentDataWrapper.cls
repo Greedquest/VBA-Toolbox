@@ -96,7 +96,7 @@ Private Sub contentDataBuffer_ItemsAdded()
         RaiseEvent ItemsAdded(newItems)
         If this.SortOnAddition Then
             RaiseEvent NeedsSorting(newItems(1)) 'sort content afresh, tracking where first item goes
-                                                'This goes on to raise its own Needs Aligning
+                                                'This goes on to raise its own align event
         Else
             RaiseEvent NeedsAligning(firstChangeIndex)
         End If

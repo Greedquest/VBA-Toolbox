@@ -83,10 +83,10 @@ Private Sub contentDataBuffer_ItemsAdded()
     Dim newItems As Variant
     newItems = itemList.ToArray                  'TODO make everything work with filterLists
         
-    'remove duplicated newItems in place
+    'remove duplicate items and store back in array
     LetSet newItems, removeDuplicates(newItems, this.data) 'drop any items which are already present
     If IsNothing(newItems) Then
-        'do nothing
+        'nothing got through the filter or duplicate removal
     Else
         Dim i As Long, firstChangeIndex As Long
         firstChangeIndex = this.data.Count       'without sorting, first change is just the end of the array
@@ -95,7 +95,8 @@ Private Sub contentDataBuffer_ItemsAdded()
         Next i
         RaiseEvent ItemsAdded(newItems)
         If this.SortOnAddition Then
-            RaiseEvent NeedsSorting(newItems(1)) 'sort items afresh, tracking where first item goes
+            RaiseEvent NeedsSorting(newItems(1)) 'sort content afresh, tracking where first item goes
+                                                'This goes on to raise its own Needs Aligning
         Else
             RaiseEvent NeedsAligning(firstChangeIndex)
         End If

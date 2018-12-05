@@ -78,7 +78,7 @@ Private Sub contentDataBuffer_ItemsAdded()
     'Sort and filter items in place
     Dim itemList As FilterList
     Set itemList = ArrayToFilterList(this.Buffer.AddedItems)
-    RaiseEvent BufferEvent(slAdding, itemList)
+    RaiseEvent BufferEvent(slAdding, itemList) 'guarantees itemList is up-to-date for sorting and filtering
     
     Dim newItems As Variant
     newItems = itemList.ToArray                  'TODO make everything work with filterLists

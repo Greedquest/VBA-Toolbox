@@ -114,25 +114,10 @@ Public Sub FilterToOutput(FilterObject As Variant, FilterMode As lstFilterMode, 
     Else                                         'no partial set, i.e. grid was cleared
         Set this.output = this.data.Clone
     End If
-
-    '    If IsMissing(PartialSet) Then
-    '        Set this.Output = this.Data.Clone
-    '    ElseIf this.Output Is Nothing Then           'OR patrialset Is Nothing
-    '        Set this.Output = this.Data.Clone
-    '    ElseIf PartialSet Is Nothing Then
-    '        Set this.Output = this.Data.Clone
-    '    Else                                         'only want to add new items
-    '        Dim outboundItem
-    '        For Each outboundItem In PartialSet
-    '            this.Output.Add outboundItem
-    '        Next outboundItem
-    '    End If
-
-    '    Dim tempOutput As FilterList
-    '    Set tempOutput = this.Output
+    
+    'Perform filter and notify synchro
     this.output.Filter FilterObject, FilterMode, FilterComparer 'Filter list using dummy object based on current settings
     If this.output.Count > 0 Then
-        this.output.Sort SortComparer, SortMode
         RaiseEvent DataAdded                     'Let gridManager know there's new data ready
     End If
 End Sub
@@ -148,8 +133,8 @@ Public Property Get RawData() As FilterList
     Set RawData = this.data.Clone
 End Property
 
-Public Sub ReSortAndFilter() 'codename for push everything to output
-    'Really needs a full re-sort + filter
-    'RaiseEvent NeedsSortingAndFiltering(Nothing)
+Public Sub ReSortAndFilter() 'codename for push everything to output and refilter content - re-sort is automatic
+    'Todo, should we also resort?
+    RaiseEvent NeedsSortingAndFiltering(Nothing)
 End Sub
 

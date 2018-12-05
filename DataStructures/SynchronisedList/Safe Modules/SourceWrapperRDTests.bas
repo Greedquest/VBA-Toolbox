@@ -56,7 +56,7 @@ Public Sub TestAddingTwo()
     With New FilterRunner                        'this triggers an event, but let's bypass it
         .SetFilterMode , , lstKeepAll
         .SetSortMode , lstNoSorting
-        .SortAndFilterSourceToOutput sourceWrapper
+        .FilterSourceToOutput sourceWrapper
     End With
     
     'Assert:
@@ -83,7 +83,7 @@ Public Sub testRemoval()
     With New FilterRunner                        'adding triggers an event, let's assume that happened
         .SetFilterMode , , lstKeepAll
         .SetSortMode , lstNoSorting
-        .SortAndFilterSourceToOutput sourceWrapper
+        .FilterSourceToOutput sourceWrapper
     End With
 
     'Act:
@@ -116,7 +116,7 @@ Public Sub testRemovalOfNonPresent()
     With New FilterRunner                        'adding triggers an event, let's assume that happened
         .SetFilterMode , , lstKeepAll
         .SetSortMode , lstNoSorting
-        .SortAndFilterSourceToOutput sourceWrapper
+        .FilterSourceToOutput sourceWrapper
     End With
 
     'Act:
@@ -154,7 +154,7 @@ Public Sub TestFilteringError()
     'Act:
     With New FilterRunner                        'adding triggers an event, let's assume that happened
         '.setFilterMode
-        .SortAndFilterSourceToOutput sourceWrapper
+        .FilterSourceToOutput sourceWrapper
     End With
 
 Assert:

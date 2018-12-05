@@ -68,7 +68,7 @@ Public Sub SortInPlace(ByVal list As FilterList)
         Err.Description = "No IComparer has been set for Sorting, please setSortMode"
         Err.Raise 5
     Else
-        list.Sort this.SortComparer, this.SortMode
+        list.Sort SortComparer, this.SortMode
     End If
 End Sub
 
@@ -77,7 +77,7 @@ Public Sub FilterInPlace(ByVal list As FilterList)
         Err.Description = "No IComparer has been set for Filtering, please setFilterMode"
         Err.Raise 5
     Else
-        list.Filter this.filterAgainst, this.FilterMode, this.FilterComparer
+        list.Filter this.filterAgainst, this.FilterMode, FilterComparer
     End If
 End Sub
 
@@ -99,7 +99,7 @@ Public Sub FilterSourceToOutput(source As SourceDataWrapper, Optional PartialSet
         Err.Description = "No IComparer has been set for Sorting, please setSortMode"
         Err.Raise 5
     Else
-        source.FilterToOutput this.filterAgainst, this.FilterMode, FilterComparer, SortComparer, this.SortMode, PartialSet
+        source.FilterToOutput this.filterAgainst, this.FilterMode, FilterComparer, PartialSet
     End If
 End Sub
 

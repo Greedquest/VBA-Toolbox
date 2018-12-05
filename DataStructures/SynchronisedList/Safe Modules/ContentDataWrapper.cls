@@ -145,14 +145,27 @@ Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMo
 End Sub
 
 Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Optional ByVal itemToTrack As Variant)
-    'BUG
-    'here we should instead track evey newly added item
-    'and check where they end up relative to original
+    'Track the first item as it gets sorted. It and everything after it will need aligning
+    'However if it stays in the same place then since everything is sorted
+    'Nothing will have moved
+    
     this.data.Sort Comparer, SortMode
     If IsMissing(itemToTrack) Or IsNothing(itemToTrack) Then
-        RaiseEvent NeedsAligning(alignAll)       'to everything
+        RaiseEvent NeedsAligning(alignAll)
     Else
-        RaiseEvent NeedsAligning(this.data.IndexOf(itemToTrack)) 'this might be 1 too low
+        Dim previousIndex As Long, newIndex As Long
+        previousIndex = this.data.IndexOf(itemToTrack)
+        this.data.Sort Comparer, SortMode
+        newIndex = this.data.IndexOf(itemToTrack)
+        If newIndex < previousIndex Then
+            RaiseEvent NeedsAligning(newIndex) 'this might be 1 too low
+        ElseIf newIndex = previousIndex Then
+            'do nothing, it's already sorted
+            'This assumes everything got aligned when it was first added
+        Else
+            'we should never be here, some sort problem
+            Err.Raise vbObjectError + 1000, Description:="Bad beans, sort is all off"
+        End If
     End If
 End Sub
 

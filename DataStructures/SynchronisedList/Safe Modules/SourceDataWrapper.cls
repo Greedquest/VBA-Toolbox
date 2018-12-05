@@ -100,7 +100,7 @@ Private Sub sourceBuffer_ItemsAdded()
     RaiseEvent NeedsSortingAndFiltering(newArray) 'Tell grid manager to filter source to output (only added items though)
 End Sub
 
-Public Sub FilterToOutput(FilterObject As Variant, FilterMode As lstFilterMode, FilterComparer As IComparer, SortComparer As IComparer, SortMode As lstSortMode, Optional PartialSet As Variant)
+Public Sub FilterToOutput(FilterObject As Variant, FilterMode As lstFilterMode, FilterComparer As IComparer, Optional PartialSet As Variant)
     'Pass filtered and sorted copy of data to output queue, which will be buffered into Grid
     'TODO Sort ascending, descending or maintain order - maintain order makes it hard to find first index
 

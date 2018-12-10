@@ -78,7 +78,7 @@ Private Sub contentDataBuffer_ItemsAdded()
     'Sort and filter items in place
     Dim itemList As FilterList
     Set itemList = ArrayToFilterList(this.Buffer.AddedItems)
-    RaiseEvent BufferEvent(slAdding, itemList) 'guarantees itemList is up-to-date for sorting and filtering
+    RaiseEvent BufferEvent(slAdding, itemList)   'guarantees itemList is up-to-date for sorting and filtering
     
     Dim newItems As Variant
     newItems = itemList.ToArray                  'TODO make everything work with filterLists
@@ -135,20 +135,20 @@ Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMo
     With this.data.Clone
         'use complimentary filter mode to get those items which wouldn't make it through the filter
         .Filter FilterObject, -FilterMode, Comparer
-        Me.RemoveItems .data 'this will raise all the required alignment events
+        Me.RemoveItems .data                     'this will raise all the required alignment events
     End With
-'    Dim unFilteredData As FilterList
-'    Set unFilteredData = this.data.Clone
-'    this.data.Filter FilterObject, FilterMode, Comparer
-'
-'    Dim firstChangeIndex As Long
-'    firstChangeIndex = -1                        '0 index
-'    Dim gridItem As Variant
-'    For Each gridItem In unFilteredData.data     'loop through original and filtered to find first difference then flag it
-'        firstChangeIndex = firstChangeIndex + 1
-'        If Not this.data.Contains(gridItem) Then Exit For
-'    Next gridItem
-'    RaiseEvent NeedsAligning(firstChangeIndex)
+    '    Dim unFilteredData As FilterList
+    '    Set unFilteredData = this.data.Clone
+    '    this.data.Filter FilterObject, FilterMode, Comparer
+    '
+    '    Dim firstChangeIndex As Long
+    '    firstChangeIndex = -1                        '0 index
+    '    Dim gridItem As Variant
+    '    For Each gridItem In unFilteredData.data     'loop through original and filtered to find first difference then flag it
+    '        firstChangeIndex = firstChangeIndex + 1
+    '        If Not this.data.Contains(gridItem) Then Exit For
+    '    Next gridItem
+    '    RaiseEvent NeedsAligning(firstChangeIndex)
 End Sub
 
 Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Optional ByVal itemToTrack As Variant)
@@ -165,7 +165,7 @@ Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Opti
         this.data.Sort Comparer, SortMode
         newIndex = this.data.IndexOf(itemToTrack)
         If newIndex < previousIndex Then
-            RaiseEvent NeedsAligning(newIndex) 'this might be 1 too low
+            RaiseEvent NeedsAligning(newIndex)   'this might be 1 too low
         ElseIf newIndex = previousIndex Then
             'do nothing, it's already sorted
             'This assumes everything got aligned when it was first added

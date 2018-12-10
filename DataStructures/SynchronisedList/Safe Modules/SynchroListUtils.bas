@@ -74,9 +74,9 @@ Public Function IsArrayNotObj(ByVal valueToTest As Variant) As Boolean
 End Function
 
 Public Function removeDuplicates(ByVal inArray As Variant, ByVal dataSet As FilterList) As Variant
-'Function checks if inArray items are in dataset, removes them from the array if so
-'Returns Nothing if all items dropped or inArray is empty
-'Errors if inArray is not an array
+    'Function checks if inArray items are in dataset, removes them from the array if so
+    'Returns Nothing if all items dropped or inArray is empty
+    'Errors if inArray is not an array
     If IsArray(inArray) Then
         Dim lowerBound As Long
         lowerBound = LBound(inArray)

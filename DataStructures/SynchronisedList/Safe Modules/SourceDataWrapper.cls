@@ -97,7 +97,7 @@ Private Sub sourceBuffer_ItemsAdded()
             this.data.Add newArray(i)
         End If
     Next i
-    RaiseEvent NeedsPushingToOutput(newArray) 'Tell grid manager to filter source to output (only added items though)
+    RaiseEvent NeedsPushingToOutput(newArray)    'Tell grid manager to filter source to output (only added items though)
 End Sub
 
 Public Sub FilterToOutput(FilterObject As Variant, FilterMode As lstFilterMode, FilterComparer As IComparer, Optional PartialSet As Variant)

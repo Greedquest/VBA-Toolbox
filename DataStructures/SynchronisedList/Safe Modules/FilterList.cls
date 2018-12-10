@@ -23,7 +23,7 @@ Public Enum lstFilterMode
 End Enum
 
 Public Enum lstSortMode
-    lstUndefinedSorting = 0 'If passed as an override then we ignore it
+    lstUndefinedSorting = 0                      'If passed as an override then we ignore it
     lstSortAscending = 1
     lstSortDescending
     lstNoSorting
@@ -35,6 +35,7 @@ End Sub
 
 Public Property Get data() As Object
 Attribute data.VB_UserMemId = 0
+    'Attribute data.VB_UserMemId = 0
     Set data = dataSet
 End Property
 

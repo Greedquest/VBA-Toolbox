@@ -116,14 +116,14 @@ End Sub
 
 Private Sub contentWrapper_NeedsAligning(ByVal firstChangeIndex As Long)
 
-RaiseEvent OrderChanged(firstChangeIndex)
+    RaiseEvent OrderChanged(firstChangeIndex)
 
-'    'wehenever something happens that triggers a re-align, we clear source from that point
-'    'and push through the content. This way the buffer can do its job of managing the rate of
-'    'stuff going to the UI
-'    this.ContentData.ClearFromIndex firstChangeIndex
-'    RaiseEvent OrderChanged(firstChangeIndex)
-'    this.SourceData.ReSortAndFilter
+    '    'wehenever something happens that triggers a re-align, we clear source from that point
+    '    'and push through the content. This way the buffer can do its job of managing the rate of
+    '    'stuff going to the UI
+    '    this.ContentData.ClearFromIndex firstChangeIndex
+    '    RaiseEvent OrderChanged(firstChangeIndex)
+    '    this.SourceData.ReSortAndFilter
     
 End Sub
 

@@ -63,13 +63,13 @@ Public Sub MarkAsAmmended(ParamArray gridItems())
     this.SourceData.AmmendItems flattenParamArray(gridItems) 'should auto trigger removal in grid
 End Sub
 
-Public Sub Sort(Optional ByVal newComparer As IComparer, Optional ByVal overrideSortMode As lstSortMode = 0)
+Public Sub Sort(Optional newComparer As IComparer, Optional overrideSortMode As lstSortMode = lstUndefinedSorting)
     this.FilterSortMethods.SetSortMode newComparer, overrideSortMode
     this.FilterSortMethods.sortContent this.ContentData, Nothing
     'this.SourceData.ReSortAndFilter 'TODO what does this do, it breaks no unit tests whether there or not!'doubles grid data
 End Sub
 
-Public Sub Filter(Optional ByVal compareTo As Variant = vbNullString, Optional ByVal newComparer As IComparer, Optional ByVal overrideFilterMode As lstFilterMode = 0)
+Public Sub Filter(Optional compareTo As Variant = vbNullString, Optional newComparer As IComparer, Optional overrideFilterMode As lstFilterMode = lstUndefinedFiltering)
     this.FilterSortMethods.SetFilterMode compareTo, newComparer, overrideFilterMode
     this.SourceData.PushToOutput
 End Sub

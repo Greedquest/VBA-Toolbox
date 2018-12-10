@@ -51,11 +51,11 @@ Public Property Set SortComparer(ByVal Value As IComparer)
     this.sortModeSet = Not Value Is Nothing      'sort mode set as long as valid IComparer set
 End Property
 
-Public Sub SetFilterMode(Optional ByVal compareTo As Variant = vbNullString, Optional ByVal newComparer As IComparer, Optional ByVal overrideFilterMode As lstFilterMode = 0)
+Public Sub SetFilterMode(Optional ByVal compareTo As Variant = vbNullString, Optional ByVal newComparer As IComparer, Optional ByVal overrideFilterMode As lstFilterMode = lstUndefinedFiltering)
     'NOTE: why vbnullstring? shouldn't this be its own default
     'If overrides not set, revert to default mode
     If Not newComparer Is Nothing Then Set FilterComparer = newComparer
-    If overrideFilterMode = 0 Then
+    If overrideFilterMode = lstUndefinedFiltering Then
         this.FilterMode = defaultFilterMode
     Else
         this.FilterMode = overrideFilterMode
@@ -81,10 +81,10 @@ Public Sub FilterInPlace(ByVal list As FilterList)
     End If
 End Sub
 
-Public Sub SetSortMode(Optional ByVal newComparer As IComparer, Optional ByVal overrideSortMode As lstSortMode = 0)
+Public Sub SetSortMode(Optional ByVal newComparer As IComparer, Optional ByVal overrideSortMode As lstSortMode = lstUndefinedSorting)
     'If overrides not set, revert to default mode
     If Not newComparer Is Nothing Then Set SortComparer = newComparer
-    If overrideSortMode = 0 Then
+    If overrideSortMode = lstUndefinedSorting Then
         this.SortMode = defaultSortMode
     Else
         this.SortMode = overrideSortMode

@@ -129,19 +129,25 @@ End Sub
 
 Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMode, ByVal Comparer As IComparer)
     'Filter content and raise an event according to the location of the first change
+    'Filtering should remove items in the proper way (with the Remove syntax)
     'TODO: might be more efficient if this.data.Filter gave this info
-    Dim unFilteredData As FilterList
-    Set unFilteredData = this.data.Clone
-    this.data.Filter FilterObject, FilterMode, Comparer
-    
-    Dim firstChangeIndex As Long
-    firstChangeIndex = -1                        '0 index
-    Dim gridItem As Variant
-    For Each gridItem In unFilteredData.data     'loop through original and filtered to find first difference then flag it
-        firstChangeIndex = firstChangeIndex + 1
-        If Not this.data.Contains(gridItem) Then Exit For
-    Next gridItem
-    RaiseEvent NeedsAligning(firstChangeIndex)
+        
+    'Make copy of data so we can find what to remove
+    With this.data.Clone
+        .Filter FilterObject, -FilterMode, Comparer
+    End With
+'    Dim unFilteredData As FilterList
+'    Set unFilteredData = this.data.Clone
+'    this.data.Filter FilterObject, FilterMode, Comparer
+'
+'    Dim firstChangeIndex As Long
+'    firstChangeIndex = -1                        '0 index
+'    Dim gridItem As Variant
+'    For Each gridItem In unFilteredData.data     'loop through original and filtered to find first difference then flag it
+'        firstChangeIndex = firstChangeIndex + 1
+'        If Not this.data.Contains(gridItem) Then Exit For
+'    Next gridItem
+'    RaiseEvent NeedsAligning(firstChangeIndex)
 End Sub
 
 Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Optional ByVal itemToTrack As Variant)

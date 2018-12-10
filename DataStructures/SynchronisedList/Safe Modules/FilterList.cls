@@ -14,13 +14,16 @@ Option Explicit
 
 Private dataSet As Object
 Public Enum lstFilterMode
+    'this funny numbering means a negative FilterMode flips the meaning of the operation
+    lstKeepAll = 2
     lstKeepMatching = 1
-    lstRemoveMatching
-    lstKeepAll
-    lstRemoveAll
+    lstUndefinedFiltering = 0
+    lstRemoveMatching = -1
+    lstRemoveAll = -2
 End Enum
 
 Public Enum lstSortMode
+    lstUndefinedSorting = 0 'If passed as an override then we ignore it
     lstSortAscending = 1
     lstSortDescending
     lstNoSorting

@@ -95,8 +95,9 @@ Private Sub contentDataBuffer_ItemsAdded()
         Next i
         RaiseEvent ItemsAdded(newItems)
         If this.SortOnAddition Then
-            RaiseEvent NeedsSorting(newItems(1)) 'sort content afresh, tracking where first item goes
-                                                'This goes on to raise its own align event
+            'sort content afresh, tracking where first item goes
+            'This goes on to raise its own align event
+            RaiseEvent NeedsSorting(newItems(1))
         Else
             RaiseEvent NeedsAligning(firstChangeIndex)
         End If
@@ -128,13 +129,13 @@ End Sub
 '''
 
 Public Sub Filter(ByVal FilterObject As Variant, ByVal FilterMode As lstFilterMode, ByVal Comparer As IComparer)
-    'Filter content and raise an event according to the location of the first change
-    'Filtering should remove items in the proper way (with the Remove syntax)
-    'TODO: might be more efficient if this.data.Filter gave this info
+    'Filter out the items that need removing and remove them in the proper way
         
     'Make copy of data so we can find what to remove
     With this.data.Clone
+        'use complimentary filter mode to get those items which wouldn't make it through the filter
         .Filter FilterObject, -FilterMode, Comparer
+        Me.RemoveItems .data 'this will raise all the required alignment events
     End With
 '    Dim unFilteredData As FilterList
 '    Set unFilteredData = this.data.Clone

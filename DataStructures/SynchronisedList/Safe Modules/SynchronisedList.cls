@@ -71,7 +71,7 @@ End Sub
 
 Public Sub Filter(Optional ByVal compareTo As Variant = vbNullString, Optional ByVal newComparer As IComparer, Optional ByVal overrideFilterMode As lstFilterMode = 0)
     this.FilterSortMethods.SetFilterMode compareTo, newComparer, overrideFilterMode
-    this.SourceData.ReSortAndFilter
+    this.SourceData.PushToOutput
 End Sub
 
 Public Property Get SourceData() As FilterList
@@ -147,7 +147,7 @@ Private Sub sourceWrapper_DataRemoved(ByVal RemovedItems As Variant)
     this.ContentData.RemoveItems RemovedItems
 End Sub
 
-Private Sub sourceWrapper_NeedsSortingAndFiltering(PartialFilterSet As Variant)
+Private Sub sourceWrapper_NeedsPushingToOutput(PartialFilterSet As Variant)
     'Empty partial set means complete resort/filter - filter mode is changed
     'in which case we also want to filter the content first, then
     If IsNothing(PartialFilterSet) Then this.FilterSortMethods.filterContent this.ContentData

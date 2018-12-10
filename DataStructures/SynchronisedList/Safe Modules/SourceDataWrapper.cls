@@ -19,7 +19,7 @@ Private WithEvents sourceBuffer As ListBuffer    'input buffer to chunkify data
 Attribute sourceBuffer.VB_VarHelpID = -1
 Public Event DataAdded()
 Public Event DataRemoved(ByRef RemovedItems)
-Public Event NeedsSortingAndFiltering(ByRef PartialFilterSet) 'trigger filter to output
+Public Event NeedsPushingToOutput(ByRef PartialFilterSet) 'trigger filter to output
 
 Private Type TSource
     data As FilterList                           'Complete source data for grid
@@ -63,7 +63,7 @@ Private Sub sourceBuffer_ItemsAmmended()
     
     RaiseEvent DataRemoved(markedItems)          'triggers grid to remove items, raises needs aligning event at index of 1st marked item
     'TODO: only really needs filtering as sort definition may change whilst in buffer
-    RaiseEvent NeedsSortingAndFiltering(markedItems) 'Filters newly ammended source to grid
+    RaiseEvent NeedsPushingToOutput(markedItems) 'Filters newly ammended source to grid
     
 End Sub
 
@@ -97,14 +97,19 @@ Private Sub sourceBuffer_ItemsAdded()
             this.data.Add newArray(i)
         End If
     Next i
-    RaiseEvent NeedsSortingAndFiltering(newArray) 'Tell grid manager to filter source to output (only added items though)
+    RaiseEvent NeedsPushingToOutput(newArray) 'Tell grid manager to filter source to output (only added items though)
 End Sub
 
 Public Sub FilterToOutput(FilterObject As Variant, FilterMode As lstFilterMode, FilterComparer As IComparer, Optional PartialSet As Variant)
     'Pass filtered and sorted copy of data to output queue, which will be buffered into Grid
+    'Partial filter set is whatever needs adding to the grid
+    'If Nothing then we need a full refresh
+    'TODO: once unit tests are working, pass everything instead of Nothing when full refresh needed
     'TODO Sort ascending, descending or maintain order - maintain order makes it hard to find first index
 
     If this.output Is Nothing Then
+        'base case, output queue is uninitialised so we must want everything
+        'TODO: is this really true?
         Set this.output = this.data.Clone
     ElseIf isIterable(PartialSet) Then
         Dim outboundItem As Variant
@@ -133,8 +138,10 @@ Public Property Get RawData() As FilterList
     Set RawData = this.data.Clone
 End Property
 
-Public Sub ReSortAndFilter() 'codename for push everything to output and refilter content - re-sort is automatic
-    'Todo, should we also resort?
-    RaiseEvent NeedsSortingAndFiltering(Nothing)
+Public Sub PushToOutput()
+    'This is only called when filter mode changed
+    'Therefore only needs to push and trigger content refilter
+    'No Re-Sort required
+    RaiseEvent NeedsPushingToOutput(Nothing)
 End Sub
 

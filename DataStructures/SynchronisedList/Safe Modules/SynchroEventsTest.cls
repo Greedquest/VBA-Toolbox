@@ -7,52 +7,49 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+Option Explicit
 '@Folder("Tests.TestEventHandlers")
 Public WithEvents synchro As SynchronisedList
 Attribute synchro.VB_VarHelpID = -1
+
 Private Type tSynchroTest
-    OrderEventRaised As Long
-    LastChangeIndex As Long
-    PropertiesEventRaised As Long
-    ChangeIndecies As Collection
+    OrderEvents As FilterList
+    AdditionEvents As FilterList
+    RemovalEvents As FilterList
 End Type
 
 Private this As tSynchroTest
 
 Public Sub ClearCounts()
-    this.LastChangeIndex = -1
-    this.OrderEventRaised = 0
-    this.PropertiesEventRaised = 0
-    Set this.ChangeIndecies = New Collection
+    Set this.OrderEvents = New FilterList
+    Set this.RemovalEvents = New FilterList
+    Set this.AdditionEvents = New FilterList
 End Sub
-
-Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
-    this.OrderEventRaised = this.OrderEventRaised + 1
-    this.LastChangeIndex = firstChangeIndex
-    this.ChangeIndecies.Add firstChangeIndex
-End Sub
-
-Private Sub Synchro_PropertiesChanged()
-    this.PropertiesEventRaised = this.PropertiesEventRaised + 1
-End Sub
-
-Public Property Get OrderEventRaised() As Long
-    OrderEventRaised = this.OrderEventRaised
-End Property
-
-Public Property Get LastChangeIndex() As Long
-    LastChangeIndex = this.LastChangeIndex
-End Property
-
-Public Property Get PropertiesEventRaised() As Long
-    PropertiesEventRaised = this.PropertiesEventRaised
-End Property
-
-Public Property Get ChangeIndecies() As Collection
-    Set ChangeIndecies = this.ChangeIndecies
-End Property
 
 Private Sub Class_Initialize()
     ClearCounts
 End Sub
 
+Private Sub synchro_AfterRemoval(itemArray As Variant)
+    this.RemovalEvents.Add itemArray
+End Sub
+
+Private Sub synchro_OnAddition(itemArray As Variant)
+    this.AdditionEvents.Add itemArray
+End Sub
+
+Private Sub synchro_OrderChanged(ByVal firstChangeIndex As Long)
+    this.OrderEvents.Add firstChangeIndex
+End Sub
+
+Public Property Get AdditionEvents() As FilterList
+    Set AdditionEvents = this.AdditionEvents
+End Property
+
+Public Property Get RemovalEvents() As FilterList
+    Set RemovalEvents = this.RemovalEvents
+End Property
+
+Public Property Get OrderEvents() As FilterList
+    Set OrderEvents = this.OrderEvents
+End Property

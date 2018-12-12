@@ -86,7 +86,7 @@ Private Sub sourceBuffer_ItemsAdded()
     Dim newArray
     newArray = this.Buffer.AddedItems
     Dim i As Long
-    For i = 1 To UBound(newArray)
+    For i = LBound(newArray) To UBound(newArray)
         If this.data.Contains(newArray(i)) Then
             'check for duplicates as these will confuse the re-filtering system
             'Could check whether adding new stuff or just refiltering

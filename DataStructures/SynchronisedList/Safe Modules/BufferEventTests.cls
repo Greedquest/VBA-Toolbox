@@ -7,6 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+Option Explicit
 '@Folder("Tests.TestEventHandlers")
 Public WithEvents Buffer As ListBuffer
 Attribute Buffer.VB_VarHelpID = -1

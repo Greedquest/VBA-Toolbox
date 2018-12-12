@@ -72,7 +72,7 @@ TestFail:
 End Sub
 
 '@TestMethod
-Public Sub testRemoval()
+Public Sub TestRemoval()
     On Error GoTo TestFail
     
     'Arrange:

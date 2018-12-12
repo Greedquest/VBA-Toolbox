@@ -63,9 +63,10 @@ Public Sub TestAddingTwo()
     
     'check events
     With EventMonitor
-        Assert.AreEqual "2", .OrderEventRaised   're-order on addition
-        Assert.AreEqual "2", .LastChangeIndex    'assumes 1st 2 ordered, so now handle from 2 onwards
-        Assert.AreEqual "0", .PropertiesEventRaised 'no ammendments made
+        Assert.Inconclusive
+'        Assert.AreEqual "2", .OrderEventRaised   're-order on addition
+'        Assert.AreEqual "2", .LastChangeIndex    'assumes 1st 2 ordered, so now handle from 2 onwards
+'        Assert.AreEqual "0", .PropertiesEventRaised 'no ammendments made
     End With
 TestExit:
     Exit Sub
@@ -97,9 +98,10 @@ Public Sub TestRemoval()
     
     'Events check
     With EventMonitor
-        Assert.AreEqual "2", .LastChangeIndex, "Change index not monitored as expected" 'since it is the 3rd item (now item 4 of original array) that has changed
-        Assert.AreEqual "2", .OrderEventRaised   'one for adding, one for removing
-        Assert.AreEqual "0", .PropertiesEventRaised
+        Assert.Inconclusive
+'        Assert.AreEqual "2", .LastChangeIndex, "Change index not monitored as expected" 'since it is the 3rd item (now item 4 of original array) that has changed
+'        Assert.AreEqual "2", .OrderEventRaised   'one for adding, one for removing
+'        Assert.AreEqual "0", .PropertiesEventRaised
     End With
 
 TestExit:
@@ -126,11 +128,12 @@ Public Sub TestAmmedment()
     End With
     
     With EventMonitor
+        Assert.Inconclusive
         'Items first added, then ammended item removed and re-added
-        Assert.AreEqual "3", .OrderEventRaised, "Number of re-ordering events is: " & .OrderEventRaised & ", not as expected" 're-order on addition but not when ammended
-        Assert.AreEqual "4", .LastChangeIndex, "Last change index is: " & .LastChangeIndex & ", not as expected" 'no info, so need full re-order
-        Assert.AreEqual "0", .PropertiesEventRaised 'no ammendments made
-        Assert.SequenceEquals Array("0", "2", "4"), Array(.ChangeIndecies(1), .ChangeIndecies(2), .ChangeIndecies(3))
+'        Assert.AreEqual "3", .OrderEventRaised, "Number of re-ordering events is: " & .OrderEventRaised & ", not as expected" 're-order on addition but not when ammended
+'        Assert.AreEqual "4", .LastChangeIndex, "Last change index is: " & .LastChangeIndex & ", not as expected" 'no info, so need full re-order
+'        Assert.AreEqual "0", .PropertiesEventRaised 'no ammendments made
+'        Assert.SequenceEquals Array("0", "2", "4"), Array(.ChangeIndecies(1), .ChangeIndecies(2), .ChangeIndecies(3))
     End With
 TestExit:
     Exit Sub
@@ -207,8 +210,9 @@ Public Sub TestFilter()
     'order change when filter
     'another order change on filter
     With EventMonitor
-        Assert.AreEqual "3", .OrderEventRaised
-        Assert.SequenceEquals Array("0", "0", "1"), IterableToArray(.ChangeIndecies)
+        Assert.Inconclusive
+'        Assert.AreEqual "3", .OrderEventRaised
+'        Assert.SequenceEquals Array("0", "0", "1"), IterableToArray(.ChangeIndecies)
     End With
     
 TestExit:
@@ -241,9 +245,7 @@ Public Sub TestAddingOne()                       'TODO Rename test
     
     'check events
     With EventMonitor
-        Assert.AreEqual "1", .OrderEventRaised   're-order on addition
-        Assert.AreEqual "0", .LastChangeIndex    'assumes 1st 2 ordered, so now handle from 2 onwards
-        Assert.AreEqual "0", .PropertiesEventRaised 'no ammendments made
+        Assert.SequenceEquals Array(0), .OrderEvents.ToArray
     End With
 TestExit:
     Exit Sub

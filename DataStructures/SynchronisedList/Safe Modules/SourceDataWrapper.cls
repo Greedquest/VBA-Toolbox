@@ -111,7 +111,7 @@ Public Sub FilterToOutput(FilterObject As Variant, FilterMode As lstFilterMode, 
         'base case, output queue is uninitialised so we must want everything
         'TODO: is this really true?
         Set this.output = this.data.Clone
-    ElseIf isIterable(PartialSet) Then
+    ElseIf isIterable(PartialSet) Then 'partial set is 1-indexed array, needs to be filterlist
         Dim outboundItem As Variant
         For Each outboundItem In PartialSet
             this.output.Add outboundItem

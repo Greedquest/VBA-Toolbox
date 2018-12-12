@@ -102,7 +102,7 @@ Private Sub contentWrapper_BufferEvent(ByVal mode As BufferMode, ByVal bufferIte
 End Sub
 
 Private Sub contentWrapper_ItemsAdded(ByVal itemSet As Variant)
-    'BUG: Uh oh, this is duplicated! (A9,05/11/18) 'TODO check if fixed
+    
     'If this.SortOnAddition Then this.FilterSortMethods.sortContent this.ContentData, itemArray(1)
     'For now at least, this is controlled with events from the data
     'Which means we need to pass info on behaviour down

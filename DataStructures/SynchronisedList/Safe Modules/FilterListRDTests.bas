@@ -144,7 +144,7 @@ TestFail:
 End Sub
 
 '@TestMethod
-Public Sub testIndexOf()                         'TODO Rename test
+Public Sub testIndexOf()
     On Error GoTo TestFail
     
     'Arrange:
@@ -163,7 +163,7 @@ TestFail:
 End Sub
 
 '@TestMethod
-Public Sub TestSlice()                           'TODO Rename test
+Public Sub TestSlice()
     On Error GoTo TestFail
     
     'Arrange:

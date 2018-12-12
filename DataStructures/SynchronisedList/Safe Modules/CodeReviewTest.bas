@@ -3,7 +3,7 @@ Attribute VB_Name = "CodeReviewTest"
 Option Explicit
 
 Sub showForm()
-    Static runner As FormRunner
+    Dim runner As FormRunner
     Set runner = New FormRunner
     runner.init Worksheets("data").ListObjects("ExampleData")
 End Sub

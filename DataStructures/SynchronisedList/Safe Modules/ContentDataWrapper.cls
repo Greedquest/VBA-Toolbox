@@ -121,7 +121,7 @@ Private Sub contentDataBuffer_ItemsRemoved()
     markedItems = itemList.ToArray
     
     Dim firstChangeIndex As Long
-    firstChangeIndex = this.data.IndexOf(markedItems(1))
+    firstChangeIndex = this.data.IndexOf(markedItems(LBound(markedItems)))
     Dim item
     For Each item In markedItems
         this.data.Remove item

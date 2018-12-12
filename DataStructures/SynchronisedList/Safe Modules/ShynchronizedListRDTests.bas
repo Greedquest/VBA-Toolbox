@@ -39,7 +39,7 @@ Public Sub TestCleanup()
 End Sub
 
 '@TestMethod
-Public Sub TestAddingTwo()
+Public Sub TestAddingTwice()
     On Error GoTo TestFail
     
     'Arrange:
@@ -63,11 +63,14 @@ Public Sub TestAddingTwo()
     
     'check events
     With EventMonitor
-        Assert.Inconclusive
-'        Assert.AreEqual "2", .OrderEventRaised   're-order on addition
-'        Assert.AreEqual "2", .LastChangeIndex    'assumes 1st 2 ordered, so now handle from 2 onwards
-'        Assert.AreEqual "0", .PropertiesEventRaised 'no ammendments made
+        'not expecting any sort or remove alignments, so should only have 1 for each addition
+        'Async buffer would change this to a single event
+        Assert.SequenceEquals Array("0", "2"), .OrderEvents.ToArray
+        Assert.AreEqual "2", .AdditionEvents.Count
+        Assert.IsTrue ArraySupport.ChangeBoundsOfArray(items2, 0, 2), "Could not change array bounds"
+        Assert.SequenceEquals items2, .AdditionEvents(1)
     End With
+    
 TestExit:
     Exit Sub
 TestFail:
@@ -98,10 +101,10 @@ Public Sub TestRemoval()
     
     'Events check
     With EventMonitor
-        Assert.Inconclusive
-'        Assert.AreEqual "2", .LastChangeIndex, "Change index not monitored as expected" 'since it is the 3rd item (now item 4 of original array) that has changed
-'        Assert.AreEqual "2", .OrderEventRaised   'one for adding, one for removing
-'        Assert.AreEqual "0", .PropertiesEventRaised
+        'expect 1 for addition, 1 for removal of 3rd item
+        Assert.SequenceEquals Array("0", "2"), .OrderEvents.ToArray
+        Assert.AreEqual "1", .AdditionEvents.Count, "Incorrect number of additions"
+        Assert.AreEqual "1", .RemovalEvents.Count, "Incorrect number of removals"
     End With
 
 TestExit:
@@ -245,7 +248,10 @@ Public Sub TestAddingOne()                       'TODO Rename test
     
     'check events
     With EventMonitor
-        Assert.SequenceEquals Array(0), .OrderEvents.ToArray
+        'from addition we expect 1 event, nothing from the re-sort
+        Assert.SequenceEquals Array("0"), .OrderEvents.ToArray
+        Assert.AreEqual "1", .AdditionEvents.Count
+        Assert.AreEqual "0", .RemovalEvents.Count
     End With
 TestExit:
     Exit Sub

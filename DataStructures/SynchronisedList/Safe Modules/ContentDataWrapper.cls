@@ -97,7 +97,12 @@ Private Sub contentDataBuffer_ItemsAdded()
         RaiseEvent ItemsAdded(newItems)
         If this.SortOnAddition Then
             'sort content afresh, tracking where first item goes
-            'This goes on to raise its own align event
+            'NOTE: there's a tredeoff here; if after sorting, nothing has changed order,
+            'then aligning would be misleading as the change index would be 1 greater than the content count
+            'However if we add and then immediately sort, we raise more events than strictly necessary
+            'As we get 1 for adding to the content in an arbitrary location and 1 for the real location
+            
+            RaiseEvent NeedsAligning(firstChangeIndex)
             RaiseEvent NeedsSorting(newItems(LBound(newItems)))
         Else
             RaiseEvent NeedsAligning(firstChangeIndex)
@@ -157,8 +162,8 @@ Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Opti
     'However if it stays in the same place then since everything is sorted
     'Nothing will have moved
     
-    this.data.Sort Comparer, SortMode
     If IsMissing(itemToTrack) Or IsNothing(itemToTrack) Then
+        this.data.Sort Comparer, SortMode
         RaiseEvent NeedsAligning(alignAll)
     Else
         Dim previousIndex As Long, newIndex As Long
@@ -166,7 +171,7 @@ Public Sub Sort(ByVal Comparer As IComparer, ByVal SortMode As lstSortMode, Opti
         this.data.Sort Comparer, SortMode
         newIndex = this.data.IndexOf(itemToTrack)
         If newIndex < previousIndex Then
-            RaiseEvent NeedsAligning(newIndex)   'this might be 1 too low
+            RaiseEvent NeedsAligning(newIndex)
         ElseIf newIndex = previousIndex Then
             'do nothing, it's already sorted
             'This assumes everything got aligned when it was first added

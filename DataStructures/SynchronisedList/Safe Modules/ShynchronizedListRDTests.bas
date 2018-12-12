@@ -131,12 +131,10 @@ Public Sub TestAmmedment()
     End With
     
     With EventMonitor
-        Assert.Inconclusive
         'Items first added, then ammended item removed and re-added
-'        Assert.AreEqual "3", .OrderEventRaised, "Number of re-ordering events is: " & .OrderEventRaised & ", not as expected" 're-order on addition but not when ammended
-'        Assert.AreEqual "4", .LastChangeIndex, "Last change index is: " & .LastChangeIndex & ", not as expected" 'no info, so need full re-order
-'        Assert.AreEqual "0", .PropertiesEventRaised 'no ammendments made
-'        Assert.SequenceEquals Array("0", "2", "4"), Array(.ChangeIndecies(1), .ChangeIndecies(2), .ChangeIndecies(3))
+        Assert.SequenceEquals Array("0", "2", "4"), .OrderEvents.ToArray
+        Assert.AreEqual "2", .AdditionEvents.Count
+        Assert.AreEqual "1", .RemovalEvents.Count
     End With
 TestExit:
     Exit Sub
@@ -183,7 +181,7 @@ Public Sub TestFilter()
     
     'Arrange:
     Dim Filterer As New CallByNameComparer
-    Filterer.init "Name", VbGet
+    Filterer.init "Name", VbGet 'search for dummyItem1
     
     Dim testClasses() As DummyGridItem           'should be named dummyItem1,2,3 etc.
     Dim filterAgainst As DummyGridItem
@@ -213,9 +211,9 @@ Public Sub TestFilter()
     'order change when filter
     'another order change on filter
     With EventMonitor
-        Assert.Inconclusive
-'        Assert.AreEqual "3", .OrderEventRaised
-'        Assert.SequenceEquals Array("0", "0", "1"), IterableToArray(.ChangeIndecies)
+        Assert.SequenceEquals Array("0", "0", "1"), .OrderEvents.ToArray
+        Assert.AreEqual "1", .AdditionEvents.Count
+        Assert.AreEqual "2", .RemovalEvents.Count
     End With
     
 TestExit:
@@ -225,7 +223,7 @@ TestFail:
 End Sub
 
 '@TestMethod
-Public Sub TestAddingOne()                       'TODO Rename test
+Public Sub TestAddingOne()
     On Error GoTo TestFail
     
     'Arrange:
@@ -260,7 +258,7 @@ TestFail:
 End Sub
 
 '@TestMethod
-Public Sub TestAddingRange()                     'TODO Rename test
+Public Sub TestAddingRange()
     On Error GoTo TestFail
     
     'Arrange:

@@ -15,8 +15,10 @@ Public Event OrderChanged(ByVal firstChangeIndex As Long) '0 indexed location of
 Public Event OnAddition(ByRef itemArray As Variant) 'when stuff added to content wrapper
 Public Event AfterRemoval(ByRef itemArray As Variant) 'when stuff removed from content
 
+'@MemberAttribute VB_VarHelpID, -1
 Private WithEvents sourceWrapper As SourceDataWrapper
 Attribute sourceWrapper.VB_VarHelpID = -1
+'@MemberAttribute VB_VarHelpID, -1
 Private WithEvents contentWrapper As ContentDataWrapper
 Attribute contentWrapper.VB_VarHelpID = -1
 

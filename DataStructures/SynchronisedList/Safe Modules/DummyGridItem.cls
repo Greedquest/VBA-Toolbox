@@ -23,7 +23,7 @@ Private this As TDummyItem
 'End Sub
 '
 'Private Property Set IGridable_parentUF(ByVal Value As MSForms.UserForm)
-'    Err.raise 5                                  'TODO implement interface member
+
 'End Property
 '
 'Private Property Let IGridable_Visible(ByVal Value As Boolean)
@@ -80,7 +80,7 @@ Private this As TDummyItem
 'End Property
 
 Private Property Let ISortable_SortingProperty(ByVal Value As Variant)
-    Err.Raise 5                                  'TODO implement interface member
+    Err.Raise 5
 End Property
 
 Private Property Get ISortable_SortingProperty() As Variant

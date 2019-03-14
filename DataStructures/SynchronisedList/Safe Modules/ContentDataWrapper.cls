@@ -23,6 +23,7 @@ Option Explicit
 'Therefore: Filter, Sort and Arrange all need to be implemented separately
 
 
+'@MemberAttribute VB_VarHelpID, -1
 Private WithEvents contentDataBuffer As ListBuffer
 Attribute contentDataBuffer.VB_VarHelpID = -1
 

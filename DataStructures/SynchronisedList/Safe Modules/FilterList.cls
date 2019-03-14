@@ -33,6 +33,7 @@ Private Sub Class_Initialize()
     Set dataSet = CreateObject("System.Collections.ArrayList")
 End Sub
 
+'@DefaultMember
 Public Property Get data() As Object
 Attribute data.VB_UserMemId = 0
     'Attribute data.VB_UserMemId = 0
@@ -40,6 +41,7 @@ Attribute data.VB_UserMemId = 0
 End Property
 
 Public Property Set data(ByVal Value As Object)
+Attribute data.VB_UserMemId = 0
     Set dataSet = Value
 End Property
 

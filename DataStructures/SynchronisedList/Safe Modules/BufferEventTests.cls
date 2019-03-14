@@ -9,6 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 '@Folder("Tests.TestEventHandlers")
+'@MemberAttribute VB_VarHelpID, -1
 Public WithEvents Buffer As ListBuffer
 Attribute Buffer.VB_VarHelpID = -1
 Private Type tBufferTest

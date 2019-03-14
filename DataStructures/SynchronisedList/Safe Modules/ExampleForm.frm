@@ -3,8 +3,8 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} ExampleForm
    Caption         =   "Example App"
    ClientHeight    =   6210
    ClientLeft      =   120
-   ClientTop       =   465
-   ClientWidth     =   10335
+   ClientTop       =   468
+   ClientWidth     =   7968
    OleObjectBlob   =   "ExampleForm.frx":0000
    StartUpPosition =   1  'CenterOwner
 End

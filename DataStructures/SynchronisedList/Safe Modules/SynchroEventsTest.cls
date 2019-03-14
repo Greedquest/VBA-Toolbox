@@ -9,6 +9,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 '@Folder("Tests.TestEventHandlers")
+'@MemberAttribute VB_VarHelpID, -1
 Public WithEvents synchro As SynchronisedList
 Attribute synchro.VB_VarHelpID = -1
 

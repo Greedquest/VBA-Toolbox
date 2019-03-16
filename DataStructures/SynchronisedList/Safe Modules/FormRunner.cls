@@ -10,10 +10,8 @@ Attribute VB_Exposed = False
 '@Folder("CodeReview")
 Option Explicit
 
-'@MemberAttribute VB_VarHelpID, -1
 Private WithEvents userInterface As ExampleForm
 Attribute userInterface.VB_VarHelpID = -1
-'@MemberAttribute VB_VarHelpID, -1
 Private WithEvents synchro As SynchronisedList
 Attribute synchro.VB_VarHelpID = -1
 

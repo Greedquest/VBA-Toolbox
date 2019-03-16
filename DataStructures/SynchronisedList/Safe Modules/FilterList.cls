@@ -100,7 +100,7 @@ End Property
 
 Public Function Range(ByVal startIndex As Long, ByVal endIndex As Long) As FilterList
     Dim result As New FilterList
-    If startIndex < 0 Then                       'python style
+    If startIndex < 0 Then                       'python style count backwards
         startIndex = dataSet.Count + startIndex
     End If
     If endIndex < 0 Then

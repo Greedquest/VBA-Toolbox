@@ -15,8 +15,6 @@ Option Explicit
 ' - Holds an always up to date copy of all data seen
 '''
 
-
-'@MemberAttribute VB_VarHelpID, -1
 Private WithEvents sourceBuffer As ListBuffer    'input buffer to chunkify data
 Attribute sourceBuffer.VB_VarHelpID = -1
 Public Event DataAdded()

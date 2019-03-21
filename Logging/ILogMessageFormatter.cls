@@ -6,8 +6,9 @@ Attribute VB_Name = "ILogMessageFormatter"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 '@Folder("Logger.Interfaces")
+'@Exposed
 Option Explicit
 
 Public Function FormatMessage(ByVal level As LogLevel, ByVal loggerName As String, ByVal message As String) As String

@@ -58,7 +58,7 @@ Catch:
     End If
 
     'NOTE Patch
-'    OpenFile = (openedFiles.ContainsKey(fileName))
+    '    OpenFile = (openedFiles.ContainsKey(fileName))
     OpenFile = (openedFiles.Exists(fileName))
     'End Patch
 
@@ -124,7 +124,7 @@ Public Sub CloseFile(Optional ByVal fileName As String = vbNullString)
     End If
     
     'NOTE: Patch
-'    If openedFiles.Count = 1 Then quickWriteFile = openedFiles.Values.First
+    '    If openedFiles.Count = 1 Then quickWriteFile = openedFiles.Values.First
     If openedFiles.Count = 1 Then quickWriteFile = openedFiles.Items(0)
     'End Patch
 
@@ -132,11 +132,11 @@ End Sub
 
 Public Sub CloseAllFiles()
     'NOTE: Patch
-'    Dim file As KeyValuePair
-'    For Each file In openedFiles
-'        Close #file.value
-'    Next
-'    openedFiles.Clear
+    '    Dim file As KeyValuePair
+    '    For Each file In openedFiles
+    '        Close #file.value
+    '    Next
+    '    openedFiles.Clear
     Dim file As Variant
     For Each file In openedFiles.Items
         Close #file
@@ -152,10 +152,10 @@ Private Function GetFileNumber(ByVal fileName As String) As Long
     If quickWriteFile <> 0 And fileName = vbNullString Then
         result = quickWriteFile
         
-    'NOTE: Patch
-    'ElseIf Not openedFiles.TryGetValue(fileName, result) Then
+        'NOTE: Patch
+        'ElseIf Not openedFiles.TryGetValue(fileName, result) Then
     ElseIf Not Patches.TryGetValue(fileName, result, openedFiles) Then
-    'End Patch
+        'End Patch
         result = FreeFile
 
     End If

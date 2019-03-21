@@ -5,9 +5,11 @@ END
 Attribute VB_Name = "LogManager"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
 '@Folder("Logger.Implementation")
+'@PredeclaredId
+'@Exposed
 Option Explicit
 
 Public Enum LogLevel
@@ -83,7 +85,7 @@ Private Sub LogWith(ByVal logger As ILogger, ByVal level As LogLevel, ByVal mess
     End If
 End Sub
 
-Friend Function FormatMessage(ByVal level As LogLevel, ByVal loggerName As String, ByVal message As String)
+Friend Function FormatMessage(ByVal level As LogLevel, ByVal loggerName As String, ByVal message As String) As String
     FormatMessage = this.Formatter.FormatMessage(level, loggerName, message)
 End Function
 

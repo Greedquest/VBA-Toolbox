@@ -6,8 +6,9 @@ Attribute VB_Name = "ILogger"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 '@Folder("Logger.Interfaces")
+'@Exposed
 Option Explicit
 
 Public Sub Log(ByVal output As String)

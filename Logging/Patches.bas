@@ -2,16 +2,15 @@ Attribute VB_Name = "Patches"
 '@Folder("Logger.Utils.TextWriter")
 Option Explicit
 
-Public Function TryGetValue(k As Variant, ByRef outValue As Variant, ByVal dict As Dictionary) As Boolean
+Public Function TryGetValue(key As Variant, ByRef outValue As Variant, ByVal dict As Dictionary) As Boolean
 
-    If dict.Exists(k) Then
-        letset outValue, dict(key)
+    If dict.Exists(key) Then
+        LetSet outValue, dict(key)
         TryGetValue = True
-
+        
     Else
-
         TryGetValue = False
-
+        
     End If
 
 End Function
@@ -26,11 +25,12 @@ Public Sub RemoveByValue(ByVal lookupVal As Variant, ByVal dict As Dictionary)
     Next
 End Sub
 
-
-Private Sub letset(ByRef variable As Variant, ByVal value As Variant)
+'@Ignore ProcedureCanBeWrittenAsFunction
+Private Sub LetSet(ByRef variable As Variant, ByVal value As Variant)
     If IsObject(value) Then
         Set variable = value
     Else
         variable = value
     End If
 End Sub
+

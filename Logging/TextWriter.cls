@@ -57,7 +57,8 @@ Catch:
         Err.Clear
     End If
 
-    OpenFile = (openedFiles.ContainsKey(fileName))
+'    OpenFile = (openedFiles.ContainsKey(fileName))
+    OpenFile = (openedFiles.Exists(fileName))
 
 End Function
 
@@ -77,7 +78,10 @@ Public Sub WriteLine(ByVal data As String, Optional ByVal fileName As String = v
 Catch:
     If Err.Number <> 0 Then
         result = False
-        openedFiles.Remove fileNumber
+        'NOTE: patch
+        'openedFiles.Remove fileNumber
+        Patches.RemoveByValue fileNumber, openedFiles
+        'End Patch
         Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
     End If
 
@@ -116,6 +120,7 @@ Public Sub CloseFile(Optional ByVal fileName As String = vbNullString)
 End Sub
 
 Public Sub CloseAllFiles()
+    'NOTE: Patch
 '    Dim file As KeyValuePair
 '    For Each file In openedFiles
 '        Close #file.value
@@ -126,8 +131,9 @@ Public Sub CloseAllFiles()
     For Each file In openedFiles.Items
         Close #file
     Next
-    Set openedFiles = New Dictionary
+    openedFiles.RemoveAll
     quickWriteFile = 0
+    'End Patch
 End Sub
 
 Private Function GetFileNumber(ByVal fileName As String) As Long

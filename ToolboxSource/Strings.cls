@@ -5,8 +5,9 @@ END
 Attribute VB_Name = "Strings"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
+Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
+Attribute VB_Description = "Static module for doing string manipulation such as printing and formatting"
 '@Folder("Strings")
 '@ModuleDescription("Static module for doing string manipulation such as printing and formatting")
 '@PredeclaredId

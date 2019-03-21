@@ -7,6 +7,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
+'@Exposed
+'@PredeclaredId
 Option Explicit
 '@Folder(AsciiProgressBar)
 
@@ -155,5 +157,6 @@ Public Function Create(Optional ByVal size As Long = 0, Optional ByVal base As V
     Set Create = result
 
 End Function
+
 
 

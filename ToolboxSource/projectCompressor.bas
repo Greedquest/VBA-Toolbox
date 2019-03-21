@@ -270,7 +270,7 @@ Debug.Print , "Project skeleton written"
         Next i
 
         Dim killLine As Long                     'place for adding last bit of code to remove self-extractor
-        .Find "{1}", killLine, 1, -1, -1
+        .find "{1}", killLine, 1, -1, -1
         .ReplaceLine killLine, Replace(.Lines(killLine, 1), "{1}", projectName)
 Debug.Print , "Inserted killLine"
     End With
@@ -583,7 +583,7 @@ Private Function FillModule(ByVal codeSection As Object) As Long()
         .InsertLines 129, "End Function"
 Debug.Print , "Inserted skeleton"
         Dim result(0 To 1) As Long
-        If .Find("{0}", result(0), result(1), -1, -1) Then 'search for point to insert lines
+        If .find("{0}", result(0), result(1), -1, -1) Then 'search for point to insert lines
             FillModule = result
         Else
             result(0) = 0

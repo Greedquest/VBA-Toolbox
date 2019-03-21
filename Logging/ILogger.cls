@@ -18,3 +18,4 @@ End Property
 
 Public Property Get MinLevel() As LogLevel
 End Property
+

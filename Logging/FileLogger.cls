@@ -16,6 +16,7 @@ Private Type TFileLogger
     LogFile As String
     Writer As TextWriter
 End Type
+
 Private this As TFileLogger
 
 Implements ILogger
@@ -81,3 +82,4 @@ End Property
 Private Property Get ILogger_Name() As String
     ILogger_Name = this.Name
 End Property
+

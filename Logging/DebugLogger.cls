@@ -14,6 +14,7 @@ Private Type TDebugLogger
     Name As String
     MinLevel As LogLevel
 End Type
+
 Private this As TDebugLogger
 
 Implements ILogger
@@ -44,7 +45,7 @@ Friend Property Let MinLevel(ByVal value As LogLevel)
 End Property
 
 Private Sub ILogger_Log(ByVal output As String)
-    Debug.Print output
+Debug.Print output
 End Sub
 
 Private Property Get ILogger_MinLevel() As LogLevel
@@ -54,3 +55,4 @@ End Property
 Private Property Get ILogger_Name() As String
     ILogger_Name = this.Name
 End Property
+

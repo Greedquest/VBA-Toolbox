@@ -103,3 +103,5 @@ End Sub
 Private Sub FilterButton_Click()
     RaiseEvent filterModeSet(Me.FilterBy.Value, Me.FilterValue.Value)
 End Sub
+
+

@@ -3,5 +3,7 @@
 DataStructures/SynchronisedList/~$SynchroList.xlsm
 Async/~$async timer.xlsm
 DataStructures/SynchronisedList/Safe Modules/VB11E3.tmp
+Async/~$async timer.xlsm
+*.tmp
 ProgressBar/~$AsciiProgressBar.xlsm
 *.tmp

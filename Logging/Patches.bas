@@ -26,11 +26,6 @@ Public Sub RemoveByValue(ByVal lookupVal As Variant, ByVal dict As Dictionary)
     Next
 End Sub
 
-Sub t()
-Dim x As New Dictionary
-x.Add "keyy", "vall"
-Debug.Print x.Exists("keyy")
-End Sub
 
 Private Sub letset(ByRef variable As Variant, ByVal value As Variant)
     If IsObject(value) Then

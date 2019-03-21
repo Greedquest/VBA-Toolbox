@@ -57,8 +57,10 @@ Catch:
         Err.Clear
     End If
 
+    'NOTE Patch
 '    OpenFile = (openedFiles.ContainsKey(fileName))
     OpenFile = (openedFiles.Exists(fileName))
+    'End Patch
 
 End Function
 
@@ -96,7 +98,10 @@ Private Function CanWrite(ByVal fileName As String, ByRef outFileNumber As Long)
         fileNumber = quickWriteFile
         CanWrite = True
     Else
-        CanWrite = openedFiles.TryGetValue(fileName, fileNumber)
+        'NOTE: Patch
+        'CanWrite = openedFiles.TryGetValue(fileName, fileNumber)
+        CanWrite = Patches.TryGetValue(fileName, result, openedFiles)
+        'End Patch
     End If
 
     outFileNumber = fileNumber
@@ -111,11 +116,17 @@ Public Sub CloseFile(Optional ByVal fileName As String = vbNullString)
 
     If fileNumber <> FreeFile Then
         Close #fileNumber
-        openedFiles.Remove fileNumber
+        'NOTE Patch
+        'openedFiles.Remove fileNumber
+        Patches.RemoveByValue fileNumber, openedFiles
+        'End Patch
         If fileNumber = quickWriteFile Then quickWriteFile = 0
     End If
-
-    If openedFiles.Count = 1 Then quickWriteFile = openedFiles.Values.First
+    
+    'NOTE: Patch
+'    If openedFiles.Count = 1 Then quickWriteFile = openedFiles.Values.First
+    If openedFiles.Count = 1 Then quickWriteFile = openedFiles.Items(0)
+    'End Patch
 
 End Sub
 
@@ -126,14 +137,13 @@ Public Sub CloseAllFiles()
 '        Close #file.value
 '    Next
 '    openedFiles.Clear
-'    quickWriteFile = 0
     Dim file As Variant
     For Each file In openedFiles.Items
         Close #file
     Next
     openedFiles.RemoveAll
-    quickWriteFile = 0
     'End Patch
+    quickWriteFile = 0
 End Sub
 
 Private Function GetFileNumber(ByVal fileName As String) As Long
@@ -141,8 +151,11 @@ Private Function GetFileNumber(ByVal fileName As String) As Long
 
     If quickWriteFile <> 0 And fileName = vbNullString Then
         result = quickWriteFile
-
-    ElseIf Not openedFiles.TryGetValue(fileName, result) Then
+        
+    'NOTE: Patch
+    'ElseIf Not openedFiles.TryGetValue(fileName, result) Then
+    ElseIf Not Patches.TryGetValue(fileName, result, openedFiles) Then
+    'End Patch
         result = FreeFile
 
     End If

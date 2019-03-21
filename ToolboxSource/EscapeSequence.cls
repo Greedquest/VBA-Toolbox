@@ -17,7 +17,6 @@ End Type
 
 Private this As tEscapeSequence
 
-
 Public Property Get EscapeString() As String
     EscapeString = this.EscapeString
 End Property
@@ -41,3 +40,4 @@ Public Function Create(escape As String, replacement As String) As EscapeSequenc
     result.ReplacementString = replacement
     Set Create = result
 End Function
+

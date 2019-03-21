@@ -39,7 +39,7 @@ Private Function MicroTimer() As Double
     If cyFrequency Then MicroTimer = cyTicks1 / cyFrequency
 End Function
 
-Public Sub Start()
+Public Sub start()
     OpenLabel "Start"
 End Sub
 

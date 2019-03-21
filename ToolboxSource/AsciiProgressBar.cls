@@ -53,29 +53,35 @@ Public Function Update(ByVal fractionComplete As Double) As String
 End Function
 
 Public Property Get repr() As String
-    repr = printf(this.mask, this.base, this.bar, Round(this.percentComplete * 100, 0))
+    repr = Toolbox.Strings.Format(this.mask, this.base, this.bar, Round(this.percentComplete * 100, 0))
 End Property
 
 Private Sub raiseError(ByVal errNum As progressError, ParamArray args() As Variant)
     Select Case errNum
+    
     Case percentOutOfBoundsError
         Err.Description = "Percent must lie between 0.0 and 1.0"
+        
     Case barSizeOutOfRangeError
-        Err.Description = printf("Bar size must be at least {0} characters", args(0))
+        Err.Description = Toolbox.Strings.printf("Bar size must be at least {0} characters", args(0))
+        
     Case singleCharacterRequiredError
-        Err.Description = printf("Only a single character should be used as {0}, not '{1}'", args(0), args(1))
+        Err.Description = Toolbox.Strings.printf("Only a single character should be used as {0}, not '{1}'", args(0), args(1))
+        
     Case baseIsNotAStringError
-        Err.Description = printf("Base must be of type string or left blank, not '{0}'", TypeName(args(0)))
+        Err.Description = Toolbox.Strings.printf("Base must be of type string or left blank, not '{0}'", TypeName(args(0)))
+        
     Case maskMissingPositionalArgumentError
-        Err.Description = printf("formatMask must contain all three positional tokens ({0,1,2}){0}'{1}' does not", _
-                                 vbCrLf, args(0))
+        Err.Description = Toolbox.Strings.printf("formatMask must contain all three positional tokens ({0,1,2}){0}'{1}' does not", _
+                                                 vbCrLf, args(0))
+                                                 
     Case Else                                    'some errNum we don't know what to do with
         On Error Resume Next                     'fake raise to grab description text
         Err.Raise errNum
         Dim errDescription As String
         errDescription = Err.Description
         On Error GoTo 0
-Debug.Print printf("Warning: Unexpected error '{0}' with description '{1}'", errNum, errDescription)
+Debug.Print Toolbox.Strings.printf("Warning: Unexpected error '{0}' with description '{1}'", errNum, errDescription)
     End Select
     Err.Raise errNum
 End Sub
@@ -157,6 +163,5 @@ Public Function Create(Optional ByVal size As Long = 0, Optional ByVal base As V
     Set Create = result
 
 End Function
-
 
 

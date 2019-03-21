@@ -5,3 +5,4 @@ Option Explicit
 Public Property Get newStopwatch() As Stopwatch
     Set newStopwatch = New Stopwatch
 End Property
+

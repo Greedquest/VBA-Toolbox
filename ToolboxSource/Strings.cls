@@ -21,7 +21,7 @@ Public Sub EngineerFormat()
 End Sub
 
 Public Function printf(ByVal mask As String, ParamArray tokens()) As String
-'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
+    'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
     Dim i As Long
     For i = 0 To UBound(tokens)
         mask = Replace$(mask, "{" & i & "}", tokens(i))
@@ -35,7 +35,7 @@ End Function
 
 Public Function Contains(haystack, needle, Optional ByVal caseSensitive As Boolean = False) As Boolean
 
-   Dim compareMethod As Integer
+    Dim compareMethod As Integer
 
     If caseSensitive Then
         compareMethod = vbBinaryCompare
@@ -53,12 +53,12 @@ Public Function ContainsAny(haystack, ByVal caseSensitive As Boolean, ParamArray
 
     For i = LBound(needles) To UBound(needles)
         If Contains(CStr(haystack), CStr(needles(i)), caseSensitive) Then
-          ContainsAny = True
-          Exit Function
+            ContainsAny = True
+            Exit Function
         End If
     Next
 
-    ContainsAny = False 'Not really necessary, default is False..
+    ContainsAny = False                          'Not really necessary, default is False..
 
 End Function
 
@@ -83,3 +83,4 @@ Public Function StartsWith(ByVal start As String, ByVal string_source) As Boolea
     StartsWith = Left$(CStr(string_source), Len(CStr(start))) = CStr(start)
 
 End Function
+

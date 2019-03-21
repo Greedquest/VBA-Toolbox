@@ -29,6 +29,10 @@ Public Function printf(ByVal mask As String, ParamArray tokens()) As String
     printf = mask
 End Function
 
+Public Function Format(ByVal mask As String, ParamArray tokens()) As String
+    Format = StringFormat(mask, Array(tokens)(0))
+End Function
+
 Public Function Contains(haystack, needle, Optional ByVal caseSensitive As Boolean = False) As Boolean
 
    Dim compareMethod As Integer
@@ -71,5 +75,11 @@ Public Function MatchesAny(ByVal string_source, ParamArray potential_matches()) 
     Next
 
     MatchesAny = found
+
+End Function
+
+Public Function StartsWith(ByVal start As String, ByVal string_source) As Boolean
+
+    StartsWith = Left$(CStr(string_source), Len(CStr(start))) = CStr(start)
 
 End Function

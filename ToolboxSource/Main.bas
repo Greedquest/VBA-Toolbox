@@ -5,7 +5,7 @@ Option Explicit
 Public PADDING_CHAR As String
 
 '@Description("A CSharpish String.Format formatting helper: https://codereview.stackexchange.com/q/30817/146810"
-Public Function StringFormat(format_string As String, ParamArray values()) As String
+Public Function StringFormat(ByVal format_string As String, ByRef values As Variant) As String
 'VB6 implementation of .net String.Format(), slightly customized.
 
         Dim return_value As String
@@ -46,7 +46,7 @@ Public Function StringFormat(format_string As String, ParamArray values()) As St
         Dim uniqueCount As Integer
         Dim tmpCSV As String
         For Each thisMatch In matches
-            If Not StringContains(tmpCSV, thisMatch.SubMatches(1)) Then
+            If Not Strings.Contains(tmpCSV, thisMatch.SubMatches(1)) Then
                 uniqueCount = uniqueCount + 1
                 tmpCSV = tmpCSV & thisMatch.SubMatches(1) & ","
             End If
@@ -58,10 +58,10 @@ Public Function StringFormat(format_string As String, ParamArray values()) As St
             ERR_SOURCE, ERR_MSG_FORMAT_EXCEPTION
         End If
 
-        useLiteral = StringStartsWith("@", format_string)
+        useLiteral = Strings.StartsWith("@", format_string)
         If useLiteral Then format_string = Right(format_string, Len(format_string) - 1) 'remove the "@" literal specifier
 
-        If Not useLiteral And StringContains(format_string, "\\") Then _
+        If Not useLiteral And Strings.Contains(format_string, "\\") Then _
             format_string = Replace(format_string, "\\", Chr$(27))
 
         If matches.Count = 0 And format_string <> vbNullString And UBound(values) = -1 Then
@@ -103,7 +103,7 @@ Public Function StringFormat(format_string As String, ParamArray values()) As St
 
             'get the format specifier if it is specified:
             thisString = thisMatch.value
-            If StringContains(thisString, ":") Then
+            If Strings.Contains(thisString, ":") Then
 
                 Dim formatGroup As String, precisionSpecifier As Integer
                 Dim formatSpecifier As String, precisionString As String
@@ -147,7 +147,8 @@ NumberFormatSpecifiers:
                         thisFormat = _
                         Replace$(thisFormat, ".", "." & String$(precisionString, Chr$(48)))
                     Else
-                        thisFormat = CURRENCY_FORMAT
+                        Const CURRENCY_FORMAT As String = "#,##0.$"
+                        thisFormat = CURRENCY_FORMAT 'NOTE: I have no idea what this should be :?
                     End If
 
 
@@ -202,7 +203,7 @@ NumberFormatSpecifiers:
 
                     Dim eNotation As String, ePower As Integer, specifier As String
                     precisionSpecifier = IIf(CInt(precisionString) > 0, CInt(precisionString), _
-                        IIf(StringContains(v, "."), Len(v) - InStr(1, v, "."), 0))
+                        IIf(Strings.Contains(v, "."), Len(v) - InStr(1, v, "."), 0))
 
                     'track character case of formatSpecifier:
                     specifier = IIf(formatSpecifier = "G", "D", "d")
@@ -379,7 +380,7 @@ AlignFormattedValue:
             End If
 
             'Replace C# hex specifier with VB6 hex specifier, only if hex specifier was introduced in this function:
-            If (Not useLiteral And escapeHex) And StringContains(formattedValue, "0x") Then formattedValue = Replace$(formattedValue, "0x", "&H")
+            If (Not useLiteral And escapeHex) And Strings.Contains(formattedValue, "0x") Then formattedValue = Replace$(formattedValue, "0x", "&H")
 
             'replace all occurrences of placeholder {i} with their formatted values:
             return_value = Replace(return_value, thisString, formattedValue, Count:=1)
@@ -391,7 +392,7 @@ AlignFormattedValue:
 
 checkEscapes:
         'if there's no more backslashes, don't bother checking for the rest:
-        If useLiteral Or Not StringContains(return_value, "\") Then GoTo normalExit
+        If useLiteral Or Not Strings.Contains(return_value, "\") Then GoTo normalExit
         Dim escape As New EscapeSequence
         Dim escapes As New Collection
         escapes.Add escape.Create("\n", vbNewLine), "0"
@@ -405,10 +406,10 @@ checkEscapes:
 
         For i = 0 To escapes.Count - 1
             Set escape = escapes(CStr(i))
-            If StringContains(return_value, escape.EscapeString) Then _
+            If Strings.Contains(return_value, escape.EscapeString) Then _
                 return_value = Replace(return_value, escape.EscapeString, escape.ReplacementString)
 
-            If Not StringContains(return_value, "\") Then _
+            If Not Strings.Contains(return_value, "\") Then _
                 GoTo normalExit
         Next
 
@@ -431,7 +432,7 @@ checkEscapes:
         End If
 
         'if there's no more backslashes, don't bother checking for the rest:
-        If Not StringContains("\", return_value) Then GoTo normalExit
+        If Not Strings.Contains("\", return_value) Then GoTo normalExit
 
         'replace "ASCII (hex)" escape sequence
         Set regex = New RegExp
@@ -453,7 +454,7 @@ checkEscapes:
 normalExit:
         Set escapes = Nothing
         Set escape = Nothing
-        If Not useLiteral And StringContains(return_value, Chr$(27)) Then _
+        If Not useLiteral And Strings.Contains(return_value, Chr$(27)) Then _
             return_value = Replace(return_value, Chr$(27), "\")
         StringFormat = return_value
 End Function

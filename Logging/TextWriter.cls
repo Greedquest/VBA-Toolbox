@@ -5,9 +5,13 @@ END
 Attribute VB_Name = "TextWriter"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Attribute VB_Description = "Mathieu Guindon CR https://codereview.stackexchange.com/q/52185/146810"
+'@Exposed
 '@Folder("Logger.Utils.TextWriter")
+'@ModuleDescription("Mathieu Guindon CR https://codereview.stackexchange.com/q/52185/146810")
+'@PredeclaredID
 
 'expose raised errors to clients:
 Public Enum FileWriterError
@@ -112,11 +116,17 @@ Public Sub CloseFile(Optional ByVal fileName As String = vbNullString)
 End Sub
 
 Public Sub CloseAllFiles()
-    Dim file As KeyValuePair
-    For Each file In openedFiles
-        Close #file.value
+'    Dim file As KeyValuePair
+'    For Each file In openedFiles
+'        Close #file.value
+'    Next
+'    openedFiles.Clear
+'    quickWriteFile = 0
+    Dim file As Variant
+    For Each file In openedFiles.Items
+        Close #file
     Next
-    openedFiles.Clear
+    Set openedFiles = New Dictionary
     quickWriteFile = 0
 End Sub
 
@@ -132,6 +142,10 @@ Private Function GetFileNumber(ByVal fileName As String) As Long
     End If
 
     GetFileNumber = result
+End Function
+
+Public Function Create() As TextWriter
+    Set Create = New TextWriter
 End Function
 
 Private Sub Class_Initialize()

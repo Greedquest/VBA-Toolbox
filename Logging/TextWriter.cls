@@ -26,7 +26,7 @@ Private quickWriteFile As Long
 
 Option Explicit
 
-Public Property Get OpenedFilesCount() As Integer
+Public Property Get OpenedFilesCount() As Long
     OpenedFilesCount = openedFiles.Count
 End Property
 
@@ -92,8 +92,7 @@ End Sub
 Private Function CanWrite(ByVal fileName As String, ByRef outFileNumber As Long) As Boolean
     Dim result As Boolean
     Dim fileNumber As Long
-    Dim proceed As Boolean
-
+    
     If quickWriteFile <> 0 And fileName = vbNullString Then
         fileNumber = quickWriteFile
         CanWrite = True

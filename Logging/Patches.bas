@@ -2,7 +2,7 @@ Attribute VB_Name = "Patches"
 '@Folder("Logger.Utils.TextWriter")
 Option Explicit
 
-Public Function TryGetValue(key As Variant, ByRef outValue As Variant, ByVal dict As Dictionary) As Boolean
+Public Function TryGetValue(ByVal key As Variant, ByRef outValue As Variant, ByVal dict As Dictionary) As Boolean
 
     If dict.Exists(key) Then
         LetSet outValue, dict(key)

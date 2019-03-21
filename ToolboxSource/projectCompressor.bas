@@ -83,11 +83,11 @@ Private Function ListBoxChoice(ByVal wb As Workbook) As String()
     Dim protected As Boolean
     protected = Not ProjectAccessible(ThisWorkbook)
     
-     'This is to stop screen flashing while creating form
+    'This is to stop screen flashing while creating form
     Application.VBE.MainWindow.Visible = False
     
     Set newForm = populatedForm(protected)
-    If newForm Is Nothing Then 'got something valid
+    If newForm Is Nothing Then                   'got something valid
     
         Err.Description = "No listbox form could be found or created"
         Err.Raise 5
@@ -95,11 +95,11 @@ Private Function ListBoxChoice(ByVal wb As Workbook) As String()
     Else
         Dim formName As String
         formName = newForm.Name
-        designForm newForm, wb 'populate form
+        designForm newForm, wb                   'populate form
         Application.VBE.MainWindow.Visible = True
         newForm.Show
         
-        Dim selections() As String                   'hold output of list
+        Dim selections() As String               'hold output of list
         On Error GoTo noSelection
         ReDim selections(1 To newForm.lst_1.ListCount)
         On Error GoTo 0
@@ -115,7 +115,7 @@ Private Function ListBoxChoice(ByVal wb As Workbook) As String()
         Next i
         
         On Error GoTo noSelection
-        If selectedCount = 0 Then Err.Raise 0        'no selection
+        If selectedCount = 0 Then Err.Raise 0    'no selection
         On Error GoTo 0
 
         ReDim Preserve selections(1 To selectedCount)
@@ -210,10 +210,10 @@ Private Sub designForm(ByRef populatedForm As Object, ByVal callerBook As Workbo
     End With
     
     'populate listbox
-    Dim codeItem As Object                            'VBComponent
+    Dim codeItem As Object                       'VBComponent
     Dim formComponent As Object
-    On Error Resume Next 'Temp form will have unique name and be in ThisWorkbook always
-        Set formComponent = ThisWorkbook.VBProject.VBComponents(populatedForm.Name) 'may not exist
+    On Error Resume Next                         'Temp form will have unique name and be in ThisWorkbook always
+    Set formComponent = ThisWorkbook.VBProject.VBComponents(populatedForm.Name) 'may not exist
     On Error GoTo 0
     For Each codeItem In callerBook.VBProject.VBComponents
         If Not codeItem Is formComponent Then populatedForm.lst_1.AddItem codeItem.Name
@@ -270,7 +270,7 @@ Debug.Print , "Project skeleton written"
         Next i
 
         Dim killLine As Long                     'place for adding last bit of code to remove self-extractor
-        .Find "{1}", killLine, 1, -1, -1
+        .find "{1}", killLine, 1, -1, -1
         .ReplaceLine killLine, Replace(.Lines(killLine, 1), "{1}", projectName)
 Debug.Print , "Inserted killLine"
     End With
@@ -583,7 +583,7 @@ Private Function FillModule(ByVal codeSection As Object) As Long()
         .InsertLines 129, "End Function"
 Debug.Print , "Inserted skeleton"
         Dim result(0 To 1) As Long
-        If .Find("{0}", result(0), result(1), -1, -1) Then 'search for point to insert lines
+        If .find("{0}", result(0), result(1), -1, -1) Then 'search for point to insert lines
             FillModule = result
         Else
             result(0) = 0
@@ -592,3 +592,5 @@ Debug.Print , "Inserted skeleton"
         End If
     End With
 End Function
+
+

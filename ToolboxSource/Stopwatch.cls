@@ -7,6 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
+'@Exposed
 Option Explicit
 '@Folder Stopwatch
 
@@ -38,7 +39,7 @@ Private Function MicroTimer() As Double
     If cyFrequency Then MicroTimer = cyTicks1 / cyFrequency
 End Function
 
-Public Sub Start()
+Public Sub start()
     OpenLabel "Start"
 End Sub
 
@@ -123,4 +124,5 @@ End Sub
 Private Sub Class_Initialize()
     Set this.data = CreateObject("Scripting.Dictionary")
 End Sub
+
 

@@ -7,6 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
+'@Exposed
 Option Explicit
 '@Folder Stopwatch
 
@@ -28,6 +29,7 @@ Private Type TLabelTree
 End Type
 
 Private this As TLabelTree
+
 Public Property Get LabelType() As stopwatchLableType
     LabelType = this.LabelType
 End Property
@@ -87,3 +89,4 @@ End Property
 Private Sub Class_Initialize()
     Set this.ChildNodes = New Collection
 End Sub
+

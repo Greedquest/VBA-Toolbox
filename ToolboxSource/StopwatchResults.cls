@@ -7,6 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
+'@Exposed
 Option Explicit
 '@Folder Stopwatch
 
@@ -32,22 +33,22 @@ Public Property Get RawData() As Object
 End Property
 
 Public Sub ToImmediateWindow()
-'Prints time info to immediate window
+    'Prints time info to immediate window
     Dim resultsTree As LabelTree
     Set resultsTree = this.LabelData
     Dim dict As Object
     Set dict = CreateObject("Scripting.Dictionary")
     flattenTree resultsTree, dict
-    Debug.Print "Label name", "Time taken"
-    Debug.Print String(35, "-")
+Debug.Print "Label name", "Time taken"
+Debug.Print String(35, "-")
     Dim value As Variant
     For Each value In dict.Keys
-        Debug.Print value, dict(value)(0), dict(value)(1)
+Debug.Print value, dict(value)(0), dict(value)(1)
     Next value
 End Sub
 
 Private Sub flattenTree(ByVal treeItem As LabelTree, ByRef dict As Object, Optional ByVal depth As Long = 0)
-'recursively converts a results tree to a dictionary of result keys
+    'recursively converts a results tree to a dictionary of result keys
     dict.Add printf("{0} {1}", treeItem.Location, treeItem.NodeName), Array(treeItem.TimeSpent, treeItem.TimeWasted)
     If treeItem.ChildNodes.Count > 0 Then
         Dim item As Variant
@@ -117,10 +118,11 @@ Private Sub setTimeStamps(ByVal labelItem As LabelTree, ByRef startTimes As Time
 End Sub
 
 Private Function printf(ByVal mask As String, ParamArray tokens()) As String
-'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
+    'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
     Dim i As Long
     For i = 0 To UBound(tokens)
         mask = Replace$(mask, "{" & i & "}", tokens(i))
     Next
     printf = mask
 End Function
+

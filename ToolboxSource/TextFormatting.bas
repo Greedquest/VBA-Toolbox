@@ -8,10 +8,11 @@ Public Sub EngineerFormat()
 End Sub
 
 Public Function printf(ByVal mask As String, ParamArray tokens()) As String
-'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
+    'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
     Dim i As Long
     For i = 0 To UBound(tokens)
         mask = Replace$(mask, "{" & i & "}", tokens(i))
     Next
     printf = mask
 End Function
+

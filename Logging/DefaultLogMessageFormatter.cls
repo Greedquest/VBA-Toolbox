@@ -12,9 +12,9 @@ Option Explicit
 Implements ILogMessageFormatter
 
 Private Function ILogMessageFormatter_FormatMessage(ByVal level As LogLevel, ByVal loggerName As String, ByVal message As String) As String
-    'TODO:Implement better formatting
+    
     'ILogMessageFormatter_FormatMessage = Framework.Strings.Format("{0:s}\t{1}\t[{2}]\t{3}", Now, loggerName, FormatLogLevel(level), message)
-    ILogMessageFormatter_FormatMessage = Toolbox.TextFormatting.printf("{0}\t{1}\t[{2}]\t{3}", Now, loggerName, FormatLogLevel(level), message)
+    ILogMessageFormatter_FormatMessage = Toolbox.Strings.Format("{0}\t{1}\t[{2}]\t{3}", Now, loggerName, FormatLogLevel(level), message)
 End Function
 
 Private Function FormatLogLevel(ByVal level As LogLevel) As String

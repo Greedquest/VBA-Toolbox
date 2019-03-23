@@ -230,7 +230,7 @@ Private Function WriteSkeleton(ByRef codeItems() As codeItem, ByRef book As Work
 
     Dim extractorModule As Object                'VBComponent
     Set extractorModule = book.VBProject.VBComponents.Add(vbext_ct_StdModule)
-    On Error GoTo cleanExit
+    On Error GoTo CleanExit
     WriteProjectName projectName, extractorModule 'avoid err if duplicate - changes
 Debug.Print , "Project file added"
     'write code to module
@@ -277,7 +277,7 @@ Debug.Print , "Inserted killLine"
     WriteSkeleton = True
     Exit Function
     
-cleanExit:
+CleanExit:
 Debug.Print printf("Error writing to file: #{0} - {1}", Err.Number, Err.Description)
 Debug.Print , IIf(RemoveModule(projectName, book), _
                   "Temp file cleared up successfully", _

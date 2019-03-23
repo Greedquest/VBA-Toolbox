@@ -27,6 +27,11 @@ Public Type objectCallback
     TimerID As Long
 End Type
 
+Private Sub SendMessage(ByVal callbackPointer As Long, ByRef callbackObject As objectCallback)
+    callbackObject.TimerID = 0
+    CallWindowProc callbackPointer, callbackObject, 0&, 0&, 0&
+    
+End Sub
 
 Private Sub StartTimer(ByVal pauseMillis As Long, ByVal callbackPointer As Long, ByRef callbackObject As objectCallback)
     'return timer id
@@ -51,9 +56,10 @@ Public Sub CallClassMethod(ByVal Object As Object, ByVal methodName As String, O
     params.ProcName = methodName
     
     If delayMillis = 0 Then
-        Err.Raise 5
+        SendMessage AddressOf ClassMethodCallback, params
     If delayMillis > 0 Then
-        StartTimer delayMillis, AddressOf ClassMethodCallback, params
+        Err.Raise 5
+        'StartTimer delayMillis, AddressOf ClassMethodCallback, params
     Else
         Err.Raise 5 'bad argument
     End If

@@ -41,7 +41,7 @@ Public Function FromAddress(ByVal address As LongPtr) As Pointer
     End With
 End Function
 
-Friend Sub Init(ByVal address As Long, ByVal length As Long)
+Friend Sub Init(ByVal address As LongPtr, ByVal length As Long)
     this.address = address
     this.length = length
 End Sub
@@ -51,11 +51,16 @@ Friend Property Get Self() As Pointer
 End Property
 
 Public Property Get DeRef() As Pointer
-    Set DeRef = Pointer.FromPointer(DeRef(this.address))
+    Set DeRef = Pointer.FromAddress(DeReference(this.address))
 End Property
 
+'@DefaultMember
 Public Property Let Value(ByVal valueBytes As LongPtr)
-    DeRef(this.address) = valueBytes
+    Init valueBytes, LenB(valueBytes)
+End Property
+
+Public Property Get Value() As LongPtr
+    Value = this.address
 End Property
 
 'Debugging

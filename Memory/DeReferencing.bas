@@ -22,7 +22,8 @@ End Enum
 Private Declare Function VirtualProtect Lib "kernel32" (ByRef location As Any, ByVal numberOfBytes As Long, ByVal newProtectionFlags As VirtualProtectFlags, ByVal lpOldProtectionFlags As LongPtr) As BOOL
 
 '@Description("Pointer dereferencing; reads/ writes a single 4 byte (32-bit) or 8 byte (64-bit) block of memory at the address specified. Performs any necessary unprotecting")
-Public Property Let DeRef(ByVal address As LongPtr, ByVal Value As LongPtr)
+Public Property Let DeReference(ByVal address As LongPtr, ByVal Value As LongPtr)
+Attribute DeReference.VB_Description = "Pointer dereferencing; reads/ writes a single 4 byte (32-bit) or 8 byte (64-bit) block of memory at the address specified. Performs any necessary unprotecting"
     If ToggleMemoryProtection(address, LenB(Value), PAGE_EXECUTE_READWRITE) Then
         GetMem Value, ByVal address
         ToggleMemoryProtection address, LenB(Value)
@@ -31,10 +32,10 @@ Public Property Let DeRef(ByVal address As LongPtr, ByVal Value As LongPtr)
     End If
 End Property
 
-Public Property Get DeRef(ByVal address As LongPtr) As LongPtr
-    If ToggleMemoryProtection(address, LenB(DeRef), PAGE_EXECUTE_READWRITE) Then
-        GetMem ByVal address, DeRef
-        ToggleMemoryProtection address, LenB(DeRef)
+Public Property Get DeReference(ByVal address As LongPtr) As LongPtr
+    If ToggleMemoryProtection(address, LenB(DeReference), PAGE_EXECUTE_READWRITE) Then
+        GetMem ByVal address, DeReference
+        ToggleMemoryProtection address, LenB(DeReference)
     Else
         Err.Raise 5, Description:="That address is protected memory which cannot be accessed"
     End If
@@ -47,7 +48,7 @@ Private Static Function ToggleMemoryProtection(ByVal address As LongPtr, ByVal n
         If unprotectWasNOOP Then
             ToggleMemoryProtection = True
         Else
-            ToggleMemoryProtection = VirtualProtect(ByVal address, numberOfBytes, previousMemoryState, VarPtr(previousMemoryState)) <> API_FALSE
+            ToggleMemoryProtection = VirtualProtect(ByVal address, numberOfBytes, previousMemoryState, VarPtr(newMemoryFlag)) <> API_FALSE
         End If
     Else
         ToggleMemoryProtection = VirtualProtect(ByVal address, numberOfBytes, newMemoryFlag, VarPtr(previousMemoryState)) <> API_FALSE

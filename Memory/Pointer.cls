@@ -14,7 +14,6 @@ Option Explicit
 
 Private Type pointerData
     address As LongPtr
-    length As Long
     baseType As VbVarType
     depth As Long
 End Type
@@ -45,13 +44,12 @@ Friend Sub Init(ByVal address As LongPtr, ByVal dataType As VbVarType, ByVal ref
     this.address = address
     this.depth = referenceDepth
     this.baseType = dataType
-    this.length = lengthFromType(dataType)
 End Sub
 
 Public Property Get DeRef() As Pointer
-    If this.depth = 1 And this.baseType <> vbLongPtr Then
+    If this.depth = 1 Then
         'this is a pointer to a variable, not another pointer - so don't dereference or it's riskkkkkyy
-        Err.Raise 5, Description:="You can't dereference a pointer to a non-pointer type, either set the base type to vbLongPtr, set the depth grater or use Value to read the value which this points to"
+        Err.Raise 5, Description:="You can't dereference a pointer to a non-pointer type, either set the base type to vbLongPtr, set the depth greater or use Value to read the value which this points to"
     Else
         Set DeRef = Pointer.Create(DeReference(this.address), this.baseType, this.depth - 1)
     End If
@@ -90,6 +88,10 @@ Private Function lengthFromType(ByVal dataType As VbVarType) As Long
         Case vbBoolean, vbByte
             lengthFromType = 1
         Case Else
-            Err.Raise 5
+            Err.Raise 5, Description:="Unexpected dataType with unknown length"
     End Select
 End Function
+
+Friend Sub DebugPrint()
+    Debug.Print printf("Pointer @{3}{4}baseType: {0}{4}depth: {1}{4}value: {2}", this.baseType, this.depth, Value, this.address, vbCrLf & vbTab)
+End Sub

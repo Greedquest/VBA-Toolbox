@@ -13,6 +13,9 @@ Private Enum VirtualProtectFlags 'See Memory Protection constants: https://docs.
     RESET_TO_PREVIOUS = -1
 End Enum
 
+Public Enum LCIDflags
+     LOCALE_INVARIANT = &H7F&
+End Enum
 
 #If Win64 Then 'To decide whether to use 8 or 4 bytes per chunk of memory
     Private Declare PtrSafe Function GetMem Lib "msvbvm60" Alias "GetMem8" (ByRef source As Any, ByRef destination As Any) As Long
@@ -20,12 +23,14 @@ End Enum
     Private Declare PtrSafe Function GetMem Lib "msvbvm60" Alias "GetMem4" (ByRef source As Any, ByRef destination As Any) As Long
 #End If
 
+Public Declare Function VariantChangeTypeEx Lib "oleaut32" (ByRef pvargDest As Variant, ByRef pvarSrc As Variant, ByVal lcid As LCIDflags, ByVal wFlags As Integer, ByVal vt As Integer) As Long
+
 Declare Sub GetMem1 Lib "msvbvm60" (Ptr As Any, RetVal As Byte)
 Declare Sub GetMem2 Lib "msvbvm60" (Ptr As Any, RetVal As Integer)
 Declare Sub GetMem4 Lib "msvbvm60" (Ptr As Any, RetVal As Long)
 Declare Sub GetMem8 Lib "msvbvm60" (Ptr As Any, RetVal As Currency)
 
-Private Declare PtrSafe Sub CopyMem Lib "kernel32" Alias "RtlMoveMemory" (destination As Any, source As Any, ByVal length As Long)
+Public Declare PtrSafe Sub MoveMemory Lib "kernel32" Alias "RtlMoveMemory" (destination As Any, source As Any, ByVal length As Long)
 Private Declare PtrSafe Function VirtualProtect Lib "kernel32" (ByRef location As Any, ByVal numberOfBytes As Long, ByVal newProtectionFlags As VirtualProtectFlags, ByVal lpOldProtectionFlags As LongPtr) As BOOL
 
 '@Description("Pointer dereferencing; reads/ writes a single 4 byte (32-bit) or 8 byte (64-bit) block of memory at the address specified. Performs any necessary unprotecting")

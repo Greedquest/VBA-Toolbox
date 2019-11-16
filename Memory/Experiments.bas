@@ -64,10 +64,11 @@ End Sub
 
 Sub testValueLet()
 
-    Dim a As Currency
-    a = 3.14159
+    Debug.Print String(30, "_")
+    Debug.Print String(30, "-")
     
-    Debug.Print LenB(a)
+    Dim a As Double
+    a = &HAABBCCDD
     
     Dim pA As Pointer
     Set pA = Pointer.Create(VarPtr(a), VarType(a))
@@ -109,5 +110,36 @@ Sub testObjectExploration()
     ppVtable.DeRef.DebugPrint
     ppVtable.DeRef.DeRef.DebugPrint
     vtableFirst.DebugPrint
+End Sub
+
+Sub inspectVariant()
+    Dim a As Double
+    a = 1.7
+    
+    Dim aVar As Variant
+    aVar = a
+    
+    Debug.Print TypeName(a), VarType(a), VariantType(a)
+    
+    Dim variantData() As Byte
+    ReDim variantData(1 To 16)
+    
+    Dim sourceData() As Byte
+    ReDim sourceData(1 To LenB(a))
+    
+    Debug.Print ArrPtr(variantData), VarPtr(variantData(1))
+    
+    
+    MoveMemory ByVal VarPtr(sourceData(1)), a, UBound(sourceData)
+    MoveMemory ByVal VarPtr(variantData(1)), aVar, UBound(variantData)
+    
+    Dim b As Currency
+    Dim bVar As Variant
+    
+    VariantChangeTypeEx bVar, aVar, LOCALE_INVARIANT, 0, vbCurrency
+    
+    b = bVar
+    
+    
 End Sub
 

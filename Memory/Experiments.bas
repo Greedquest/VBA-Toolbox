@@ -39,12 +39,12 @@ Public Sub test()
     b = 6.22
 
     Dim apPointer As Pointer, aPointer As Pointer
-    Set apPointer = Pointer.Create(VarPtr(VarPtr(a)), VarType(a), 2)
+    Set apPointer = Pointer.Create(VarPtr(VarPtr(a)), varType(a), 2)
     
     Set aPointer = apPointer.DeRef
 
     Dim bPointer As Pointer
-    Set bPointer = Pointer.Create(VarPtr(b), VarType(b))
+    Set bPointer = Pointer.Create(VarPtr(b), varType(b))
     
     Debug.Print "&&a:", ;: apPointer.DebugPrint
     Debug.Print "&a:", ;: aPointer.DebugPrint
@@ -68,10 +68,10 @@ Sub testValueLet()
     Debug.Print String(30, "-")
     
     Dim a As Double
-    a = &HAABBCCDD
+    a = 3.14159
     
     Dim pA As Pointer
-    Set pA = Pointer.Create(VarPtr(a), VarType(a))
+    Set pA = Pointer.Create(VarPtr(a), varType(a))
     
     Debug.Print "a: "; a
     pA.DebugPrint
@@ -84,7 +84,7 @@ Sub testValueLet()
     Debug.Print String(30, "-")
     
     Dim ppA As Pointer
-    Set ppA = Pointer.Create(VarPtr(VarPtr(a)), VarType(a), 2)
+    Set ppA = Pointer.Create(VarPtr(VarPtr(a)), varType(a), 2)
     
     Debug.Print "a: "; a
     ppA.DebugPrint
@@ -119,7 +119,7 @@ Sub inspectVariant()
     Dim aVar As Variant
     aVar = a
     
-    Debug.Print TypeName(a), VarType(a), VariantType(a)
+    Debug.Print TypeName(a), varType(a), VariantType(a)
     
     Dim variantData() As Byte
     ReDim variantData(1 To 16)

@@ -58,8 +58,7 @@ End Property
 Public Property Get Value() As Variant
     Dim result As Variant
     result = valueAt(this.address, lengthFromType(valueType))
-    'VariantType(result) = valueType
-    Value = result
+    VariantChangeTypeEx Value, result, LOCALE_INVARIANT, 0, valueType
 End Property
 
 Public Property Let Value(ByVal newValue As Variant)
@@ -79,21 +78,6 @@ Private Property Get valueType() As VbVarType
     End If
 End Property
 
-'@Description("Converts native types to their length in bytes - also accepts vbLongPtr")
-Private Function lengthFromType(ByVal dataType As VbVarType) As Long
-    Select Case dataType
-        Case vbCurrency, vbLongLong
-            lengthFromType = 8
-        Case vbLong, vbDouble
-            lengthFromType = 4
-        Case vbSingle, vbInteger
-            lengthFromType = 2
-        Case vbBoolean, vbByte
-            lengthFromType = 1
-        Case Else
-            Err.Raise 5, Description:="Unexpected dataType with unknown length"
-    End Select
-End Function
 
 'Private Function CType(ByVal expression As Variant, ByVal outputType As VbVarType) As Variant
 '    Select Case outputType

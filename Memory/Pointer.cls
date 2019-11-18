@@ -56,9 +56,9 @@ Public Property Get DeRef() As Pointer
 End Property
 
 Public Property Get Value() As Variant
-    Dim result As Variant
-    result = oldValueAt(this.address, lengthFromType(valueType))
-    VariantChangeTypeEx Value, result, LOCALE_INVARIANT, 0, valueType
+'    Dim result As Variant
+'    result = oldValueAt(this.address, lengthFromType(valueType))
+'    VariantChangeTypeEx Value, result, LOCALE_INVARIANT, 0, valueType
 End Property
 
 Public Property Let Value(ByVal newValue As Variant)

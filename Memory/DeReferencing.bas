@@ -7,14 +7,23 @@ Private Enum BOOL
     'Use NOT (result = API_FALSE) for API_TRUE, as TRUE is just non-zero
 End Enum
 
-Private Enum VirtualProtectFlags 'See Memory Protection constants: https://docs.microsoft.com/en-gb/windows/win32/memory/memory-protection-constants
+Private Enum HRESULT
+    S_OK = &H0                                   'Success.
+    DISP_E_BADVARTYPE = &H8                      'The variant type is not a valid type of variant.
+    DISP_E_OVERFLOW = &HA                        'The data pointed to by pvarSrc does not fit in the destination type.
+    DISP_E_TYPEMISMATCH = &H5                    'The argument could not be coerced to the specified type.
+    E_INVALIDARG = &H57                          'One of the arguments is not valid.
+    E_OUTOFMEMORY = &HE                          'Insufficient memory to complete the operation.
+End Enum
+
+Private Enum VirtualProtectFlags                 'See Memory Protection constants: https://docs.microsoft.com/en-gb/windows/win32/memory/memory-protection-constants
     PAGE_EXECUTE_READWRITE = &H40
     PAGE_READONLY = &H2
     RESET_TO_PREVIOUS = -1
 End Enum
 
 Public Enum LCIDflags
-     LOCALE_INVARIANT = &H7F&
+    LOCALE_INVARIANT = &H7F
 End Enum
 
 Public Type VARIANT_STRUCT
@@ -23,13 +32,13 @@ Public Type VARIANT_STRUCT
     data As OByte
 End Type
 
-#If Win64 Then 'To decide whether to use 8 or 4 bytes per chunk of memory
+#If Win64 Then                                   'To decide whether to use 8 or 4 bytes per chunk of memory
     Private Declare PtrSafe Function GetMem Lib "msvbvm60" Alias "GetMem8" (ByRef Source As Any, ByRef destination As Any) As Long
 #Else
     Private Declare PtrSafe Function GetMem Lib "msvbvm60" Alias "GetMem4" (ByRef Source As Any, ByRef destination As Any) As Long
 #End If
 
-Public Declare Function VariantChangeTypeEx Lib "oleaut32" (ByRef pvargDest As Any, ByRef pvarSrc As Any, ByVal lcid As LCIDflags, ByVal wFlags As Integer, ByVal vt As Integer) As Long
+Private Declare Function VariantChangeTypeEx Lib "oleaut32" (ByRef pvargDest As Any, ByRef pvarSrc As Any, ByVal lcid As LCIDflags, ByVal wFlags As Integer, ByVal vt As Integer) As HRESULT
 
 Declare Sub GetMem1 Lib "msvbvm60" (Source As Any, Dest As Any)
 Declare Sub GetMem2 Lib "msvbvm60" (Source As Any, Dest As Any)
@@ -41,7 +50,6 @@ Private Declare PtrSafe Function VirtualProtect Lib "kernel32" (ByRef location A
 
 '@Description("Pointer dereferencing; reads/ writes a single 4 byte (32-bit) or 8 byte (64-bit) block of memory at the address specified. Performs any necessary unprotecting")
 Public Property Let DeReference(ByVal address As LongPtr, ByVal Value As LongPtr)
-Attribute DeReference.VB_Description = "Pointer dereferencing; reads/ writes a single 4 byte (32-bit) or 8 byte (64-bit) block of memory at the address specified. Performs any necessary unprotecting"
     If ToggleMemoryProtection(address, LenB(Value), PAGE_EXECUTE_READWRITE) Then
         GetMem Value, ByVal address
         ToggleMemoryProtection address, LenB(Value)
@@ -59,15 +67,61 @@ Public Property Get DeReference(ByVal address As LongPtr) As LongPtr
     End If
 End Property
 
-Sub t()
+Public Property Get ValueAt(ByVal address As LongPtr, ByVal dataType As VbVarType) As Variant
+    Dim result As VARIANT_STRUCT
+    If ToggleMemoryProtection(address, 8, PAGE_EXECUTE_READWRITE) Then
+        GetMem8 ByVal address, result.data           'read all the data - vartype will control what actually read
+        ToggleMemoryProtection address, 8
+    Else
+        Err.Raise 5, Description:="That address is protected memory which cannot be accessed"
+    End If
+    
+    result.varType = dataType
+    MoveMemory ValueAt, result, LenB(result)
+    
+End Property
+
+Public Property Let ValueAt(ByVal address As LongPtr, ByVal dataType As VbVarType, ByVal newValue As Variant)
+    Dim typedValue As VARIANT_STRUCT
+    If VariantChangeTypeEx(typedValue, newValue, LOCALE_INVARIANT, 0, dataType) <> S_OK Then
+        Err.Raise 5, "Variant issues"
+    End If
+    
+    'move the appropriate number of bytes from the data portion of the variant to the output variable
+    If ToggleMemoryProtection(address, lengthFromType(dataType), PAGE_EXECUTE_READWRITE) Then
+        MoveMemory ByVal address, typedValue.data, lengthFromType(dataType)
+        ToggleMemoryProtection address, lengthFromType(dataType)
+    Else
+        Err.Raise 5, Description:="That address is protected memory which cannot be accessed"
+    End If
+    
+End Property
+
+Sub testReadWrite()
+    Debug.Print String(80, "-")
+    
     Const data As Double = 31.4159
-    Dim testValue As Long
+    Dim testValue As Double
+    Dim testVariant As Variant
     testValue = data
+    
+    testVariant = ValueAt(VarPtr(testValue), varType(testValue))
+    
+    Debug.Print "Raw: ";
+    printVarInfo CVar(testValue)
+    Debug.Print "Get: ";
+    printVarInfo testVariant
+    
+    ValueAt(VarPtr(testValue), varType(testValue)) = data - 1
+    Debug.Print "Let: ";
+    printVarInfo CVar(testValue)
+    
+    
     
 End Sub
 
 Private Sub printVarInfo(ByRef var As Variant)
-    Debug.Print TypeName(var); varType(var), IIf(IsObject(var), "Objet", var), Hex$(VarPtr(var)), variantStructHex(VarPtr(var))
+    Debug.Print Left$(TypeName(var), 5); varType(var), IIf(IsObject(var), "Objet", var), Hex$(VarPtr(var)), variantStructHex(VarPtr(var))
 End Sub
 
 Sub testVariousTypes()
@@ -116,24 +170,6 @@ Sub testVariousTypes()
     
 End Sub
 
-Public Property Get valueAt(ByVal address As LongPtr, ByVal dataType As VbVarType) As Variant
-    Dim result As VARIANT_STRUCT
-    GetMem8 ByVal address, result.data 'read all the data - vartype will control what actually read
-    
-    result.varType = dataType
-    MoveMemory valueAt, result, LenB(result)
-    
-End Property
-
-Public Property Let valueAt(ByVal address As LongPtr, ByVal dataType As VbVarType, ByVal newValue As Variant)
-    Dim typedValue As Variant
-    VariantChangeTypeEx typedValue, newValue, LOCALE_INVARIANT, 0, dataType
-    
-    printVarInfo newValue
-    printVarInfo typedValue
-    
-End Property
-
 Public Property Get variantStructHex(ByVal address As LongPtr) As String
     Dim result As String
     Dim b
@@ -177,13 +213,13 @@ End Property
 Public Property Let oldValueAt(ByVal address As LongPtr, ByVal length As Long, ByVal newValue As Variant)
     Select Case length
         Case 2 ^ 0
-             VBVM6Lib.MemByte(address) = newValue
+            VBVM6Lib.MemByte(address) = newValue
         Case 2 ^ 1
-             VBVM6Lib.MemWord(address) = newValue
+            VBVM6Lib.MemWord(address) = newValue
         Case 2 ^ 2
-             VBVM6Lib.MemLong(address) = newValue
+            VBVM6Lib.MemLong(address) = newValue
         Case 2 ^ 3
-             VBVM6Lib.MemCurr(address) = newValue
+            VBVM6Lib.MemCurr(address) = newValue
         Case Else
             Err.Raise 5, "oldValueAt", printf("Length of {0} is not supported, it must be a power of 2 in the range 1..8 (inclusive)", length)
     End Select
@@ -208,9 +244,9 @@ End Function
 '@Description("Converts native types to their length in bytes - also accepts vbLongPtr")
 Public Function lengthFromType(ByVal dataType As VbVarType) As Long
     Select Case dataType
-        Case vbCurrency, vbLongLong
+        Case vbCurrency, vbLongLong, vbDouble
             lengthFromType = 8
-        Case vbLong, vbDouble
+        Case vbLong
             lengthFromType = 4
         Case vbSingle, vbInteger
             lengthFromType = 2
@@ -220,5 +256,4 @@ Public Function lengthFromType(ByVal dataType As VbVarType) As Long
             Err.Raise 5, Description:="Unexpected dataType with unknown length"
     End Select
 End Function
-
 

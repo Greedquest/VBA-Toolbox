@@ -60,52 +60,121 @@ Public Property Get DeReference(ByVal address As LongPtr) As LongPtr
 End Property
 
 Sub t()
-    Dim a As Double
-    a = 1234
+    Const data As Double = 31.4159
+    Dim testValue As Long
+    testValue = data
     
-    Dim b
-    b = variantValue(VarPtr(a), varType(a))
-    Debug.Print a; "("; Hex$(a); ")", b; "("; Hex$(b); ")"
-    
-    variantValue(VarPtr(a), varType(a)) = 3456
-    Debug.Print a; "("; Hex$(a); ")", b; "("; Hex$(b); ")"
 End Sub
-Public Property Get variantValue(ByVal address As LongPtr, ByVal dataType As VbVarType) As Variant
-    Dim result As VARIANT_STRUCT
-    'create the variant struct with appropriate data - assumes 8 bytes located at address
-    GetMem8 ByVal address, result.data 'TODO - all in one move
-    result.varType = dataType
-    MoveMemory variantValue, result, LenB(result)
-End Property
 
-Public Property Let variantValue(ByVal address As LongPtr, ByVal dataType As VbVarType, ByVal newValue As Variant)
-    Dim newVariant As VARIANT_STRUCT
-    Dim asType As Variant
-    VariantChangeTypeEx asType, newValue, LOCALE_INVARIANT, 0, dataType 'convert to correct type
-    Debug.Print TypeName(newValue); newValue, TypeName(asType); asType
+Private Sub printVarInfo(ByRef var As Variant)
+    Debug.Print TypeName(var); varType(var), IIf(IsObject(var), "Objet", var), Hex$(VarPtr(var)), variantStructHex(VarPtr(var))
+End Sub
+
+Sub testVariousTypes()
+    Debug.Print String(80, "-")
+    Dim a As Single
+    Dim b As Double
+    Dim c As Long
+    Dim d As Byte
+    Dim e As String
+    Dim f As New Collection
     
-    printStruct newVariant
-    MoveMemory ByVal VarPtr(newVariant), ByVal VarPtr(asType), LenB(newVariant)
-    printStruct newVariant
-    MoveMemory ByVal address, newVariant.data, 8 'BUG overwrites too far - double seems to reside in low word?
+    Const data As Double = 31.4159
+    
+    a = data
+    b = data
+    c = data
+    d = data
+    e = data
+    f.Add data
+    
+    Debug.Print TypeName(a); varType(a), a, Hex$(VarPtr(a)), HexCode(VarPtr(a), LenB(a))
+    Debug.Print TypeName(b); varType(b), b, Hex$(VarPtr(b)), HexCode(VarPtr(b), LenB(b))
+    Debug.Print TypeName(c); varType(c), c, Hex$(VarPtr(c)), HexCode(VarPtr(c), LenB(c))
+    Debug.Print TypeName(d); varType(d), d, Hex$(VarPtr(d)), HexCode(VarPtr(d), LenB(d))
+    Debug.Print TypeName(e); varType(e), e, Hex$(VarPtr(e)), HexCode(VarPtr(e), LenB(e)), Hex$(StrPtr(e))
+    Debug.Print TypeName(f); varType(f), f(1), Hex$(VarPtr(f)), HexCode(VarPtr(f), 4), Hex$(ObjPtr(f))
+    
+    Dim var As Variant
+    VariantChangeTypeEx var, CVar(a), LOCALE_INVARIANT, 0, varType(a)
+    printVarInfo var
+    
+    VariantChangeTypeEx var, CVar(b), LOCALE_INVARIANT, 0, varType(b)
+    printVarInfo var
+    
+    VariantChangeTypeEx var, CVar(c), LOCALE_INVARIANT, 0, varType(c)
+    printVarInfo var
+    
+    VariantChangeTypeEx var, CVar(d), LOCALE_INVARIANT, 0, varType(d)
+    printVarInfo var
+    
+    VariantChangeTypeEx var, CVar(e), LOCALE_INVARIANT, 0, varType(e)
+    printVarInfo var
+    
+    VariantChangeTypeEx var, CVar(f), LOCALE_INVARIANT, 0, varType(f)
+    printVarInfo var
+    
+End Sub
+
+Public Property Get valueAt(ByVal address As LongPtr, ByVal dataType As VbVarType) As Variant
+    Dim result As VARIANT_STRUCT
+    GetMem8 ByVal address, result.data 'read all the data - vartype will control what actually read
+    
+    result.varType = dataType
+    MoveMemory valueAt, result, LenB(result)
+    
 End Property
 
-Public Property Get valueAt(ByVal address As LongPtr, ByVal length As Long) As Variant
+Public Property Let valueAt(ByVal address As LongPtr, ByVal dataType As VbVarType, ByVal newValue As Variant)
+    Dim typedValue As Variant
+    VariantChangeTypeEx typedValue, newValue, LOCALE_INVARIANT, 0, dataType
+    
+    printVarInfo newValue
+    printVarInfo typedValue
+    
+End Property
+
+Public Property Get variantStructHex(ByVal address As LongPtr) As String
+    Dim result As String
+    Dim b
+    For Each b In AsOByteArr(ByVal address).bytes
+        result = result & WorksheetFunction.Dec2Hex(b, 2)
+    Next b
+    result = result & " | "
+    For Each b In AsOByteArr(ByVal address + 8).bytes
+        result = result & WorksheetFunction.Dec2Hex(b, 2)
+    Next b
+    variantStructHex = result
+End Property
+
+Public Property Get HexCode(ByVal address As LongPtr, ByVal length As Long) As String
+    Dim bytes() As Byte
+    ReDim bytes(1 To length)
+    MoveMemory bytes(1), ByVal address, length
+    Dim i As Long
+    Dim result As String
+    For i = LBound(bytes) To UBound(bytes)
+        result = result & WorksheetFunction.Dec2Hex(bytes(i), 2)
+    Next i
+    HexCode = result
+End Property
+
+Public Property Get oldValueAt(ByVal address As LongPtr, ByVal length As Long) As Variant
     Select Case length
         Case 2 ^ 0
-            valueAt = VBVM6Lib.MemByte(address)
+            oldValueAt = VBVM6Lib.MemByte(address)
         Case 2 ^ 1
-            valueAt = VBVM6Lib.MemWord(address)
+            oldValueAt = VBVM6Lib.MemWord(address)
         Case 2 ^ 2
-            valueAt = VBVM6Lib.MemLong(address)
+            oldValueAt = VBVM6Lib.MemLong(address)
         Case 2 ^ 3
-            valueAt = VBVM6Lib.MemCurr(address)
+            oldValueAt = VBVM6Lib.MemCurr(address)
         Case Else
-            Err.Raise 5, "valueAt", printf("Length of {0} is not supported, it must be a power of 2 in the range 1..8 (inclusive)", length)
+            Err.Raise 5, "oldValueAt", printf("Length of {0} is not supported, it must be a power of 2 in the range 1..8 (inclusive)", length)
     End Select
 End Property
 
-Public Property Let valueAt(ByVal address As LongPtr, ByVal length As Long, ByVal newValue As Variant)
+Public Property Let oldValueAt(ByVal address As LongPtr, ByVal length As Long, ByVal newValue As Variant)
     Select Case length
         Case 2 ^ 0
              VBVM6Lib.MemByte(address) = newValue
@@ -116,7 +185,7 @@ Public Property Let valueAt(ByVal address As LongPtr, ByVal length As Long, ByVa
         Case 2 ^ 3
              VBVM6Lib.MemCurr(address) = newValue
         Case Else
-            Err.Raise 5, "valueAt", printf("Length of {0} is not supported, it must be a power of 2 in the range 1..8 (inclusive)", length)
+            Err.Raise 5, "oldValueAt", printf("Length of {0} is not supported, it must be a power of 2 in the range 1..8 (inclusive)", length)
     End Select
 End Property
 
@@ -151,17 +220,5 @@ Public Function lengthFromType(ByVal dataType As VbVarType) As Long
             Err.Raise 5, Description:="Unexpected dataType with unknown length"
     End Select
 End Function
-
-Public Sub printStruct(var As VARIANT_STRUCT)
-    Dim b
-    For Each b In AsOByteArr(var).Bytes
-        Debug.Print Hex$(b); " ";
-    Next b
-    Debug.Print "| ";
-    For Each b In AsOByteArr(var.data).Bytes
-        Debug.Print Hex$(b); " ";
-    Next b
-    Debug.Print
-End Sub
 
 

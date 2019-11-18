@@ -57,16 +57,16 @@ End Property
 
 Public Property Get Value() As Variant
     Dim result As Variant
-    result = valueAt(this.address, lengthFromType(valueType))
+    result = oldValueAt(this.address, lengthFromType(valueType))
     VariantChangeTypeEx Value, result, LOCALE_INVARIANT, 0, valueType
 End Property
 
 Public Property Let Value(ByVal newValue As Variant)
-    valueAt(this.address, lengthFromType(valueType)) = newValue
+    oldValueAt(this.address, lengthFromType(valueType)) = newValue
 End Property
 
 Public Property Set Value(ByVal reference As IUnknown) 'REVIEW: is this weird?
-    valueAt(this.address, lengthFromType(valueType)) = ObjPtr(reference)
+    oldValueAt(this.address, lengthFromType(valueType)) = ObjPtr(reference)
 End Property
 
 '@Description("The VarType of this pointer when dereferenced; if this is &a then datatype will be vartype(a), if &&a then datatype will be a pointer)

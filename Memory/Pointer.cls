@@ -20,10 +20,10 @@ End Type
 
 Public Enum customVBVarTypes
     #If Win64 Then
-    vbLongPtr = vbLongLong
+        vbLongPtr = vbLongLong
     #Else
-    vbLongLong = 20
-    vbLongPtr = vbLong
+        vbLongLong = 20
+        vbLongPtr = vbLong
     #End If
 End Enum
 
@@ -49,24 +49,22 @@ End Sub
 Public Property Get DeRef() As Pointer
     If this.depth = 1 Then
         'this is a pointer to a variable, not another pointer - so don't dereference or it's riskkkkkyy
-        Err.Raise 5, Description:="You can't dereference a pointer to a non-pointer type, either set the base type to vbLongPtr, set the depth greater or use Value to read the value which this points to"
+        Err.Raise 5, Description:="Pointer can't be dereferenced any further; either set a larger depth in the constructor, or use the Pointer.Value property to read the contents of the variable"
     Else
         Set DeRef = Pointer.Create(DeReference(this.address), this.baseType, this.depth - 1)
     End If
 End Property
 
 Public Property Get Value() As Variant
-'    Dim result As Variant
-'    result = oldValueAt(this.address, lengthFromType(valueType))
-'    VariantChangeTypeEx Value, result, LOCALE_INVARIANT, 0, valueType
+    Value = ValueAt(this.address, valueType)
 End Property
 
 Public Property Let Value(ByVal newValue As Variant)
-    oldValueAt(this.address, lengthFromType(valueType)) = newValue
+    ValueAt(this.address, valueType) = newValue
 End Property
 
 Public Property Set Value(ByVal reference As IUnknown) 'REVIEW: is this weird?
-    oldValueAt(this.address, lengthFromType(valueType)) = ObjPtr(reference)
+    ValueAt(this.address, valueType) = ObjPtr(reference)
 End Property
 
 '@Description("The VarType of this pointer when dereferenced; if this is &a then datatype will be vartype(a), if &&a then datatype will be a pointer)

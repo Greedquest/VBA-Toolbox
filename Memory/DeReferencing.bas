@@ -33,19 +33,19 @@ Public Type VARIANT_STRUCT
 End Type
 
 #If Win64 Then                                   'To decide whether to use 8 or 4 bytes per chunk of memory
-    Private Declare PtrSafe Function GetMem Lib "msvbvm60" Alias "GetMem8" (ByRef Source As Any, ByRef destination As Any) As Long
+    Private Declare PtrSafe Function GetMem Lib "msvbvm60" Alias "GetMem8" (ByRef source As Any, ByRef destination As Any) As Long
 #Else
-    Private Declare PtrSafe Function GetMem Lib "msvbvm60" Alias "GetMem4" (ByRef Source As Any, ByRef destination As Any) As Long
+    Private Declare PtrSafe Function GetMem Lib "msvbvm60" Alias "GetMem4" (ByRef source As Any, ByRef destination As Any) As Long
 #End If
 
-Private Declare Function VariantChangeTypeEx Lib "oleaut32" (ByRef pvargDest As Any, ByRef pvarSrc As Any, ByVal lcid As LCIDflags, ByVal wFlags As Integer, ByVal vt As Integer) As HRESULT
+Private Declare Function VariantChangeTypeEx Lib "oleaut32" (ByRef destination As Any, ByRef source As Any, ByVal lcid As LCIDflags, ByVal wFlags As Integer, ByVal varintType As Integer) As HRESULT
 
-Declare Sub GetMem1 Lib "msvbvm60" (Source As Any, Dest As Any)
-Declare Sub GetMem2 Lib "msvbvm60" (Source As Any, Dest As Any)
-Declare Sub GetMem4 Lib "msvbvm60" (Source As Any, Dest As Any)
-Declare Sub GetMem8 Lib "msvbvm60" (Source As Any, Dest As Any)
+Private Declare PtrSafe Sub GetMem1 Lib "msvbvm60" (source As Any, destination As Any)
+Private Declare PtrSafe Sub GetMem2 Lib "msvbvm60" (source As Any, destination As Any)
+Private Declare PtrSafe Sub GetMem4 Lib "msvbvm60" (source As Any, destination As Any)
+Private Declare PtrSafe Sub GetMem8 Lib "msvbvm60" (source As Any, destination As Any)
+Private Declare PtrSafe Sub MoveMemory Lib "kernel32" Alias "RtlMoveMemory" (destination As Any, source As Any, ByVal length As Long)
 
-Public Declare PtrSafe Sub MoveMemory Lib "kernel32" Alias "RtlMoveMemory" (destination As Any, Source As Any, ByVal length As Long)
 Private Declare PtrSafe Function VirtualProtect Lib "kernel32" (ByRef location As Any, ByVal numberOfBytes As Long, ByVal newProtectionFlags As VirtualProtectFlags, ByVal lpOldProtectionFlags As LongPtr) As BOOL
 
 '@Description("Pointer dereferencing; reads/ writes a single 4 byte (32-bit) or 8 byte (64-bit) block of memory at the address specified. Performs any necessary unprotecting")
@@ -67,11 +67,12 @@ Public Property Get DeReference(ByVal address As LongPtr) As LongPtr
     End If
 End Property
 
+'@Description("Read/write data of a certain type to and from corresponding variants")
 Public Property Get ValueAt(ByVal address As LongPtr, ByVal dataType As VbVarType) As Variant
     Dim result As VARIANT_STRUCT
-    If ToggleMemoryProtection(address, 8, PAGE_EXECUTE_READWRITE) Then
-        GetMem8 ByVal address, result.data           'read all the data - vartype will control what actually read
-        ToggleMemoryProtection address, 8
+    If ToggleMemoryProtection(address, LenB(result.data), PAGE_EXECUTE_READWRITE) Then
+        GetMem8 ByVal address, result.data       'read all the data - vartype will control what actually read
+        ToggleMemoryProtection address, LenB(result.data)
     Else
         Err.Raise 5, Description:="That address is protected memory which cannot be accessed"
     End If
@@ -97,11 +98,25 @@ Public Property Let ValueAt(ByVal address As LongPtr, ByVal dataType As VbVarTyp
     
 End Property
 
+Sub t()
+    Dim someData As Long                         'could be a Double, Single, Byte etc. This works for any type except reference types (arrays, strings, objects)
+    someData = &H1234ABCD                        'some number that fits in a Long
+    
+    Dim dataPointer As LongPtr
+    dataPointer = VarPtr(someData)
+    
+    Dim dereferencedData As Variant
+    dereferencedData = ValueAt(dataPointer, vbLong) 'interpret the data as a Long; vbLong = 3
+    
+    'dereferencedData now looks like 03 00 | 00 00 00 00 00 00 | 12 34 AB CD 00 00 00 00
+    Debug.Assert dereferencedData = someData     'Passes
+End Sub
+
 Sub testReadWrite()
     Debug.Print String(80, "-")
     
     Const data As Double = 31.4159
-    Dim testValue As Double
+    Dim testValue As Long
     Dim testVariant As Variant
     testValue = data
     
@@ -193,36 +208,6 @@ Public Property Get HexCode(ByVal address As LongPtr, ByVal length As Long) As S
         result = result & WorksheetFunction.Dec2Hex(bytes(i), 2)
     Next i
     HexCode = result
-End Property
-
-Public Property Get oldValueAt(ByVal address As LongPtr, ByVal length As Long) As Variant
-    Select Case length
-        Case 2 ^ 0
-            oldValueAt = VBVM6Lib.MemByte(address)
-        Case 2 ^ 1
-            oldValueAt = VBVM6Lib.MemWord(address)
-        Case 2 ^ 2
-            oldValueAt = VBVM6Lib.MemLong(address)
-        Case 2 ^ 3
-            oldValueAt = VBVM6Lib.MemCurr(address)
-        Case Else
-            Err.Raise 5, "oldValueAt", printf("Length of {0} is not supported, it must be a power of 2 in the range 1..8 (inclusive)", length)
-    End Select
-End Property
-
-Public Property Let oldValueAt(ByVal address As LongPtr, ByVal length As Long, ByVal newValue As Variant)
-    Select Case length
-        Case 2 ^ 0
-            VBVM6Lib.MemByte(address) = newValue
-        Case 2 ^ 1
-            VBVM6Lib.MemWord(address) = newValue
-        Case 2 ^ 2
-            VBVM6Lib.MemLong(address) = newValue
-        Case 2 ^ 3
-            VBVM6Lib.MemCurr(address) = newValue
-        Case Else
-            Err.Raise 5, "oldValueAt", printf("Length of {0} is not supported, it must be a power of 2 in the range 1..8 (inclusive)", length)
-    End Select
 End Property
 
 Private Static Function ToggleMemoryProtection(ByVal address As LongPtr, ByVal numberOfBytes As Long, Optional ByVal newMemoryFlag As VirtualProtectFlags = RESET_TO_PREVIOUS) As Boolean

@@ -7,7 +7,7 @@ Private Enum BOOL
     'Use NOT (result = API_FALSE) for API_TRUE, as TRUE is just non-zero
 End Enum
 
-Private Enum HRESULT
+Public Enum HRESULT
     S_OK = &H0                                   'Success.
     DISP_E_BADVARTYPE = &H8                      'The variant type is not a valid type of variant.
     DISP_E_OVERFLOW = &HA                        'The data pointed to by pvarSrc does not fit in the destination type.

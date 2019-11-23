@@ -20,10 +20,10 @@ End Type
 
 Public Enum customVBVarTypes
     #If Win64 Then
-        vbLongPtr = vbLongLong
+        vblongptr = vbLongLong
     #Else
         vbLongLong = 20
-        vbLongPtr = vbLong
+        vblongptr = vbLong
     #End If
 End Enum
 
@@ -67,50 +67,26 @@ Public Property Set Value(ByVal reference As IUnknown) 'REVIEW: is this weird?
     ValueAt(this.address, valueType) = ObjPtr(reference)
 End Property
 
+Public Property Get address() As LongPtr
+    address = this.address
+End Property
+
+Public Property Get NextSibling() As Pointer
+    Set NextSibling = Pointer.Create(this.address + lengthFromType(valueType), this.baseType, this.depth)
+End Property
+
+Public Property Get PreviousSibling() As Pointer
+    Set PreviousSibling = Pointer.Create(this.address - lengthFromType(valueType), this.baseType, this.depth)
+End Property
+
 '@Description("The VarType of this pointer when dereferenced; if this is &a then datatype will be vartype(a), if &&a then datatype will be a pointer)
 Private Property Get valueType() As VbVarType
     If this.depth = 1 Then                       'just a pointer to a value, so that value is this class' base type
         valueType = this.baseType
     Else
-        valueType = vbLongPtr
+        valueType = vblongptr
     End If
 End Property
-
-
-'Private Function CType(ByVal expression As Variant, ByVal outputType As VbVarType) As Variant
-'    Select Case outputType
-'        #If Win64 Then
-'        Case vbLongLong
-'            CType = CLngLng(expression)
-'        #End If
-'        Case vbBoolean
-'            CType = CBool(expression)
-'        Case vbByte
-'            CType = CByte(expression)
-'        Case vbCurrency
-'            CType = CCur(expression)
-'        Case vbDate
-'            CType = CDate(expression)
-'        Case vbDecimal
-'            CType = CDec(expression)
-'        Case vbDouble
-'            CType = CDbl(expression)
-'        Case vbInteger
-'            CType = CInt(expression)
-'        Case vbLong
-'            CType = CLng(expression)
-'        Case vbLongPtr
-'            CType = CLngPtr(expression)
-'        Case vbSingle
-'            CType = CSng(expression)
-'        Case vbString
-'            CType = CStr(expression)
-'        Case vbVariant
-'            CType = CVar(expression)
-'        Case Else
-'            CType = expression
-'    End Select
-'End Function
 
 Friend Sub DebugPrint()
     Debug.Print printf("Pointer @{3}{4}baseType: {0}{4}depth: {1}{4}value: {2}", this.baseType, this.depth, Value, this.address, vbCrLf & vbTab)

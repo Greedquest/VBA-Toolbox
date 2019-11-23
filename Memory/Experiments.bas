@@ -4,32 +4,13 @@ Attribute VB_Name = "Experiments"
 Option Explicit
 
 Private Sub getPointer()
-       
-'    Dim pointers(1 To 4) As Pointer
-'
-'    Dim obj As Collection
-'    Set obj = New Collection
-'    Set pointers(1) = Pointer.FromReference(obj)
-'
-'    Dim fnPointer As LongPtr
-'    fnPointer = VBA.CLngPtr(AddressOf getPointer)
-'    Set pointers(2) = Pointer.FromAddress(fnPointer)
-'
-'    Dim varPointer As LongPtr
-'    varPointer = VarPtr(fnPointer)
-'    Set pointers(3) = Pointer.FromAddress(varPointer)
-'
-'    Dim objPointer As LongPtr
-'    objPointer = ObjPtr(obj)
-'    Set pointers(4) = Pointer.FromAddress(objPointer)
-'
-''    Dim numericData As Double
-''    Set pointers(5) = Pointer.FromValue(VarPtr(numericData), LenB(numericData))
-'
-'    Dim i As Long
-'    For i = LBound(pointers) To UBound(pointers)
-'        pointers(i).debugPrint
-'    Next i
+    
+    Dim testObj As New Pointer
+    Dim inspectedObject As Pointer
+    
+    Set inspectedObject = Pointer.Create(ObjPtr(testObj), vblongptr, 5)
+    
+    
     
 End Sub
 
@@ -46,16 +27,18 @@ Public Sub test()
     Dim bPointer As Pointer
     Set bPointer = Pointer.Create(VarPtr(b), varType(b))
     
-    Debug.Print "&&a:", ;: apPointer.DebugPrint
-    Debug.Print "&a:", ;: aPointer.DebugPrint
-    Debug.Print "&b:", ;: bPointer.DebugPrint
+    Debug.Print "BEFORE"
+    Debug.Print "&&a:";: apPointer.DebugPrint
+    Debug.Print "&a:";: aPointer.DebugPrint
+    Debug.Print "&b:";: bPointer.DebugPrint
     
     aPointer.Value = bPointer.Value
     'apPointer.DeRef.Value = bPointer.Value
 
-    Debug.Print "&&a:", ;: apPointer.DebugPrint
-    Debug.Print "&a:", ;: aPointer.DebugPrint
-    Debug.Print "&b:", ;: bPointer.DebugPrint
+    Debug.Print "AFTER"
+    Debug.Print "&&a:";: apPointer.DebugPrint
+    Debug.Print "&a:";: aPointer.DebugPrint
+    Debug.Print "&b:";: bPointer.DebugPrint
     
     Debug.Print "a: "; a, "b: "; b
 
@@ -101,7 +84,7 @@ Sub testObjectExploration()
     Set someObj = New Collection
     
     Dim ppVtable As Pointer
-    Set ppVtable = Pointer.Create(ObjPtr(someObj), vbLongPtr, 3)
+    Set ppVtable = Pointer.Create(ObjPtr(someObj), vblongptr, 3)
     
     Dim vtableFirst As Pointer
     Set vtableFirst = Pointer.Create(ppVtable.DeRef.Value, vbLong)

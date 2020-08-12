@@ -58,11 +58,11 @@ Public Function StringFormat(ByVal mask As String, ByRef values As Variant) As S
 
     'determine if values_count matches number of unique regex matches:
     Dim uniqueCount As Long
-    Dim tmpCSV As String
+    Dim tempCSV As String
     For Each thisMatch In matches
-        If Not Strings.Contains(tmpCSV, thisMatch.SubMatches(1)) Then
+        If Not Strings.Contains(tempCSV, thisMatch.SubMatches(1)) Then
             uniqueCount = uniqueCount + 1
-            tmpCSV = tmpCSV & thisMatch.SubMatches(1) & ","
+            tempCSV = tempCSV & thisMatch.SubMatches(1) & ","
         End If
     Next
 

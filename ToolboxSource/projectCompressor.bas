@@ -30,7 +30,7 @@ End Enum
 
 Private Const invalid_argument_error As Long = 5
 
-Public Sub CompressProjectFileSelector(Optional ByRef wb As Variant)
+Public Sub CompressProjectFileSelector(Optional ByVal wb As Variant)
 
     Dim book As Workbook
     If IsMissing(wb) Then Set book = ActiveWorkbook Else Set book = wb 'or active workbook?
@@ -55,7 +55,7 @@ Public Sub CompressProjectFileSelector(Optional ByRef wb As Variant)
     End If
 End Sub
 
-Public Function CompressProject(ByRef wb As Workbook, ParamArray moduleNames()) As Boolean
+Public Function CompressProject(ByVal wb As Workbook, ParamArray moduleNames()) As Boolean
     'Sub to convert selected files into self-extracting module
     'Input:
     '   filenames: array of strings based on names of modules in project
@@ -374,6 +374,7 @@ moduleMissing:
 End Function
 
 Private Function ProjectAccessible(ByVal wb As Workbook) As Boolean
+    '@Ignore UnhandledOnErrorResumeNext
     On Error Resume Next
     With wb.VBProject
         ProjectAccessible = .Protection = vbext_pp_none
@@ -383,7 +384,6 @@ End Function
 
 Private Function ReadBytes(ByVal file As String) As Byte()
     Dim inStream As Object
-    ' ADODB stream object used
     Set inStream = CreateObject("ADODB.Stream")
     ' open with no arguments makes the stream an empty container
     inStream.Open
@@ -405,19 +405,20 @@ Private Function Chunkify(ByVal base As String, Optional ByVal stringLength As L
 End Function
 
 '@Ignore AssignedByValParameter
-Private Function SplitString(ByVal str As String, ByVal numOfChar As Long, Optional ByVal quotations As Boolean = False) As String()
+Private Function SplitString(ByVal source As String, ByVal numOfChar As Long, Optional ByVal quotations As Boolean = False) As String()
     Dim result() As String
     Dim substringIndex As Long
-    ReDim result((Len(str) - 1) \ numOfChar)
-    Do While Len(str)
-        result(substringIndex) = Left$(str, numOfChar)
+    ReDim result((Len(source) - 1) \ numOfChar)
+    Do While Len(source)
+        result(substringIndex) = Left$(source, numOfChar)
         If quotations Then result(substringIndex) = """" & result(substringIndex) & """"
-        str = Mid$(str, numOfChar + 1)
+        source = Mid$(source, numOfChar + 1)
         substringIndex = substringIndex + 1
     Loop
     SplitString = result
 End Function
 
+'@Ignore UseMeaningfulName: Base64 is a very meaningful name!
 Private Function ToBase64(ByRef data() As Byte) As String
     Dim b64(0 To 63) As Byte
     Dim str() As Byte
@@ -427,7 +428,7 @@ Private Function ToBase64(ByRef data() As Byte) As String
     Dim n As Long
 
     n = UBound(data) - LBound(data) + 1
-    If n Then Else Exit Function
+    If n Then Else Exit Function 'REVIEW: what does this do?
 
     str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
     For i = 0 To 127 Step 2
@@ -463,6 +464,7 @@ Private Function ToBase64(ByRef data() As Byte) As String
 End Function
 
 Private Function RemoveModule(ByVal moduleName As String, ByVal book As Workbook) As Boolean
+    '@Ignore UnhandledOnErrorResumeNext
     On Error Resume Next
     With book.VBProject.VBComponents
         .Remove .item(moduleName)

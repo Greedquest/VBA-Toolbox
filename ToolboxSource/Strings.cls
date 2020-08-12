@@ -20,20 +20,11 @@ Public Sub EngineerFormat()
     End If
 End Sub
 
-'Public Function printf(ByVal mask As String, ParamArray tokens()) As String
-'    'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
-'    Dim i As Long
-'    For i = 0 To UBound(tokens)
-'        mask = Replace$(mask, "{" & i & "}", tokens(i))
-'    Next
-'    printf = mask
-'End Function
-
 Public Function Format(ByVal mask As String, ParamArray tokens()) As String
     Format = StringFormat(mask, Array(tokens)(0))
 End Function
 
-Public Function Contains(haystack As Variant, needle As Variant, Optional ByVal caseSensitive As Boolean = False) As Boolean
+Public Function Contains(ByVal haystack As Variant, ByVal needle As Variant, Optional ByVal caseSensitive As Boolean = False) As Boolean
 
     Dim compareMethod As Long
 
@@ -47,7 +38,7 @@ Public Function Contains(haystack As Variant, needle As Variant, Optional ByVal 
 
 End Function
 
-Public Function ContainsAny(haystack As Variant, ByVal caseSensitive As Boolean, ParamArray needles()) As Boolean
+Public Function ContainsAny(ByVal haystack As Variant, ByVal caseSensitive As Boolean, ParamArray needles() As Variant) As Boolean
 
     Dim i As Long
 
@@ -62,19 +53,16 @@ Public Function ContainsAny(haystack As Variant, ByVal caseSensitive As Boolean,
 
 End Function
 
-Public Function MatchesAny(ByVal string_source As Variant, ParamArray potential_matches()) As Boolean
+Public Function MatchesAny(ByVal source As String, ParamArray potentialMatches()) As Boolean
 
     'String-typed local copies of passed parameter values:
     Dim find As String
-    Dim src As String
     Dim i As Long
     Dim found As Boolean
 
-    src = CStr(string_source)
-
-    For i = LBound(potential_matches) To UBound(potential_matches)
-        find = CStr(potential_matches(i))
-        found = (src = find)
+    For i = LBound(potentialMatches) To UBound(potentialMatches)
+        find = CStr(potentialMatches(i))
+        found = (source = find)
         If found Then Exit For
     Next
 

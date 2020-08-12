@@ -84,7 +84,7 @@ Catch:
         'openedFiles.Remove fileNumber
         Patches.RemoveByValue fileNumber, openedFiles
         'End Patch
-        Err.Raise Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext
+        Err.Raise Err.Number, Err.source, Err.Description, Err.HelpFile, Err.HelpContext
     End If
 
 End Sub

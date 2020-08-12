@@ -14,12 +14,6 @@ Attribute VB_Description = "Static module for doing string manipulation such as 
 '@Exposed
 Option Explicit
 
-Public Sub EngineerFormat()
-    If TypeOf Selection Is Range Then
-        Selection.NumberFormat = "##0.0E+0"
-    End If
-End Sub
-
 Public Function Format(ByVal mask As String, ParamArray tokens()) As String
     Format = StringFormat(mask, Array(tokens)(0))
 End Function

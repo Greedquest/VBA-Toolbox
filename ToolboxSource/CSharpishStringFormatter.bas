@@ -1,4 +1,4 @@
-Attribute VB_Name = "Main"
+Attribute VB_Name = "CSharpishStringFormatter"
 '@Folder("Strings.StringFormat")
 
 Option Explicit

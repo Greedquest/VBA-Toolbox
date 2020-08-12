@@ -59,44 +59,48 @@ End Property
 Private Sub raiseError(ByVal errNum As progressError, ParamArray Args() As Variant)
     Select Case errNum
     
-    Case percentOutOfBoundsError
-        Err.Description = "Percent must lie between 0.0 and 1.0"
+        Case percentOutOfBoundsError
+            Err.Description = "Percent must lie between 0.0 and 1.0"
         
-    Case barSizeOutOfRangeError
-        Err.Description = Toolbox.Strings.printf("Bar size must be at least {0} characters", Args(0))
+        Case barSizeOutOfRangeError
+            Err.Description = printf("Bar size must be at least {0} characters", Args(0))
         
-    Case singleCharacterRequiredError
-        Err.Description = Toolbox.Strings.printf("Only a single character should be used as {0}, not '{1}'", Args(0), Args(1))
+        Case singleCharacterRequiredError
+            Err.Description = printf("Only a single character should be used as {0}, not '{1}'", Args(0), Args(1))
         
-    Case baseIsNotAStringError
-        Err.Description = Toolbox.Strings.printf("Base must be of type string or left blank, not '{0}'", TypeName(Args(0)))
+        Case baseIsNotAStringError
+            Err.Description = printf("Base must be of type string or left blank, not '{0}'", TypeName(Args(0)))
         
-    Case maskMissingPositionalArgumentError
-        Err.Description = Toolbox.Strings.printf("formatMask must contain all three positional tokens ({0,1,2}){0}'{1}' does not", _
-                                                 vbCrLf, Args(0))
+        Case maskMissingPositionalArgumentError
+            Err.Description = printf("formatMask must contain all three positional tokens ({0,1,2}){0}'{1}' does not", _
+                                                     vbCrLf, Args(0))
                                                  
-    Case Else                                    'some errNum we don't know what to do with
-        On Error Resume Next                     'fake raise to grab description text
-        Err.Raise errNum
-        Dim errDescription As String
-        errDescription = Err.Description
-        On Error GoTo 0
-Debug.Print Toolbox.Strings.printf("Warning: Unexpected error '{0}' with description '{1}'", errNum, errDescription)
+        Case Else                                'some errNum we don't know what to do with
+            On Error Resume Next                 'fake raise to grab description text
+            Err.Raise errNum
+            Dim errDescription As String
+            errDescription = Err.Description
+            On Error GoTo 0
+            Debug.Print printf("Warning: Unexpected error '{0}' with description '{1}'", errNum, errDescription)
     End Select
     Err.Raise errNum
 End Sub
 
-Public Sub Init(Optional ByVal size As Long = 0, Optional ByVal base As Variant, _
-                Optional ByVal character As String = vbNullString, Optional ByVal whitespace As String = vbNullString, _
-                Optional ByVal formatMask As String = vbNullString)
+Public Sub Init(Optional ByVal sizeOverride As Long = 0, Optional ByVal baseOverride As Variant, _
+                Optional ByVal characterOverride As String = vbNullString, Optional ByVal whitespaceOverride As String = vbNullString, _
+                Optional ByVal formatMaskOverride As String = vbNullString)
     'Method to set appearence and other properties of the progress bar
 
     'check is inputs were missing - if so leave as they were
     'Base can be any string so can't be checked in this way, needs special handling
-    size = IIf(size = 0, this.size, size)
-    character = IIf(character = vbNullString, this.character, character)
-    whitespace = IIf(whitespace = vbNullString, this.whitespace, whitespace)
-    formatMask = IIf(formatMask = vbNullString, this.mask, formatMask)
+    Dim whitespace As String
+    Dim character As String
+    Dim size As Long
+    size = IIf(sizeOverride = 0, this.size, sizeOverride)
+    character = IIf(characterOverride = vbNullString, this.character, characterOverride)
+    whitespace = IIf(whitespaceOverride = vbNullString, this.whitespace, whitespaceOverride)
+    Dim formatMask As String
+    formatMask = IIf(formatMaskOverride = vbNullString, this.mask, formatMaskOverride)
     
     'check for valid inputs
     Const minBarSize As Long = 2
@@ -108,15 +112,15 @@ Public Sub Init(Optional ByVal size As Long = 0, Optional ByVal base As Variant,
         raiseError singleCharacterRequiredError, "'whitespace'", whitespace
     ElseIf MaskIsInvalid(formatMask) Then
         raiseError maskMissingPositionalArgumentError, formatMask
-    ElseIf Not IsMissing(base) Then
+    ElseIf Not IsMissing(baseOverride) Then
         'base is variant so requires type checking
         On Error Resume Next
-        this.base = base                         'may be type error if base can't be converted; e.g an object was passed
+        this.base = baseOverride                         'may be type error if base can't be converted; e.g an object was passed
         Dim errNum As Long
         errNum = Err.Number
         On Error GoTo 0
         If errNum <> 0 Then
-            raiseError baseIsNotAStringError, base
+            raiseError baseIsNotAStringError, baseOverride
         End If
     End If
 
@@ -154,6 +158,7 @@ Public Sub ResetDefaults()
     this.mask = DEFAULT_MASK
 End Sub
 
+'@Ignore ProcedureNotUsed
 Public Function Create(Optional ByVal size As Long = 0, Optional ByVal base As Variant, _
                        Optional ByVal character As String = vbNullString, Optional ByVal whitespace As String = vbNullString, _
                        Optional ByVal formatMask As String = vbNullString) As AsciiProgressBar

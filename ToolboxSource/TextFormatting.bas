@@ -1,4 +1,5 @@
 Attribute VB_Name = "TextFormatting"
+'@Folder("Toolbox.Macros")
 Option Explicit
 
 Public Sub EngineerFormat()
@@ -7,6 +8,7 @@ Public Sub EngineerFormat()
     End If
 End Sub
 
+'@Ignore AssignedByValParameter
 Public Function printf(ByVal mask As String, ParamArray tokens()) As String
     'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
     Dim i As Long

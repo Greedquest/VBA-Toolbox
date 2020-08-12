@@ -48,7 +48,7 @@ Friend Property Let MinLevel(ByVal value As LogLevel)
 End Property
 
 Private Sub ILogger_Log(ByVal output As String)
-Debug.Print output
+    Debug.Print output
 End Sub
 
 Private Property Get ILogger_MinLevel() As LogLevel

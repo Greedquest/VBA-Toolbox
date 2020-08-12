@@ -12,8 +12,9 @@ Public Sub TestLogger()
     LogManager.Log TraceLevel, "logger has been created."
     LogManager.Log InfoLevel, "it works!"
 
-Debug.Print LogManager.IsEnabled(TraceLevel)
+    Debug.Print LogManager.IsEnabled(TraceLevel)
 
+    '@Ignore VariableNotUsed
     Dim boom As Long
     boom = 1 / 0
 

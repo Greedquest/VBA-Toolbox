@@ -20,22 +20,22 @@ Public Sub EngineerFormat()
     End If
 End Sub
 
-Public Function printf(ByVal mask As String, ParamArray tokens()) As String
-    'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
-    Dim i As Long
-    For i = 0 To UBound(tokens)
-        mask = Replace$(mask, "{" & i & "}", tokens(i))
-    Next
-    printf = mask
-End Function
+'Public Function printf(ByVal mask As String, ParamArray tokens()) As String
+'    'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
+'    Dim i As Long
+'    For i = 0 To UBound(tokens)
+'        mask = Replace$(mask, "{" & i & "}", tokens(i))
+'    Next
+'    printf = mask
+'End Function
 
 Public Function Format(ByVal mask As String, ParamArray tokens()) As String
     Format = StringFormat(mask, Array(tokens)(0))
 End Function
 
-Public Function Contains(haystack, needle, Optional ByVal caseSensitive As Boolean = False) As Boolean
+Public Function Contains(haystack As Variant, needle As Variant, Optional ByVal caseSensitive As Boolean = False) As Boolean
 
-    Dim compareMethod As Integer
+    Dim compareMethod As Long
 
     If caseSensitive Then
         compareMethod = vbBinaryCompare
@@ -47,9 +47,9 @@ Public Function Contains(haystack, needle, Optional ByVal caseSensitive As Boole
 
 End Function
 
-Public Function ContainsAny(haystack, ByVal caseSensitive As Boolean, ParamArray needles()) As Boolean
+Public Function ContainsAny(haystack As Variant, ByVal caseSensitive As Boolean, ParamArray needles()) As Boolean
 
-    Dim i As Integer
+    Dim i As Long
 
     For i = LBound(needles) To UBound(needles)
         If Contains(CStr(haystack), CStr(needles(i)), caseSensitive) Then
@@ -62,10 +62,14 @@ Public Function ContainsAny(haystack, ByVal caseSensitive As Boolean, ParamArray
 
 End Function
 
-Public Function MatchesAny(ByVal string_source, ParamArray potential_matches()) As Boolean
+Public Function MatchesAny(ByVal string_source As Variant, ParamArray potential_matches()) As Boolean
 
     'String-typed local copies of passed parameter values:
-    Dim find As String, src As String, i As Integer, found As Boolean
+    Dim find As String
+    Dim src As String
+    Dim i As Long
+    Dim found As Boolean
+
     src = CStr(string_source)
 
     For i = LBound(potential_matches) To UBound(potential_matches)
@@ -78,7 +82,7 @@ Public Function MatchesAny(ByVal string_source, ParamArray potential_matches()) 
 
 End Function
 
-Public Function StartsWith(ByVal start As String, ByVal string_source) As Boolean
+Public Function StartsWith(ByVal start As String, ByVal string_source As Variant) As Boolean
 
     StartsWith = Left$(CStr(string_source), Len(CStr(start))) = CStr(start)
 

@@ -39,11 +39,11 @@ Public Sub ToImmediateWindow()
     Dim dict As Object
     Set dict = CreateObject("Scripting.Dictionary")
     flattenTree resultsTree, dict
-Debug.Print "Label name", "Time taken"
-Debug.Print String(35, "-")
+    Debug.Print "Label name", "Time taken"
+    Debug.Print String(35, "-")
     Dim value As Variant
     For Each value In dict.Keys
-Debug.Print value, dict(value)(0), dict(value)(1)
+        Debug.Print value, dict(value)(0), dict(value)(1)
     Next value
 End Sub
 
@@ -58,7 +58,7 @@ Private Sub flattenTree(ByVal treeItem As LabelTree, ByRef dict As Object, Optio
     End If
 End Sub
 
-Private Sub writeTimes(ByRef labelItem As LabelTree)
+Private Sub writeTimes(ByVal labelItem As LabelTree)
     'Recursively write absolute time data to time elapsed data
 
     Dim startTimes As TimeInfo
@@ -96,33 +96,24 @@ Private Sub setTimeStamps(ByVal labelItem As LabelTree, ByRef startTimes As Time
         Dim endKey As String
         'location of timestamps in dictionary
         Select Case .LabelType
-        Case stp_LapTime
-            Dim keyBase As String
-            keyBase = .parentNode.Location
-            Dim lapNumber As Long
-            lapNumber = Right$(.NodeName, Len(.NodeName) - 3)
-            If lapNumber = 1 Then                'first lap, starts at
-                startKey = printf("{0}_open", keyBase)
-            Else
-                startKey = printf("{0}_Lap{1}", keyBase, lapNumber - 1) 'start at prev lap, end here
-            End If
-            endKey = printf("{0}_Lap{1}", keyBase, lapNumber)
-        Case Else
-            startKey = printf("{0}_open", .Location)
-            endKey = printf("{0}_close", .Location)
+            Case stp_LapTime
+                Dim keyBase As String
+                keyBase = .parentNode.Location
+                Dim lapNumber As Long
+                lapNumber = Right$(.NodeName, Len(.NodeName) - 3)
+                If lapNumber = 1 Then            'first lap, starts at
+                    startKey = printf("{0}_open", keyBase)
+                Else
+                    startKey = printf("{0}_Lap{1}", keyBase, lapNumber - 1) 'start at prev lap, end here
+                End If
+                endKey = printf("{0}_Lap{1}", keyBase, lapNumber)
+            Case Else
+                startKey = printf("{0}_open", .Location)
+                endKey = printf("{0}_close", .Location)
         End Select
         Set endTimes = this.TimeData(endKey)
         Set startTimes = this.TimeData(startKey)
     End With
 
 End Sub
-
-Private Function printf(ByVal mask As String, ParamArray tokens()) As String
-    'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
-    Dim i As Long
-    For i = 0 To UBound(tokens)
-        mask = Replace$(mask, "{" & i & "}", tokens(i))
-    Next
-    printf = mask
-End Function
 

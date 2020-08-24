@@ -1,12 +1,8 @@
 Attribute VB_Name = "TextFormatting"
+'@Folder("Toolbox.Common")
 Option Explicit
 
-Public Sub EngineerFormat()
-    If TypeOf Selection Is Range Then
-        Selection.NumberFormat = "##0.0E+0"
-    End If
-End Sub
-
+'@Ignore AssignedByValParameter
 Public Function printf(ByVal mask As String, ParamArray tokens()) As String
     'Format string with by substituting into mask - stackoverflow.com/a/17233834/6609896
     Dim i As Long
@@ -16,3 +12,10 @@ Public Function printf(ByVal mask As String, ParamArray tokens()) As String
     printf = mask
 End Function
 
+Public Property Let Assign(ByRef variable As Variant, ByVal value As Variant)
+    If IsObject(value) Then
+        Set variable = value
+    Else
+        variable = value
+    End If
+End Property

@@ -21,23 +21,23 @@ Private Function FormatLogLevel(ByVal level As LogLevel) As String
 
     Select Case level
 
-    Case LogLevel.DebugLevel
-        FormatLogLevel = "DEBUG"
+        Case LogLevel.DebugLevel
+            FormatLogLevel = "DEBUG"
 
-    Case LogLevel.ErrorLevel
-        FormatLogLevel = "ERROR"
+        Case LogLevel.ErrorLevel
+            FormatLogLevel = "ERROR"
 
-    Case LogLevel.FatalLevel
-        FormatLogLevel = "FATAL"
+        Case LogLevel.FatalLevel
+            FormatLogLevel = "FATAL"
 
-    Case LogLevel.InfoLevel
-        FormatLogLevel = "INFO"
+        Case LogLevel.InfoLevel
+            FormatLogLevel = "INFO"
 
-    Case LogLevel.TraceLevel
-        FormatLogLevel = "TRACE"
+        Case LogLevel.TraceLevel
+            FormatLogLevel = "TRACE"
 
-    Case LogLevel.WarnLevel
-        FormatLogLevel = "WARNING"
+        Case LogLevel.WarnLevel
+            FormatLogLevel = "WARNING"
 
     End Select
 

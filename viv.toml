@@ -1,0 +1,5 @@
+[project]
+name = "VBA-Toolbox"
+description = """
+General purpose toolbox of VBA utils.
+"""

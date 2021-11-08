@@ -3,3 +3,5 @@ name = "VBA-Toolbox"
 description = """
 General purpose toolbox of VBA utils.
 """
+
+ptrsafe = false #https://github.com/Greedquest/VBA-Toolbox/issues/13
